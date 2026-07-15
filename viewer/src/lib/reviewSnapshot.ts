@@ -24,7 +24,7 @@ export function buildReviewSnapshot({
   traceability
 }: ReviewSnapshotInput) {
   return {
-    schema: "pacs.review-snapshot.v2",
+    schema: "prd.review-snapshot.v2",
     exported_at: exportedAt,
     source: {
       label: sourceLabel,

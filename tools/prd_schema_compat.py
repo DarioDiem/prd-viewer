@@ -17,7 +17,7 @@ except ImportError as exc:  # pragma: no cover - dependency guard
         "Missing Python dependency: jsonschema. Install it before running this tool."
     ) from exc
 
-from pacs_metrics import append_metrics
+from prd_metrics import append_metrics
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

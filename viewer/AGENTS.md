@@ -23,7 +23,7 @@ The viewer is a local-first web UI for reviewing canonical PRD JSON artifacts. T
 ## Web UI Rules
 
 - Keep `PRD.json` as the canonical artifact. Any database, cache, search index, or metrics store must be derived and rebuildable.
-- For viewer implementation and review work, treat `viewer/PRD_web_ui.json` as the live subproject source of truth. When the local `pacs-prd` MCP server is available, prefer its focused reads such as `search_prd`, `get_entity`, `get_linked_entities`, `build_agent_packet`, `prd://summary`, and `prd://section/{name}` before reading large PRD sections directly.
+- For viewer implementation and review work, treat `viewer/PRD_web_ui.json` as the live subproject source of truth. When the local `prd-viewer` MCP server is available, prefer its focused reads such as `search_prd`, `get_entity`, `get_linked_entities`, `build_agent_packet`, `prd://summary`, and `prd://section/{name}` before reading large PRD sections directly.
 - Fall back to targeted local reads only when the MCP server is unavailable, and read the full PRD artifact only for schema-wide validation, deterministic export checks, migration work, or complete artifact review.
 - Validate every load, edit, save, and export against `schema.strict.json`.
 - Fail closed on invalid PRD data; do not silently repair or rewrite canonical data.

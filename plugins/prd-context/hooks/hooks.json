@@ -8,7 +8,7 @@
             "type": "command",
             "command": "node \"${PLUGIN_ROOT}/hooks/context-reminder.cjs\"",
             "timeout": 5,
-            "statusMessage": "Loading PACS context guidance..."
+            "statusMessage": "Loading PRD context guidance..."
           }
         ]
       }
@@ -20,7 +20,7 @@
             "type": "command",
             "command": "node \"${PLUGIN_ROOT}/hooks/context-reminder.cjs\"",
             "timeout": 5,
-            "statusMessage": "Loading PACS context guidance..."
+            "statusMessage": "Loading PRD context guidance..."
           }
         ]
       }

@@ -49,7 +49,7 @@ test("focuses the traceability graph and exports the selected trace summary", as
     nodes: Array<{ id: string }>;
   };
 
-  expect(bundle.schema).toBe("pacs.trace-summary.v1");
+  expect(bundle.schema).toBe("prd.trace-summary.v1");
   expect(bundle.selected_node_id).toBe("US-003");
   expect(bundle.nodes).toContainEqual(expect.objectContaining({ id: "FR-005" }));
   expect(bundle.nodes).toContainEqual(expect.objectContaining({ id: "FR-007" }));
@@ -63,7 +63,7 @@ test("exports a read-only review snapshot", async ({ page }) => {
   const download = await downloadPromise;
   const downloadPath = await download.path();
 
-  expect(download.suggestedFilename()).toMatch(/^prd-review-snapshot-prd-reviewer-ui-\d{4}-\d{2}-\d{2}\.json$/);
+  expect(download.suggestedFilename()).toMatch(/^prd-review-snapshot-prd-viewer-\d{4}-\d{2}-\d{2}\.json$/);
   expect(downloadPath).toBeTruthy();
 
   const snapshot = JSON.parse(readFileSync(downloadPath ?? "", "utf8")) as {
@@ -78,7 +78,7 @@ test("exports a read-only review snapshot", async ({ page }) => {
     traceability: { counts: { requirements: number } };
   };
 
-  expect(snapshot.schema).toBe("pacs.review-snapshot.v2");
+  expect(snapshot.schema).toBe("prd.review-snapshot.v2");
   expect(snapshot.source.title).toBe("PRD Reviewer Local/Web UI");
   expect(snapshot.validation.status).toBe("valid");
   expect(snapshot.readiness.status).toBe("blocked");

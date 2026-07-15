@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
 
-import type { PacsMcpConfig } from "./config.js";
+import type { PrdMcpConfig } from "./config.js";
 import {
   checkSchemaCompatibility,
   isLossyCompatibilityStatus,
@@ -68,7 +68,7 @@ type CachedLoad = {
 export class PrdLoader {
   private cachedLoad: CachedLoad | null = null;
 
-  constructor(private readonly config: PacsMcpConfig) {}
+  constructor(private readonly config: PrdMcpConfig) {}
 
   async load(): Promise<PrdLoadResult> {
     const checkedAt = new Date().toISOString();

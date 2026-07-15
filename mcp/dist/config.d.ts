@@ -1,5 +1,5 @@
-export type PacsMcpTransport = "stdio" | "http";
-export type PacsMcpHttpConfig = {
+export type PrdMcpTransport = "stdio" | "http";
+export type PrdMcpHttpConfig = {
     host: string;
     port: number;
     path: string;
@@ -7,25 +7,25 @@ export type PacsMcpHttpConfig = {
     allowedOrigins: string[];
     url: string;
 };
-export type PacsMcpConfig = {
+export type PrdMcpConfig = {
     repoRoot: string;
     prdPath: string;
     metricsPath: string;
-    transport: PacsMcpTransport;
+    transport: PrdMcpTransport;
     mode: "local-read-only";
     plannedResources: readonly string[];
     plannedTools: readonly string[];
     responseModes: readonly string[];
-    http: PacsMcpHttpConfig | null;
+    http: PrdMcpHttpConfig | null;
 };
-type ServerInfoSnapshot = PacsMcpConfig & {
+type ServerInfoSnapshot = PrdMcpConfig & {
     prdExists: boolean;
     metricsDirectoryExists: boolean;
 };
-export declare function resolveConfig(env?: NodeJS.ProcessEnv): PacsMcpConfig;
-export declare function resolveConfigFromProjectRoots(rootUris: string[], env?: NodeJS.ProcessEnv): Promise<PacsMcpConfig>;
-export declare function resolveProjectConfig(projectRoot: string, env?: NodeJS.ProcessEnv): Promise<PacsMcpConfig>;
+export declare function resolveConfig(env?: NodeJS.ProcessEnv): PrdMcpConfig;
+export declare function resolveConfigFromProjectRoots(rootUris: string[], env?: NodeJS.ProcessEnv): Promise<PrdMcpConfig>;
+export declare function resolveProjectConfig(projectRoot: string, env?: NodeJS.ProcessEnv): Promise<PrdMcpConfig>;
 export declare function repoRoot(): string;
-export declare function getServerInfoSnapshot(config: PacsMcpConfig): Promise<ServerInfoSnapshot>;
+export declare function getServerInfoSnapshot(config: PrdMcpConfig): Promise<ServerInfoSnapshot>;
 export declare function isLocalHostname(value: string): boolean;
 export {};

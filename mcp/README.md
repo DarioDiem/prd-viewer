@@ -1,6 +1,6 @@
-# PACS Local MCP Server
+# PRD Local MCP Server
 
-This package hosts the local-only MCP server for the PACS PRD framework.
+This package hosts the local-only MCP server for the PRD framework.
 
 Current implemented slice:
 
@@ -62,7 +62,7 @@ The viewer is a browser application. The MCP server is a local process-oriented 
 
 ## Metrics
 
-The server now appends local-only JSONL metrics at `PACS_MCP_METRICS_PATH` or `.metrics/pacs_prd_mcp.jsonl` by default.
+The server now appends local-only JSONL metrics at `PRD_MCP_METRICS_PATH` or `.metrics/prd_viewer_mcp.jsonl` by default.
 
 Each event records:
 
@@ -92,15 +92,15 @@ The current test suite now covers:
 For local manual inspection, build the package and point MCP Inspector at the stdio entrypoint:
 
 - `cd mcp && npm run build`
-- `npx @modelcontextprotocol/inspector node "$PWD/mcp/dist/index.js"`
+- `npx @modelcontextprotocol/inspector node "$PWD/dist/index.js"`
 
 If you want the viewer PRD explicitly:
 
-- `PACS_PRD_PATH="$PWD/viewer/PRD_web_ui.json" npx @modelcontextprotocol/inspector node "$PWD/mcp/dist/index.js"`
+- `PRD_PATH="$PWD/../viewer/PRD_web_ui.json" npx @modelcontextprotocol/inspector node "$PWD/dist/index.js"`
 
 For the optional HTTP transport:
 
-- `PACS_MCP_TRANSPORT=http npm run start:http`
+- `PRD_MCP_TRANSPORT=http npm run start:http`
 - then connect clients to `http://127.0.0.1:3334/mcp` unless you override the host, port, or path
 
 ## Response shaping
@@ -120,13 +120,13 @@ Each resource and tool response is wrapped with:
 
 ## Environment
 
-- `PACS_PRD_PATH`: optional relative or absolute path to the active PRD file
-- `PACS_MCP_METRICS_PATH`: optional relative or absolute path for local JSONL metrics output
-- `PACS_MCP_TRANSPORT`: `stdio` or `http`
-- `PACS_MCP_HTTP_HOST`: localhost-only bind host for HTTP mode, default `127.0.0.1`
-- `PACS_MCP_HTTP_PORT`: HTTP port for HTTP mode, default `3334`
-- `PACS_MCP_HTTP_PATH`: HTTP endpoint path for HTTP mode, default `/mcp`
-- `PACS_MCP_HTTP_ALLOWED_ORIGINS`: optional comma-separated explicit origin allowlist for HTTP mode
+- `PRD_PATH`: optional relative or absolute path to the active PRD file
+- `PRD_MCP_METRICS_PATH`: optional relative or absolute path for local JSONL metrics output
+- `PRD_MCP_TRANSPORT`: `stdio` or `http`
+- `PRD_MCP_HTTP_HOST`: localhost-only bind host for HTTP mode, default `127.0.0.1`
+- `PRD_MCP_HTTP_PORT`: HTTP port for HTTP mode, default `3334`
+- `PRD_MCP_HTTP_PATH`: HTTP endpoint path for HTTP mode, default `/mcp`
+- `PRD_MCP_HTTP_ALLOWED_ORIGINS`: optional comma-separated explicit origin allowlist for HTTP mode
 
 Relative paths resolve from the repo root.
 
@@ -145,16 +145,16 @@ From `mcp/`:
 
 From the framework root:
 
-- `python3 tools/init_pacs_project.py /path/to/new-project --project-name "New Project"`
+- `python3 tools/init_prd_project.py /path/to/new-project --project-name "New Project"`
 - optional self-contained agent export:
-  - `python3 tools/init_pacs_project.py /path/to/new-project --project-name "New Project" --include-agents`
+  - `python3 tools/init_prd_project.py /path/to/new-project --project-name "New Project" --include-agents`
 - upgrade an existing bootstrapped project in place:
-  - `python3 tools/init_pacs_project.py /path/to/existing-project --upgrade-existing`
+  - `python3 tools/init_prd_project.py /path/to/existing-project --upgrade-existing`
 
 That scaffold creates:
 
 - `PRD.json`
-- `pacs.config.json`
+- `prd.config.json`
 - `AGENTS.md`
 - `docs/mcp-registration.md`
 - `.metrics/.gitkeep`
@@ -163,7 +163,7 @@ That scaffold creates:
 - `schema.versions.json`
 - `tools/prd_schema_compat.py`
 - `tools/prd_extractor.py`
-- `tools/pacs_metrics.py`
+- `tools/prd_metrics.py`
 
 With `--include-agents`, it also copies a curated local subset of:
 
@@ -172,7 +172,7 @@ With `--include-agents`, it also copies a curated local subset of:
 - `.gemini/agents/*`
 - `.agents/skills/*`
 
-The generated project keeps the PRD local, points agent users at focused MCP reads, and includes a concrete stdio plus optional HTTP registration example for the shared `pacs-prd` server.
+The generated project keeps the PRD local, points agent users at focused MCP reads, and includes a concrete stdio plus optional HTTP registration example for the shared `prd-viewer` server.
 It also includes a project-local schema validation bundle that does not depend on this framework repo's layout.
 When you upgrade an existing project, the bootstrap refreshes the framework-managed bundle in place and preserves the current `PRD.json` unless you also pass `--refresh-prd`.
 
@@ -181,7 +181,7 @@ When you upgrade an existing project, the bootstrap refreshes the framework-mana
 The extraction plan for reusing this framework across multiple projects lives in:
 
 - [Framework extraction plan](../docs/framework-extraction-plan.md)
-- [Example project configuration](../docs/pacs.config.example.json)
+- [Example project configuration](../docs/prd.config.example.json)
 
 ## Safety stance
 

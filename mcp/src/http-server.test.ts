@@ -10,8 +10,8 @@ import { createFixture } from "./test-fixtures.js";
 
 test("validateHttpRequest rejects missing host and non-local origins", () => {
   const config = resolveConfig({
-    PACS_MCP_TRANSPORT: "http",
-    PACS_MCP_HTTP_PORT: "3334"
+    PRD_MCP_TRANSPORT: "http",
+    PRD_MCP_HTTP_PORT: "3334"
   });
 
   assert.deepEqual(validateHttpRequest({ headers: {} }, config), {
@@ -36,18 +36,18 @@ test("validateHttpRequest rejects missing host and non-local origins", () => {
 });
 
 test("streamable HTTP transport serves focused MCP reads on localhost", async () => {
-  const fixture = await createFixture("valid", "pacs-mcp-http-valid-");
+  const fixture = await createFixture("valid", "prd-mcp-http-valid-");
   const config = resolveConfig({
-    PACS_PRD_PATH: fixture.prdPath,
-    PACS_MCP_METRICS_PATH: fixture.metricsPath,
-    PACS_MCP_TRANSPORT: "http",
-    PACS_MCP_HTTP_PORT: "0"
+    PRD_PATH: fixture.prdPath,
+    PRD_MCP_METRICS_PATH: fixture.metricsPath,
+    PRD_MCP_TRANSPORT: "http",
+    PRD_MCP_HTTP_PORT: "0"
   });
   const started = await startHttpServer(config);
   const transport = new StreamableHTTPClientTransport(new URL(started.endpointUrl));
   const client = new Client(
     {
-      name: "pacs-prd-http-test-client",
+      name: "prd-viewer-http-test-client",
       version: "0.1.0"
     },
     {
@@ -87,12 +87,12 @@ test("streamable HTTP transport serves focused MCP reads on localhost", async ()
 });
 
 test("streamable HTTP transport rejects non-local origins", async () => {
-  const fixture = await createFixture("valid", "pacs-mcp-http-origin-");
+  const fixture = await createFixture("valid", "prd-mcp-http-origin-");
   const config = resolveConfig({
-    PACS_PRD_PATH: fixture.prdPath,
-    PACS_MCP_METRICS_PATH: fixture.metricsPath,
-    PACS_MCP_TRANSPORT: "http",
-    PACS_MCP_HTTP_PORT: "0"
+    PRD_PATH: fixture.prdPath,
+    PRD_MCP_METRICS_PATH: fixture.metricsPath,
+    PRD_MCP_TRANSPORT: "http",
+    PRD_MCP_HTTP_PORT: "0"
   });
   const started = await startHttpServer(config);
   const transport = new StreamableHTTPClientTransport(new URL(started.endpointUrl), {
@@ -104,7 +104,7 @@ test("streamable HTTP transport rejects non-local origins", async () => {
   });
   const client = new Client(
     {
-      name: "pacs-prd-http-origin-client",
+      name: "prd-viewer-http-origin-client",
       version: "0.1.0"
     },
     {

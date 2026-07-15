@@ -32,7 +32,7 @@ npm run check
 npm run test
 npm run test:e2e
 npm run build
-npm run report:generate -- --project-name "PACS Viewer Status"
+npm run report:generate -- --project-name "PRD Viewer Status"
 ```
 
 The local MVP loads `viewer/PRD_web_ui.json` as the seed document and supports local file open, strict schema validation, structured section editing, raw JSON maintainer edits, traceability review, metrics ingestion, export, writable save-back where supported by the browser, and local diagnostics export.

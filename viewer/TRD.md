@@ -13,7 +13,7 @@ linked_req_ids:
   - NFR-007
 ---
 
-# PACS PRD Viewer technical design
+# PRD Viewer technical design
 
 ## Purpose and scope
 
@@ -34,7 +34,7 @@ flowchart LR
   V -->|"validate"| S["schema.strict.json"]
   V -->|"read compatibility"| M["schema.versions.json"]
   V -->|"explicit export or guarded save"| F["Local filesystem"]
-  A["Local agent"] -->|"focused read-only request"| P["pacs-prd MCP server"]
+  A["Local agent"] -->|"focused read-only request"| P["prd-viewer MCP server"]
   P -->|"derived packet"| C["Canonical Viewer PRD"]
   CI["Public CI"] -->|"tests source and fixtures"| R["Repository checkout"]
 ```
@@ -54,7 +54,7 @@ flowchart LR
 | --- | --- | --- |
 | PRD load, edit, export, and save | `schema.strict.json` and deterministic JSON serialization | Canonical PRD file |
 | Compatibility status | `schema.versions.json` plus `meta.schema_contract` | Repository schema contract |
-| Focused agent reads | `pacs.config.json` selects the canonical PRD; MCP tools remain read-only | Canonical PRD file |
+| Focused agent reads | `prd.config.json` selects the canonical PRD; MCP tools remain read-only | Canonical PRD file |
 | Review and project status exports | Derived HTML or JSON snapshots | Rebuildable Viewer output |
 | Public validation | Locked npm dependencies and repository scripts | CI workflow |
 
@@ -75,7 +75,7 @@ Viewer a hosted service.
 
 ### Focused MCP context
 
-1. The local server discovers `pacs.config.json` from the active project root.
+1. The local server discovers `prd.config.json` from the active project root.
 2. `prd.path` resolves relative to that root.
 3. An agent searches compact indexed entities.
 4. The agent requests a standard, token-budgeted packet with an explicit preset.
@@ -92,7 +92,7 @@ Viewer a hosted service.
   is present; selecting an open-source license remains a repository-owner choice.
 - Public release uses a new repository initialized from a sanitized current-tree
   snapshot. No Git objects, refs, or remotes are copied from the private source.
-- The public repository is `https://github.com/DarioDiem/pacs-prd-viewer` and
+- The public repository is `https://github.com/DarioDiem/prd-viewer` and
   uses `main` as its protected release-integration branch.
 - The private source branch must remain a fast-forward candidate from its
   intended `PRD-v1` base and must pass the same checks locally before extraction.

@@ -1,14 +1,14 @@
-import type { PacsMcpConfig } from "./config.js";
+import type { PrdMcpConfig } from "./config.js";
 import { resolveConfigFromProjectRoots } from "./config.js";
-import { createServerServices, type PacsMcpServerServices } from "./server.js";
+import { createServerServices, type PrdMcpServerServices } from "./server.js";
 
 export type RootUriProvider = () => Promise<string[]>;
 
 export function createActiveProjectServicesResolver(
   listRootUris: RootUriProvider,
   env: NodeJS.ProcessEnv = process.env
-): () => Promise<PacsMcpServerServices> {
-  let services: Promise<PacsMcpServerServices> | null = null;
+): () => Promise<PrdMcpServerServices> {
+  let services: Promise<PrdMcpServerServices> | null = null;
 
   return () => {
     services ??= resolveActiveConfig(listRootUris, env).then(createServerServices);
@@ -19,7 +19,7 @@ export function createActiveProjectServicesResolver(
 export async function resolveActiveConfig(
   listRootUris: RootUriProvider,
   env: NodeJS.ProcessEnv = process.env
-): Promise<PacsMcpConfig> {
-  const rootUris = env.PACS_PRD_PATH ? [] : await listRootUris();
+): Promise<PrdMcpConfig> {
+  const rootUris = env.PRD_PATH ? [] : await listRootUris();
   return resolveConfigFromProjectRoots(rootUris, env);
 }

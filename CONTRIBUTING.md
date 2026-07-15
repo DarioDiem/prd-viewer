@@ -1,6 +1,6 @@
-# Contributing to PACS
+# Contributing to PRD Viewer
 
-Thank you for helping improve PACS. Keep changes focused, preserve canonical
+Thank you for helping improve PRD Viewer. Keep changes focused, preserve canonical
 PRD identifiers, and update product or technical artifacts when behavior or
 design changes.
 
@@ -12,7 +12,7 @@ Use Node.js 20.19 or newer and Python 3.11 or newer.
 npm ci
 npm --prefix mcp ci
 npm --prefix viewer ci
-python3 -m pip install -r tools/requirements-pacs-validation.txt
+python3 -m pip install -r tools/requirements-prd-validation.txt
 ```
 
 ## Change workflow
@@ -35,7 +35,7 @@ For framework and agent changes:
 ```bash
 npm run validate:agents
 python3 tools/prd_schema_compat.py viewer/PRD_web_ui.json --stats-json
-python3 -m unittest tools.test_init_pacs_project
+python3 -m unittest tools.test_init_prd_project
 ```
 
 For MCP changes:

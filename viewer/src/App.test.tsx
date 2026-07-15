@@ -89,7 +89,7 @@ describe("App", () => {
       nodes: Array<{ id: string }>;
     };
 
-    expect(bundle.schema).toBe("pacs.trace-summary.v1");
+    expect(bundle.schema).toBe("prd.trace-summary.v1");
     expect(bundle.selected_node_id).toBe("FR-005");
     expect(bundle.selected_node).toEqual(expect.objectContaining({ id: "FR-005", status: "proposed" }));
     expect(bundle.nodes).toContainEqual(expect.objectContaining({ id: "US-003" }));
@@ -118,7 +118,7 @@ describe("App", () => {
       traceability: { counts: { requirements: number } };
     };
 
-    expect(snapshot.schema).toBe("pacs.review-snapshot.v2");
+    expect(snapshot.schema).toBe("prd.review-snapshot.v2");
     expect(snapshot.source.title).toBe("PRD Reviewer Local/Web UI");
     expect(snapshot.validation.status).toBe("valid");
     expect(snapshot.readiness.status).toBe("blocked");
@@ -153,7 +153,7 @@ describe("App", () => {
 
     expect(promptSpy).toHaveBeenCalledWith(
       "Project name for the standalone status report",
-      "PRD Reviewer UI"
+      "PRD Viewer"
     );
     expect(URL.createObjectURL).toHaveBeenCalledTimes(1);
     const blob = vi.mocked(URL.createObjectURL).mock.calls[0][0] as Blob;
@@ -593,7 +593,7 @@ describe("App", () => {
       redaction: { content_fields_removed: boolean };
     };
 
-    expect(snapshot.schema).toBe("pacs.viewer.diagnostic-snapshot.v1");
+    expect(snapshot.schema).toBe("prd.viewer.diagnostic-snapshot.v1");
     expect(snapshot.redaction.content_fields_removed).toBe(true);
     expect(snapshot.events).toEqual(
       expect.arrayContaining([

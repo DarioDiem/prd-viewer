@@ -20,7 +20,7 @@ export function buildMetricEvent(config, options) {
     const loadSnapshot = options.load?.snapshot ?? null;
     const indexSnapshot = options.index?.snapshot ?? null;
     return {
-        schema: "pacs.mcp.metric.v1",
+        schema: "prd.mcp.metric.v1",
         recorded_at: new Date().toISOString(),
         transport: config.transport,
         request: {

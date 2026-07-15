@@ -1,4 +1,4 @@
-import type { PacsMcpConfig } from "./config.js";
+import type { PrdMcpConfig } from "./config.js";
 import { type SchemaCompatibilityResult } from "./compatibility.js";
 import { type ValidationResult } from "./validation.js";
 export type PrdCacheState = "cold" | "hit" | "reloaded";
@@ -37,7 +37,7 @@ export type PrdLoadResult = {
 export declare class PrdLoader {
     private readonly config;
     private cachedLoad;
-    constructor(config: PacsMcpConfig);
+    constructor(config: PrdMcpConfig);
     load(): Promise<PrdLoadResult>;
     private safeStat;
 }

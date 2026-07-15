@@ -85,7 +85,7 @@ export function buildAgentPacketResult(load, indexResult, ids = [], sections = [
     const maxTokens = Math.min(32_000, Math.max(256, Math.round(options.maxTokens ?? 6_000)));
     const includeUnresolved = options.includeUnresolved ?? (preset === "review" || preset === "triage");
     const packet = {
-        schema: "pacs.agent-packet.v2",
+        schema: "prd.agent-packet.v2",
         goal,
         preset,
         max_tokens: maxTokens,

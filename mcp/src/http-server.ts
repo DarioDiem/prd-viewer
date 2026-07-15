@@ -2,9 +2,9 @@ import http, { type IncomingMessage, type ServerResponse } from "node:http";
 
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 
-import type { PacsMcpConfig } from "./config.js";
+import type { PrdMcpConfig } from "./config.js";
 import { isLocalHostname } from "./config.js";
-import { createServer, createServerServices, type PacsMcpServerServices } from "./server.js";
+import { createServer, createServerServices, type PrdMcpServerServices } from "./server.js";
 
 export type StartedHttpServer = {
   close(): Promise<void>;
@@ -16,8 +16,8 @@ export type StartedHttpServer = {
 };
 
 export async function startHttpServer(
-  config: PacsMcpConfig,
-  services: PacsMcpServerServices = createServerServices(config)
+  config: PrdMcpConfig,
+  services: PrdMcpServerServices = createServerServices(config)
 ): Promise<StartedHttpServer> {
   const httpConfig = config.http;
 
@@ -140,7 +140,7 @@ export async function startHttpServer(
 
 export function validateHttpRequest(
   req: Pick<IncomingMessage, "headers">,
-  config: PacsMcpConfig
+  config: PrdMcpConfig
 ): { statusCode: number; message: string } | null {
   if (!config.http) {
     return {

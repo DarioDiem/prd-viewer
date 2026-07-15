@@ -31,7 +31,7 @@ describe("reviewSnapshot", () => {
 
     expect(snapshot).toEqual(
       expect.objectContaining({
-        schema: "pacs.review-snapshot.v2",
+        schema: "prd.review-snapshot.v2",
         exported_at: "2026-04-21T05:01:00Z",
         source: expect.objectContaining({
           label: "viewer/PRD_web_ui.json",
@@ -72,7 +72,7 @@ describe("reviewSnapshot", () => {
 
   it("builds stable snapshot filenames from PRD product names", () => {
     expect(buildReviewSnapshotFilename(seedPrd as PrdDocument, "2026-04-21T05:01:00Z")).toBe(
-      "prd-review-snapshot-prd-reviewer-ui-2026-04-21.json"
+      "prd-review-snapshot-prd-viewer-2026-04-21.json"
     );
   });
 });

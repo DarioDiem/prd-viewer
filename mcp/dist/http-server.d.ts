@@ -1,6 +1,6 @@
 import { type IncomingMessage } from "node:http";
-import type { PacsMcpConfig } from "./config.js";
-import { type PacsMcpServerServices } from "./server.js";
+import type { PrdMcpConfig } from "./config.js";
+import { type PrdMcpServerServices } from "./server.js";
 export type StartedHttpServer = {
     close(): Promise<void>;
     endpointUrl: string;
@@ -9,8 +9,8 @@ export type StartedHttpServer = {
     port: number;
     path: string;
 };
-export declare function startHttpServer(config: PacsMcpConfig, services?: PacsMcpServerServices): Promise<StartedHttpServer>;
-export declare function validateHttpRequest(req: Pick<IncomingMessage, "headers">, config: PacsMcpConfig): {
+export declare function startHttpServer(config: PrdMcpConfig, services?: PrdMcpServerServices): Promise<StartedHttpServer>;
+export declare function validateHttpRequest(req: Pick<IncomingMessage, "headers">, config: PrdMcpConfig): {
     statusCode: number;
     message: string;
 } | null;

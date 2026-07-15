@@ -2,7 +2,7 @@ import { McpServer, ResourceTemplate } from "@modelcontextprotocol/sdk/server/mc
 import { ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
 import * as z from "zod";
 
-import type { PacsMcpConfig } from "./config.js";
+import type { PrdMcpConfig } from "./config.js";
 import { getServerInfoSnapshot } from "./config.js";
 import { MetricsRecorder } from "./metrics.js";
 import { PrdIndexStore } from "./prd-index.js";
@@ -34,16 +34,16 @@ import {
   searchPrd
 } from "./tools.js";
 
-export type PacsMcpServerServices = {
-  config: PacsMcpConfig;
+export type PrdMcpServerServices = {
+  config: PrdMcpConfig;
   loader: PrdLoader;
   indexStore: PrdIndexStore;
   metrics: MetricsRecorder;
 };
 
-export type PacsMcpServerServicesResolver = () => Promise<PacsMcpServerServices>;
+export type PrdMcpServerServicesResolver = () => Promise<PrdMcpServerServices>;
 
-export function createServerServices(config: PacsMcpConfig): PacsMcpServerServices {
+export function createServerServices(config: PrdMcpConfig): PrdMcpServerServices {
   const loader = new PrdLoader(config);
   return {
     config,
@@ -54,9 +54,9 @@ export function createServerServices(config: PacsMcpConfig): PacsMcpServerServic
 }
 
 export function createServer(
-  config: PacsMcpConfig,
-  services: PacsMcpServerServices = createServerServices(config),
-  resolveServices: PacsMcpServerServicesResolver = async () => services
+  config: PrdMcpConfig,
+  services: PrdMcpServerServices = createServerServices(config),
+  resolveServices: PrdMcpServerServicesResolver = async () => services
 ): McpServer {
   const loader = {
     load: async () => (await resolveServices()).loader.load()
@@ -70,7 +70,7 @@ export function createServer(
   } as unknown as MetricsRecorder;
   const server = new McpServer(
     {
-      name: "pacs-prd-mcp",
+      name: "prd-viewer-mcp",
       version: "0.1.0"
     },
     {
@@ -251,7 +251,7 @@ export function createServer(
     "server-info",
     "prd://server/info",
     {
-      title: "PACS PRD MCP server info",
+      title: "PRD MCP server info",
       description: "Reports the local MCP contract, active PRD path, and planned capability surface.",
       mimeType: "application/json"
     },
@@ -283,7 +283,7 @@ export function createServer(
     "server-info-mode",
     new ResourceTemplate("prd://server/info{?mode}", { list: undefined }),
     {
-      title: "PACS PRD MCP server info",
+      title: "PRD MCP server info",
       description: "Reports the local MCP contract, active PRD path, and planned capability surface.",
       mimeType: "application/json"
     },

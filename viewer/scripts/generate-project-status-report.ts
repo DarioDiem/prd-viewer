@@ -63,7 +63,7 @@ await writeFile(
   metadataPath,
   `${JSON.stringify(
     {
-      schema: "pacs.viewer.project-status-report.v1",
+      schema: "prd.viewer.project-status-report.v1",
       generated_at: exportedAt,
       project_name: projectName,
       slug,

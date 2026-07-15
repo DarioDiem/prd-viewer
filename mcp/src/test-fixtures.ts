@@ -26,11 +26,11 @@ export async function loadSeedPrd(): Promise<Record<string, unknown>> {
 
 export async function createFixture(
   variant: FixtureVariant,
-  prefix = "pacs-mcp-fixture-"
+  prefix = "prd-mcp-fixture-"
 ): Promise<FixtureState> {
   const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), prefix));
   const prdPath = path.join(tempDir, "prd.json");
-  const metricsPath = path.join(tempDir, "metrics", "pacs-prd-mcp.jsonl");
+  const metricsPath = path.join(tempDir, "metrics", "prd-viewer-mcp.jsonl");
 
   if (variant === "malformed_json") {
     await fs.writeFile(prdPath, "{");

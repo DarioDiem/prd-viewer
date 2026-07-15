@@ -1,4 +1,4 @@
-# PACS Framework Extraction Plan
+# PRD Framework Extraction Plan
 
 ## Goal
 
@@ -22,7 +22,7 @@ Use one shared framework plus one project-local PRD instance.
 
 ## Target package split
 
-### `packages/pacs-schema`
+### `packages/prd-schema`
 
 Owns:
 
@@ -38,7 +38,7 @@ Exports:
 - version metadata
 - validation API
 
-### `packages/pacs-mcp`
+### `packages/prd-mcp`
 
 Owns:
 
@@ -49,9 +49,9 @@ Owns:
 
 Depends on:
 
-- `pacs-schema`
+- `prd-schema`
 
-### `packages/pacs-agent-assets`
+### `packages/prd-agent-assets`
 
 Owns:
 
@@ -59,14 +59,14 @@ Owns:
 - generated agent sync rules
 - generic skills that are not viewer-specific
 
-### `templates/pacs-project`
+### `templates/prd-project`
 
 Owns the starting project skeleton:
 
 - canonical `PRD.json`
 - optional viewer workspace
 - local metrics directory
-- sample `pacs.config.example.json`
+- sample `prd.config.example.json`
 - minimal `AGENTS.md`
 
 ## Per-project contract
@@ -83,7 +83,7 @@ Every adopted project should define:
   - endpoint path
   - optional explicit allowed origins
 
-The example contract is captured in [pacs.config.example.json](pacs.config.example.json).
+The example contract is captured in [prd.config.example.json](prd.config.example.json).
 
 ## Recommended runtime model for multiple projects
 
@@ -122,14 +122,14 @@ Do not start with one global multi-project server. That adds routing, isolation,
 
 ### Phase 2: extract shared packages
 
-- move schema assets into `packages/pacs-schema`
-- move MCP runtime into `packages/pacs-mcp`
-- move generic agent assets into `packages/pacs-agent-assets`
+- move schema assets into `packages/prd-schema`
+- move MCP runtime into `packages/prd-mcp`
+- move generic agent assets into `packages/prd-agent-assets`
 
 ### Phase 3: create the bootstrap path
 
 - add a project template directory
-- add a bootstrap script such as `tools/init_pacs_project.*`
+- add a bootstrap script such as `tools/init_prd_project.*`
 - emit:
   - PRD file
   - metrics directory
@@ -138,22 +138,22 @@ Do not start with one global multi-project server. That adds routing, isolation,
 
 Implemented locally with:
 
-- `templates/pacs-project/`
-- `tools/init_pacs_project.py`
-- `python3 -m unittest tools/test_init_pacs_project.py`
+- `templates/prd-project/`
+- `tools/init_prd_project.py`
+- `python3 -m unittest tools/test_init_prd_project.py`
 
 Current bootstrap modes:
 
 - default:
   - creates the project PRD, config, metrics scaffold, and MCP registration guidance
   - copies the schema and validation bundle into the new project so `PRD.json` can be validated locally without depending on the framework repo layout
-  - expects the shared PACS framework repo to remain available for specialist agent definitions
+  - expects the shared PRD framework repo to remain available for specialist agent definitions
 - `--upgrade-existing`:
   - refreshes framework-managed files in place for an already bootstrapped project
   - preserves the existing `PRD.json` by default
-  - keeps existing `pacs.config.json` values where they already exist and fills in missing framework defaults
+  - keeps existing `prd.config.json` values where they already exist and fills in missing framework defaults
   - can be combined with `--include-agents` or used to refresh already-present local agent assets
-  - can be combined with `--remove-legacy-agents` to explicitly remove the known PACS-vendored agent assets while preserving unrelated files
+  - can be combined with `--remove-legacy-agents` to explicitly remove the known PRD-vendored agent assets while preserving unrelated files
 - `--include-agents`:
   - copies a curated local subset of `.agents/*.yaml`, `.codex/agents/*`, `.gemini/agents/*`, and reusable PRD skills
   - makes the bootstrapped project more self-contained at the cost of later drift from the framework repo

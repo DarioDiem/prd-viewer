@@ -1,13 +1,13 @@
 {
   "project": {
-    "id": "pacs-prd-viewer",
-    "name": "PACS PRD Viewer"
+    "id": "prd-viewer",
+    "name": "PRD Viewer"
   },
   "prd": {
     "path": "viewer/PRD_web_ui.json"
   },
   "metrics": {
-    "path": ".metrics/pacs_prd_mcp.jsonl"
+    "path": ".metrics/prd_viewer_mcp.jsonl"
   },
   "mcp": {
     "transport": "stdio",

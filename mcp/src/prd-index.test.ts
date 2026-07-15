@@ -28,7 +28,7 @@ test("builds section, entity, and link indexes for a valid PRD", async () => {
 });
 
 test("tracks broken links without failing the index build", async () => {
-  const fixture = await createFixture("broken_trace_links", "pacs-mcp-index-");
+  const fixture = await createFixture("broken_trace_links", "prd-mcp-index-");
   const seed = JSON.parse(await fs.readFile(fixture.prdPath, "utf8")) as Record<string, unknown>;
 
   const index = buildPrdIndex(seed);
@@ -36,14 +36,14 @@ test("tracks broken links without failing the index build", async () => {
 });
 
 test("reuses the cached index until the source file changes", async () => {
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "pacs-mcp-index-"));
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "prd-mcp-index-"));
   const prdPath = path.join(tempDir, "prd.json");
   const seed = await loadSeedPrd();
   await fs.writeFile(prdPath, JSON.stringify(seed, null, 2));
 
   const config = resolveConfig({
-    PACS_PRD_PATH: prdPath,
-    PACS_MCP_METRICS_PATH: path.join(tempDir, "metrics.jsonl")
+    PRD_PATH: prdPath,
+    PRD_MCP_METRICS_PATH: path.join(tempDir, "metrics.jsonl")
   });
   const store = new PrdIndexStore(new PrdLoader(config));
 
@@ -65,11 +65,11 @@ test("reuses the cached index until the source file changes", async () => {
 });
 
 test("blocks the index when the loader blocks the PRD", async () => {
-  const fixture = await createFixture("schema_invalid", "pacs-mcp-index-");
+  const fixture = await createFixture("schema_invalid", "prd-mcp-index-");
 
   const config = resolveConfig({
-    PACS_PRD_PATH: fixture.prdPath,
-    PACS_MCP_METRICS_PATH: fixture.metricsPath
+    PRD_PATH: fixture.prdPath,
+    PRD_MCP_METRICS_PATH: fixture.metricsPath
   });
   const store = new PrdIndexStore(new PrdLoader(config));
   const result = await store.load();

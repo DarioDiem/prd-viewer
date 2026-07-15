@@ -1,13 +1,13 @@
 {
   "project": {
     "id": "example-project",
-    "name": "Example PACS Project"
+    "name": "Example PRD Project"
   },
   "prd": {
     "path": "PRD.json"
   },
   "metrics": {
-    "path": ".metrics/pacs_prd_mcp.jsonl"
+    "path": ".metrics/prd_viewer_mcp.jsonl"
   },
   "mcp": {
     "transport": "stdio",

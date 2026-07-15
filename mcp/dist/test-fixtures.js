@@ -6,10 +6,10 @@ const seedPrdPath = path.resolve(repoRoot, "viewer/PRD_web_ui.json");
 export async function loadSeedPrd() {
     return JSON.parse(await fs.readFile(seedPrdPath, "utf8"));
 }
-export async function createFixture(variant, prefix = "pacs-mcp-fixture-") {
+export async function createFixture(variant, prefix = "prd-mcp-fixture-") {
     const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), prefix));
     const prdPath = path.join(tempDir, "prd.json");
-    const metricsPath = path.join(tempDir, "metrics", "pacs-prd-mcp.jsonl");
+    const metricsPath = path.join(tempDir, "metrics", "prd-viewer-mcp.jsonl");
     if (variant === "malformed_json") {
         await fs.writeFile(prdPath, "{");
         return {

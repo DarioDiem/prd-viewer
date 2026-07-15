@@ -28,7 +28,7 @@ export function createServer(config, services = createServerServices(config), re
         record: async (...args) => (await resolveServices()).metrics.record(...args)
     };
     const server = new McpServer({
-        name: "pacs-prd-mcp",
+        name: "prd-viewer-mcp",
         version: "0.1.0"
     }, {
         instructions: "This server is local-only and read-only. Treat the PRD JSON on disk as canonical. Prefer focused discovery followed by a budgeted build_agent_packet request. Avoid full-document payloads unless the task requires whole-document validation or migration."
@@ -144,7 +144,7 @@ export function createServer(config, services = createServerServices(config), re
         });
     });
     server.registerResource("server-info", "prd://server/info", {
-        title: "PACS PRD MCP server info",
+        title: "PRD MCP server info",
         description: "Reports the local MCP contract, active PRD path, and planned capability surface.",
         mimeType: "application/json"
     }, async (uri) => {
@@ -164,7 +164,7 @@ export function createServer(config, services = createServerServices(config), re
         });
     });
     server.registerResource("server-info-mode", new ResourceTemplate("prd://server/info{?mode}", { list: undefined }), {
-        title: "PACS PRD MCP server info",
+        title: "PRD MCP server info",
         description: "Reports the local MCP contract, active PRD path, and planned capability surface.",
         mimeType: "application/json"
     }, async (uri) => {

@@ -12,7 +12,7 @@ This repository contains PRD JSON generation and validation assets for a multi-a
 - `.gemini/agents/` contains generated Gemini CLI Markdown agent definitions.
 - `.agents/skills/*/SKILL.md` contains Agent Skills-compatible reusable PRD skills.
 - `tools/sync_agents.py` synchronizes definitions from `.agents/*.yaml` to other formats.
-- `plugins/pacs-context/` packages focused context guidance, MCP registration, and lightweight hooks.
+- `plugins/prd-context/` packages focused context guidance, MCP registration, and lightweight hooks.
 - `tools/prd_toon_roundtrip.py` is an optional encoding benchmark.
 - `docs/agent-research.md` records evaluated external agent implementations and local-agent inclusion decisions.
 - `docs/delivery-workflow.md` defines when PRD, TRD, project-tracking, external issues, tasks, and sprints change.
@@ -33,8 +33,8 @@ This repository contains PRD JSON generation and validation assets for a multi-a
 
 ## Agent Rules
 
-- This framework repository intentionally has no root product `PRD.json`. Treat `viewer/PRD_web_ui.json` as the live artifact for repository, Viewer, and MCP-server work. Newly scaffolded PACS projects keep their own root `PRD.json` as canonical.
-- When the local `pacs-prd` MCP server is available, prefer MCP reads over direct PRD file reads. Use focused discovery first, then call `build_agent_packet` with an explicit task preset and token budget. Keep `include_unresolved` false unless unresolved work is in scope.
+- This framework repository intentionally has no root product `PRD.json`. Treat `viewer/PRD_web_ui.json` as the live artifact for repository, Viewer, and MCP-server work. Newly scaffolded PRD projects keep their own root `PRD.json` as canonical.
+- When the local `prd-viewer` MCP server is available, prefer MCP reads over direct PRD file reads. Use focused discovery first, then call `build_agent_packet` with an explicit task preset and token budget. Keep `include_unresolved` false unless unresolved work is in scope.
 - If the MCP server is unavailable in this repository, fall back to targeted reads of `viewer/PRD_web_ui.json`. In scaffolded projects with a root `PRD.json`, prefer `python3 tools/prd_extractor.py --summary` and `python3 tools/prd_extractor.py --section <name>`.
 - Read the full PRD file only when a task strictly requires whole-document review, full-file validation, migration, deterministic serialization, complete artifact export, or schema-wide edits that cannot be handled safely through focused MCP or extractor reads.
 - Treat TOON as an opt-in benchmark only, never as an agent context, compliance, merge, or release gate.

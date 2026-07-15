@@ -670,7 +670,7 @@ export default function App() {
     <main className="app-shell">
       <aside className="workspace-rail" aria-label="PRD sections">
         <div className="brand-block">
-          <span className="eyebrow">PACS</span>
+          <span className="eyebrow">PRD</span>
           <h1>PRD Viewer</h1>
           <p>{summary.sourceLabel}</p>
         </div>

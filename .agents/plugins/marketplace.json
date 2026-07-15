@@ -1,14 +1,14 @@
 {
-  "name": "pacs-local",
+  "name": "prd-local",
   "interface": {
-    "displayName": "PACS Local Plugins"
+    "displayName": "PRD Local Plugins"
   },
   "plugins": [
     {
-      "name": "pacs-context",
+      "name": "prd-context",
       "source": {
         "source": "local",
-        "path": "./plugins/pacs-context"
+        "path": "./plugins/prd-context"
       },
       "policy": {
         "installation": "AVAILABLE",

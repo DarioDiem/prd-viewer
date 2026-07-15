@@ -1,20 +1,20 @@
 {
-  "name": "pacs-prd-mcp",
+  "name": "prd-viewer-mcp",
   "private": true,
   "version": "0.1.0",
   "type": "module",
-  "description": "Local-only MCP server for derived PRD access in the PACS framework.",
+  "description": "Local-only MCP server for derived PRD access in the PRD framework.",
   "engines": {
     "node": ">=20.19.0"
   },
   "scripts": {
     "dev": "tsx src/index.ts",
-    "dev:http": "PACS_MCP_TRANSPORT=http tsx src/index.ts",
+    "dev:http": "PRD_MCP_TRANSPORT=http tsx src/index.ts",
     "build": "tsc -p tsconfig.json",
-    "build:plugin": "npm run build && esbuild dist/index.js --bundle --platform=node --format=esm --target=node20 --outfile=../plugins/pacs-context/mcp/index.mjs",
+    "build:plugin": "npm run build && esbuild dist/index.js --bundle --platform=node --format=esm --target=node20 --outfile=../plugins/prd-context/mcp/index.mjs",
     "check": "tsc -p tsconfig.json --noEmit",
     "start": "node dist/index.js",
-    "start:http": "PACS_MCP_TRANSPORT=http node dist/index.js",
+    "start:http": "PRD_MCP_TRANSPORT=http node dist/index.js",
     "test": "node --import tsx --test src/*.test.ts"
   },
   "dependencies": {

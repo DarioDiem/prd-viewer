@@ -1,5 +1,5 @@
-import type { PacsMcpConfig } from "./config.js";
-import { type PacsMcpServerServices } from "./server.js";
+import type { PrdMcpConfig } from "./config.js";
+import { type PrdMcpServerServices } from "./server.js";
 export type RootUriProvider = () => Promise<string[]>;
-export declare function createActiveProjectServicesResolver(listRootUris: RootUriProvider, env?: NodeJS.ProcessEnv): () => Promise<PacsMcpServerServices>;
-export declare function resolveActiveConfig(listRootUris: RootUriProvider, env?: NodeJS.ProcessEnv): Promise<PacsMcpConfig>;
+export declare function createActiveProjectServicesResolver(listRootUris: RootUriProvider, env?: NodeJS.ProcessEnv): () => Promise<PrdMcpServerServices>;
+export declare function resolveActiveConfig(listRootUris: RootUriProvider, env?: NodeJS.ProcessEnv): Promise<PrdMcpConfig>;

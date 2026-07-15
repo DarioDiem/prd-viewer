@@ -1,0 +1,56 @@
+# PRD Plugin
+
+The PRD Context plugin packages the MCP runtime. It discovers this project's
+`prd.config.json` through the MCP Roots protocol, so the project does not need
+an MCP command, framework path, or PRD environment variables.
+
+## Install
+
+Add the PRD marketplace once, then install the plugin:
+
+```bash
+codex plugin marketplace add /path/to/PRD
+codex plugin add prd-context@prd-local
+```
+
+Restart Codex or open a new task in this project. Verify the connection with
+`server_info` or `search_prd`; the reported artifact path should resolve from
+this project's `prd.config.json`.
+
+## Update
+
+After installing a newer PRD release, reinstall the cached plugin and restart
+Codex:
+
+```bash
+codex plugin remove prd-context@prd-local
+codex plugin add prd-context@prd-local
+```
+
+The canonical PRD and metrics paths remain project-local:
+
+- PRD: `PRD.json` (or the path configured in `prd.config.json`)
+- Metrics: `.metrics/prd_viewer_mcp.jsonl` (or the configured metrics path)
+
+## Optional local registration: HTTP
+
+The plugin uses stdio. If you intentionally want one long-lived project-local
+service for multiple concurrent local clients, the shared framework can still
+run in HTTP mode:
+
+```bash
+cd /path/to/PRD/mcp
+PRD_PATH="/path/to/project/PRD.json" \
+PRD_MCP_METRICS_PATH="/path/to/project/.metrics/prd_viewer_mcp.jsonl" \
+PRD_MCP_TRANSPORT=http \
+PRD_MCP_HTTP_HOST=${HTTP_HOST} \
+PRD_MCP_HTTP_PORT=${HTTP_PORT} \
+PRD_MCP_HTTP_PATH=${HTTP_PATH} \
+npm run start:http
+```
+
+Default project-local endpoint:
+
+`${HTTP_URL}`
+
+Keep HTTP bound to localhost only.

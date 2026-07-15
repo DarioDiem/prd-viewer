@@ -3,9 +3,9 @@
     "prd_id": "38491764-5485-4218-A991-A9D83BE84B7F",
     "title": "PRD Reviewer Local/Web UI",
     "summary": "A local-first web reviewer UI for PRD.json that gives humans a dashboard, schema-aware section views, validation, traceability, and safe export/writeback while preserving PRD.json as the canonical artifact for AI agents.",
-    "product_name": "PRD Reviewer UI",
+    "product_name": "PRD Viewer",
     "document_type": "prd",
-    "version": "0.1.31",
+    "version": "0.1.32",
     "status": "draft",
     "lifecycle_stage": "definition",
     "owners": {
@@ -21,7 +21,7 @@
     "reviewers": [],
     "approvers": [],
     "created_at": "2026-04-20T00:00:00Z",
-    "updated_at": "2026-07-15T02:03:50Z",
+    "updated_at": "2026-07-15T02:55:22Z",
     "target_release": null,
     "stakeholders": [
       {
@@ -706,7 +706,7 @@
           "D-006"
         ],
         "acceptance_criteria": [
-          "The UI reads content-redacted pacs-prd MCP metrics without reading PRD payloads from the metrics log.",
+          "The UI reads content-redacted prd-viewer MCP metrics without reading PRD payloads from the metrics log.",
           "The UI displays focused-read rate, packet token estimates, budget truncation, and full-document fallback counts.",
           "The UI can filter metrics by MCP resource or tool without treating metrics data as canonical PRD content."
         ],
@@ -1316,8 +1316,8 @@
       },
       {
         "dependency_id": "D-006",
-        "name": "PACS MCP metrics log",
-        "description": "The PACS context workflow records content-redacted focused-read, packet-size, and full-document-fallback metrics at .metrics/pacs_prd_mcp.jsonl.",
+        "name": "PRD MCP metrics log",
+        "description": "The PRD context workflow records content-redacted focused-read, packet-size, and full-document-fallback metrics at .metrics/prd_viewer_mcp.jsonl.",
         "type": "internal",
         "owner": "Engineering",
         "required_by": "2026-05-04",
@@ -1603,7 +1603,7 @@
         "area": "Public repository and merge readiness",
         "owner": "Engineering",
         "status": "ready",
-        "notes": "DEC-011 is implemented at https://github.com/DarioDiem/pacs-prd-viewer. The public repository started from a sanitized current-tree snapshot with one noreply-authored root commit, no inherited Git objects, clean privacy scans, independent validation, and CI on main."
+        "notes": "DEC-011 is implemented at https://github.com/DarioDiem/prd-viewer. The public repository started from a sanitized current-tree snapshot, has no inherited Git objects or medical-project branding, and passes independent privacy scans and CI on main."
       }
     ]
   },
@@ -1611,7 +1611,7 @@
     "status": "in_progress",
     "owner": null,
     "summary": "The local-first reviewer MVP and public repository preparation are complete. The PRD framework and Viewer are published from a separate clean-history repository with public contribution and security guidance, automated validation gates, clean dependency audits, independent export verification, and no inherited private Git objects. Shared-deployment governance remains a separate blocker.",
-    "updated_at": "2026-07-15T02:03:50Z",
+    "updated_at": "2026-07-15T02:55:22Z",
     "linked_prd_ids": [
       "38491764-5485-4218-A991-A9D83BE84B7F"
     ],
@@ -1882,12 +1882,12 @@
           "FR-012",
           "TC-003"
         ],
-        "notes": "Implemented in mcp/src/http-server.ts and mcp/src/index.ts with optional Streamable HTTP transport selected by PACS_MCP_TRANSPORT=http, localhost-only host validation, optional explicit origin allowlists, health checks, and matching npm scripts; mcp/src/http-server.test.ts covers localhost client success and non-local origin rejection, and the package README documents the runtime contract and environment variables."
+        "notes": "Implemented in mcp/src/http-server.ts and mcp/src/index.ts with optional Streamable HTTP transport selected by PRD_MCP_TRANSPORT=http, localhost-only host validation, optional explicit origin allowlists, health checks, and matching npm scripts; mcp/src/http-server.test.ts covers localhost client success and non-local origin rejection, and the package README documents the runtime contract and environment variables."
       },
       {
         "work_item_id": "PTW-014",
-        "title": "Implement the reusable PACS project bootstrap layer",
-        "description": "Add a project scaffold, initialization script, validation coverage, and local MCP registration guidance so new projects can adopt the PACS framework without manual file copying.",
+        "title": "Implement the reusable PRD project bootstrap layer",
+        "description": "Add a project scaffold, initialization script, validation coverage, and local MCP registration guidance so new projects can adopt the PRD framework without manual file copying.",
         "status": "done",
         "priority": "medium",
         "owner": "Engineering",
@@ -1901,7 +1901,7 @@
           "NFR-003",
           "PTN-005"
         ],
-        "notes": "Implemented with template-backed scaffolding in templates/pacs-project/, the metrics-enabled tools/init_pacs_project.py bootstrap script, regression coverage in tools/test_init_pacs_project.py, a root npm init:project command, and updated MCP/extraction docs that show how a new project registers the shared pacs-prd server over stdio or optional localhost HTTP."
+        "notes": "Implemented with template-backed scaffolding in templates/prd-project/, the metrics-enabled tools/init_prd_project.py bootstrap script, regression coverage in tools/test_init_prd_project.py, a root npm init:project command, and updated MCP/extraction docs that show how a new project registers the shared prd-viewer server over stdio or optional localhost HTTP."
       },
       {
         "work_item_id": "PTW-015",
@@ -1919,7 +1919,7 @@
           "PTI-003"
         ],
         "external_refs": [],
-        "notes": "Implemented in schema 1.2.0, the viewer project-tracking editor, PACS bootstrap output, and docs/delivery-workflow.md. External systems remain authoritative for granular execution state."
+        "notes": "Implemented in schema 1.2.0, the viewer project-tracking editor, PRD bootstrap output, and docs/delivery-workflow.md. External systems remain authoritative for granular execution state."
       },
       {
         "work_item_id": "PTW-016",
@@ -1944,9 +1944,9 @@
           "DEC-011"
         ],
         "external_refs": [
-          "https://github.com/DarioDiem/pacs-prd-viewer"
+          "https://github.com/DarioDiem/prd-viewer"
         ],
-        "notes": "Completed with viewer/TRD.md, CONTRIBUTING.md, SECURITY.md, aligned source-of-truth guidance, a GitHub Actions validation workflow, clean npm audits, removal of tracked Playwright output, schema and agent validation, 32 MCP tests, 63 Viewer unit/component tests, 10 Viewer browser tests, plugin rebuild, privacy scans, and verified fast-forward ancestry to PRD-v1. DEC-011 is implemented by the separate public repository at https://github.com/DarioDiem/pacs-prd-viewer, created from a sanitized snapshot with one noreply-authored root commit and no inherited private Git objects."
+        "notes": "Completed with viewer/TRD.md, CONTRIBUTING.md, SECURITY.md, aligned source-of-truth guidance, a GitHub Actions validation workflow, clean npm audits, removal of tracked Playwright output, schema and agent validation, 32 MCP tests, 63 Viewer unit/component tests, 10 Viewer browser tests, plugin rebuild, privacy scans, and verified fast-forward ancestry to PRD-v1. DEC-011 is implemented by the separate PRD Viewer repository at https://github.com/DarioDiem/prd-viewer, created from a sanitized snapshot with no inherited private Git objects or medical-project branding."
       }
     ],
     "issues_found": [
@@ -2151,7 +2151,7 @@
       },
       {
         "note_id": "PTN-005",
-        "note": "The reusable multi-project extraction path is now documented in docs/framework-extraction-plan.md with a concrete per-project config contract example in docs/pacs.config.example.json, so future PACS adopters can instantiate one PRD plus one MCP server instance per project instead of treating this repo layout as the only supported shape.",
+        "note": "The reusable multi-project extraction path is now documented in docs/framework-extraction-plan.md with a concrete per-project config contract example in docs/prd.config.example.json, so future PRD adopters can instantiate one PRD plus one MCP server instance per project instead of treating this repo layout as the only supported shape.",
         "owner": "Engineering",
         "noted_at": "2026-05-04T16:40:00Z",
         "linked_prd_ids": [

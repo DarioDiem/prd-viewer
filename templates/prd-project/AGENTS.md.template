@@ -2,33 +2,33 @@
 
 ## Project Overview
 
-This project uses the PACS PRD framework with a canonical local `PRD.json` artifact.
+This project uses the PRD framework with a canonical local `PRD.json` artifact.
 
 - `PRD.json` is the source of truth for product requirements.
 - `TRD.md` describes implementation design and links back to scoped `FR-###` and `NFR-###` requirements without redefining them.
-- `pacs.config.json` stores the project-local MCP and metrics settings.
+- `prd.config.json` stores the project-local MCP and metrics settings.
 - `schema.strict.json`, `schema.json`, and `schema.versions.json` are copied locally so the project can validate its PRD without depending on the framework repo layout.
-- `tools/prd_schema_compat.py`, `tools/prd_extractor.py`, and `tools/pacs_metrics.py` are copied locally as the project validation bundle.
-- `docs/mcp-registration.md` explains how to install and verify the PACS Context plugin.
+- `tools/prd_schema_compat.py`, `tools/prd_extractor.py`, and `tools/prd_metrics.py` are copied locally as the project validation bundle.
+- `docs/mcp-registration.md` explains how to install and verify the PRD Context plugin.
 - `docs/delivery-workflow.md` defines when PRD, TRD, project-tracking, external issues, tasks, and sprints change.
 
 ## Agent Rules
 
-- Prefer the local `pacs-prd` MCP server when it is available. Start with `search_prd`, `get_entity`, or `get_linked_entities`, then call `build_agent_packet` with an explicit preset and token budget. Keep unresolved items excluded unless they are in scope.
+- Prefer the local `prd-viewer` MCP server when it is available. Start with `search_prd`, `get_entity`, or `get_linked_entities`, then call `build_agent_packet` with an explicit preset and token budget. Keep unresolved items excluded unless they are in scope.
 - Read the full `PRD.json` only when a task requires full-document validation, migration, deterministic export, or whole-document review.
 - Keep `PRD.json` canonical. Any derived index, metrics log, cache, or transport packet must be rebuildable from it.
 - Keep product scope and acceptance criteria in `PRD.json`; keep architecture, interface contracts, runtime design, and verification mapping in `TRD.md`.
 - Keep `DEC-###` records in the PRD `decisions` array as the single decision log. Reference them from `TRD.md` instead of creating a parallel ADR log.
 - Start implementation from a PTW-backed external issue rather than an FR or NFR alone. Add canonical issue, pull-request, board, or iteration URLs to `external_refs` instead of copying live external state into the PRD.
-- Validate complete PRD files against the PACS strict schema before treating edits as accepted.
+- Validate complete PRD files against the PRD strict schema before treating edits as accepted.
 - Do not send PRD content to third-party services unless the user explicitly asks.
 
 ## Local Workflow
 
-- Review `pacs.config.json` for the current PRD path, metrics path, and preferred transport.
-- Use the PACS Context plugin for agent-facing PRD reads; it resolves this project through MCP Roots.
+- Review `prd.config.json` for the current PRD path, metrics path, and preferred transport.
+- Use the PRD Context plugin for agent-facing PRD reads; it resolves this project through MCP Roots.
 - Install local validation dependencies when needed:
-  - `python3 -m pip install -r tools/requirements-pacs-validation.txt`
+  - `python3 -m pip install -r tools/requirements-prd-validation.txt`
 - Use the local validation bundle for project-local checks:
   - `python3 tools/prd_schema_compat.py PRD.json --stats-json`
   - `python3 tools/prd_extractor.py PRD.json --summary`
