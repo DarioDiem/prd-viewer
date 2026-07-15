@@ -5,7 +5,7 @@
     "summary": "A local-first web reviewer UI for PRD.json that gives humans a dashboard, schema-aware section views, validation, traceability, and safe export/writeback while preserving PRD.json as the canonical artifact for AI agents.",
     "product_name": "PRD Reviewer UI",
     "document_type": "prd",
-    "version": "0.1.30",
+    "version": "0.1.31",
     "status": "draft",
     "lifecycle_stage": "definition",
     "owners": {
@@ -21,7 +21,7 @@
     "reviewers": [],
     "approvers": [],
     "created_at": "2026-04-20T00:00:00Z",
-    "updated_at": "2026-07-15T01:44:04Z",
+    "updated_at": "2026-07-15T02:03:50Z",
     "target_release": null,
     "stakeholders": [
       {
@@ -1602,16 +1602,16 @@
       {
         "area": "Public repository and merge readiness",
         "owner": "Engineering",
-        "status": "in_progress",
-        "notes": "DEC-011 selects a separate clean-history public repository so unrelated private history is never copied. The current tree and validation gates are ready; the clean snapshot, public remote, and final visibility verification remain."
+        "status": "ready",
+        "notes": "DEC-011 is implemented at https://github.com/DarioDiem/pacs-prd-viewer. The public repository started from a sanitized current-tree snapshot with one noreply-authored root commit, no inherited Git objects, clean privacy scans, independent validation, and CI on main."
       }
     ]
   },
   "project_tracking": {
     "status": "in_progress",
     "owner": null,
-    "summary": "The local-first reviewer MVP and current-tree public repository preparation are complete, including the linked Viewer TRD, public contribution and security guidance, automated validation gates, clean dependency audits, and fast-forward merge readiness. DEC-011 requires publication from a separate clean-history repository so unrelated private history remains private; shared-deployment governance remains a separate blocker.",
-    "updated_at": "2026-07-15T01:44:04Z",
+    "summary": "The local-first reviewer MVP and public repository preparation are complete. The PRD framework and Viewer are published from a separate clean-history repository with public contribution and security guidance, automated validation gates, clean dependency audits, independent export verification, and no inherited private Git objects. Shared-deployment governance remains a separate blocker.",
+    "updated_at": "2026-07-15T02:03:50Z",
     "linked_prd_ids": [
       "38491764-5485-4218-A991-A9D83BE84B7F"
     ],
@@ -1925,7 +1925,7 @@
         "work_item_id": "PTW-016",
         "title": "Prepare the Viewer branch and repository for public release",
         "description": "Document the Viewer technical design, add public contribution and security boundaries, automate the release validation gates, remove generated test artifacts from version control, verify focused MCP configuration, and produce merge-readiness evidence for PRD-v1.",
-        "status": "in_progress",
+        "status": "done",
         "priority": "critical",
         "owner": "Engineering",
         "linked_prd_ids": [
@@ -1943,8 +1943,10 @@
           "PTB-003",
           "DEC-011"
         ],
-        "external_refs": [],
-        "notes": "Current-tree work is complete with viewer/TRD.md, CONTRIBUTING.md, SECURITY.md, aligned source-of-truth guidance, a GitHub Actions validation workflow, clean npm audits, removal of tracked Playwright output, schema and agent validation, 32 MCP tests, 63 Viewer unit/component tests, 10 Viewer browser tests, plugin rebuild, secret-pattern scans, and verified fast-forward ancestry to PRD-v1. DEC-011 now requires a separate clean-history public repository; add its canonical URL after creation and complete final public visibility verification."
+        "external_refs": [
+          "https://github.com/DarioDiem/pacs-prd-viewer"
+        ],
+        "notes": "Completed with viewer/TRD.md, CONTRIBUTING.md, SECURITY.md, aligned source-of-truth guidance, a GitHub Actions validation workflow, clean npm audits, removal of tracked Playwright output, schema and agent validation, 32 MCP tests, 63 Viewer unit/component tests, 10 Viewer browser tests, plugin rebuild, privacy scans, and verified fast-forward ancestry to PRD-v1. DEC-011 is implemented by the separate public repository at https://github.com/DarioDiem/pacs-prd-viewer, created from a sanitized snapshot with one noreply-authored root commit and no inherited private Git objects."
       }
     ],
     "issues_found": [

@@ -92,6 +92,8 @@ Viewer a hosted service.
   is present; selecting an open-source license remains a repository-owner choice.
 - Public release uses a new repository initialized from a sanitized current-tree
   snapshot. No Git objects, refs, or remotes are copied from the private source.
+- The public repository is `https://github.com/DarioDiem/pacs-prd-viewer` and
+  uses `main` as its protected release-integration branch.
 - The private source branch must remain a fast-forward candidate from its
   intended `PRD-v1` base and must pass the same checks locally before extraction.
 
