@@ -83,7 +83,7 @@ Every adopted project should define:
   - endpoint path
   - optional explicit allowed origins
 
-The example contract is captured in [docs/pacs.config.example.json](/Users/dariodiem/dev/imafem/PACS/docs/pacs.config.example.json).
+The example contract is captured in [pacs.config.example.json](pacs.config.example.json).
 
 ## Recommended runtime model for multiple projects
 

@@ -92,11 +92,11 @@ The current test suite now covers:
 For local manual inspection, build the package and point MCP Inspector at the stdio entrypoint:
 
 - `cd mcp && npm run build`
-- `npx @modelcontextprotocol/inspector node /Users/dariodiem/dev/imafem/PACS/mcp/dist/index.js`
+- `npx @modelcontextprotocol/inspector node "$PWD/mcp/dist/index.js"`
 
 If you want the viewer PRD explicitly:
 
-- `PACS_PRD_PATH=/Users/dariodiem/dev/imafem/PACS/viewer/PRD_web_ui.json npx @modelcontextprotocol/inspector node /Users/dariodiem/dev/imafem/PACS/mcp/dist/index.js`
+- `PACS_PRD_PATH="$PWD/viewer/PRD_web_ui.json" npx @modelcontextprotocol/inspector node "$PWD/mcp/dist/index.js"`
 
 For the optional HTTP transport:
 
@@ -180,8 +180,8 @@ When you upgrade an existing project, the bootstrap refreshes the framework-mana
 
 The extraction plan for reusing this framework across multiple projects lives in:
 
-- [docs/framework-extraction-plan.md](/Users/dariodiem/dev/imafem/PACS/docs/framework-extraction-plan.md)
-- [docs/pacs.config.example.json](/Users/dariodiem/dev/imafem/PACS/docs/pacs.config.example.json)
+- [Framework extraction plan](../docs/framework-extraction-plan.md)
+- [Example project configuration](../docs/pacs.config.example.json)
 
 ## Safety stance
 
