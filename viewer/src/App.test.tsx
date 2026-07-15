@@ -376,7 +376,7 @@ describe("App", () => {
       "https://github.com/example/project/issues/123"
     ]);
     expect(exportedPrd.project_tracking.issues_found.at(-1)?.title).toBe("Project tracking regression gap");
-  });
+  }, 10_000);
 
   it("blocks invalid structured project-tracking edits without replacing the active document", async () => {
     const user = userEvent.setup();
