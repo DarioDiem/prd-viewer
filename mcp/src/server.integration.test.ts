@@ -15,7 +15,7 @@ const repoRoot = path.resolve(import.meta.dirname, "../..");
 const mcpRoot = path.resolve(repoRoot, "mcp");
 
 test("stdio integration exposes tools, resources, templates, and focused results", async () => {
-  const session = await connectFixture("valid", "pacs-mcp-integration-valid-");
+  const session = await connectFixture("valid", "prd-mcp-integration-valid-");
 
   try {
     const tools = await session.client.listTools();
@@ -51,8 +51,8 @@ test("stdio integration exposes tools, resources, templates, and focused results
   }
 });
 
-test("stdio integration discovers pacs.config.json from MCP roots", async () => {
-  const fixture = await createRootDiscoveryFixture("pacs-mcp-root-discovery-");
+test("stdio integration discovers prd.config.json from MCP roots", async () => {
+  const fixture = await createRootDiscoveryFixture("prd-mcp-root-discovery-");
   const session = await connectProjectRoot(fixture);
 
   try {
@@ -67,11 +67,11 @@ test("stdio integration discovers pacs.config.json from MCP roots", async () => 
   }
 });
 
-test("bundled plugin MCP works after being copied outside the PACS repository", async () => {
-  const fixture = await createRootDiscoveryFixture("pacs-plugin-bundle-project-");
+test("bundled plugin MCP works after being copied outside the PRD repository", async () => {
+  const fixture = await createRootDiscoveryFixture("prd-plugin-bundle-project-");
   const cacheRoot = await fs.mkdtemp(path.join(fixture.tempDir, "plugin-cache-"));
-  const pluginRoot = path.join(cacheRoot, "pacs-context");
-  await fs.cp(path.join(repoRoot, "plugins", "pacs-context"), pluginRoot, {
+  const pluginRoot = path.join(cacheRoot, "prd-context");
+  await fs.cp(path.join(repoRoot, "plugins", "prd-context"), pluginRoot, {
     recursive: true
   });
   const session = await connectProjectRoot(fixture, {
@@ -95,7 +95,7 @@ test("bundled plugin MCP works after being copied outside the PACS repository", 
 });
 
 test("stdio integration reports blocked malformed PRDs through focused reads", async () => {
-  const session = await connectFixture("malformed_json", "pacs-mcp-integration-blocked-");
+  const session = await connectFixture("malformed_json", "prd-mcp-integration-blocked-");
 
   try {
     const summary = parseResourceEnvelope(await session.client.readResource({ uri: "prd://summary?mode=compact" }));
@@ -118,7 +118,7 @@ test("stdio integration reports blocked malformed PRDs through focused reads", a
 });
 
 test("stdio integration surfaces broken trace links and records invalid request failures", async () => {
-  const session = await connectFixture("broken_trace_links", "pacs-mcp-integration-broken-");
+  const session = await connectFixture("broken_trace_links", "prd-mcp-integration-broken-");
 
   try {
     const readiness = parseResourceEnvelope(await session.client.readResource({ uri: "prd://readiness?mode=full" }));
@@ -156,14 +156,14 @@ async function connectFixture(variant: FixtureVariant, prefix: string) {
     cwd: mcpRoot,
     env: {
       ...process.env,
-      PACS_PRD_PATH: fixture.prdPath,
-      PACS_MCP_METRICS_PATH: fixture.metricsPath
+      PRD_PATH: fixture.prdPath,
+      PRD_MCP_METRICS_PATH: fixture.metricsPath
     },
     stderr: "pipe"
   });
   const client = new Client(
     {
-      name: "pacs-prd-mcp-test-client",
+      name: "prd-viewer-mcp-test-client",
       version: "0.1.0"
     },
     {
@@ -186,7 +186,7 @@ async function createRootDiscoveryFixture(prefix: string) {
     fs.copyFile(path.join(repoRoot, "schema.strict.json"), path.join(fixture.tempDir, "schema.strict.json")),
     fs.copyFile(path.join(repoRoot, "schema.versions.json"), path.join(fixture.tempDir, "schema.versions.json")),
     fs.writeFile(
-      path.join(fixture.tempDir, "pacs.config.json"),
+      path.join(fixture.tempDir, "prd.config.json"),
       JSON.stringify({
         prd: { path: "prd.json" },
         metrics: { path: "metrics/root-discovery.jsonl" }
@@ -209,15 +209,15 @@ async function connectProjectRoot(
     cwd: launch.cwd,
     env: {
       ...process.env,
-      PACS_PROJECT_ROOT: undefined,
-      PACS_PRD_PATH: undefined,
-      PACS_MCP_METRICS_PATH: undefined
+      PRD_PROJECT_ROOT: undefined,
+      PRD_PATH: undefined,
+      PRD_MCP_METRICS_PATH: undefined
     },
     stderr: "pipe"
   });
   const client = new Client(
     {
-      name: "pacs-prd-mcp-roots-test-client",
+      name: "prd-viewer-mcp-roots-test-client",
       version: "0.1.0"
     },
     {

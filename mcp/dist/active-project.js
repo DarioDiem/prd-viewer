@@ -8,6 +8,6 @@ export function createActiveProjectServicesResolver(listRootUris, env = process.
     };
 }
 export async function resolveActiveConfig(listRootUris, env = process.env) {
-    const rootUris = env.PACS_PRD_PATH ? [] : await listRootUris();
+    const rootUris = env.PRD_PATH ? [] : await listRootUris();
     return resolveConfigFromProjectRoots(rootUris, env);
 }

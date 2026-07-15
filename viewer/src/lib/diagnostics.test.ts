@@ -43,7 +43,7 @@ describe("diagnostics", () => {
     const snapshot = buildDiagnosticSnapshot([event], "2026-04-23T10:01:00.000Z");
 
     expect(event).toMatchObject({
-      schema: "pacs.viewer.diagnostic-event.v1",
+      schema: "prd.viewer.diagnostic-event.v1",
       action: "save",
       outcome: "failure",
       document_revision: 4,
@@ -55,7 +55,7 @@ describe("diagnostics", () => {
       }
     });
     expect(snapshot).toEqual({
-      schema: "pacs.viewer.diagnostic-snapshot.v1",
+      schema: "prd.viewer.diagnostic-snapshot.v1",
       exported_at: "2026-04-23T10:01:00.000Z",
       event_count: 1,
       events: [event],

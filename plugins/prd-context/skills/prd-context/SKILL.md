@@ -1,13 +1,13 @@
 ---
-name: pacs-context
-description: Use for PACS PRD or TRD authoring, implementation, review, traceability, and status work that should load focused, token-budgeted context through the local pacs-prd MCP server.
+name: prd-context
+description: Use for PRD or TRD authoring, implementation, review, traceability, and status work that should load focused, token-budgeted context through the local prd-viewer MCP server.
 ---
 
-# PACS Context
+# PRD Context
 
 Keep canonical PRD JSON and Markdown TRDs on disk. Use MCP only to select the context needed for the current task.
 
-The bundled MCP server resolves `pacs.config.json` from the active MCP project root. Do not ask for `PACS_PROJECT_ROOT` or `PACS_PRD_PATH` unless the client does not support MCP Roots and the user is intentionally using the legacy registration path.
+The bundled MCP server resolves `prd.config.json` from the active MCP project root. Do not ask for `PRD_PROJECT_ROOT` or `PRD_PATH` unless the client does not support MCP Roots and the user is intentionally using the legacy registration path.
 
 ## Workflow
 

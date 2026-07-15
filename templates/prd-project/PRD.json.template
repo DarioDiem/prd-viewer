@@ -2,7 +2,7 @@
   "meta": {
     "prd_id": "__PRD_ID__",
     "title": "__PROJECT_NAME__ Product Requirements Document",
-    "summary": "A working PRD starter for __PROJECT_NAME__ using the PACS framework.",
+    "summary": "A working PRD starter for __PROJECT_NAME__ using the PRD framework.",
     "product_name": "__PRODUCT_NAME__",
     "document_type": "prd",
     "version": "0.1.0",
@@ -55,7 +55,7 @@
     "statement": "__PROJECT_NAME__ needs a single canonical PRD that stays valid, reviewable, and usable by both humans and local agent tooling.",
     "background": "This starter artifact exists so the project can begin with a schema-valid PRD instead of rebuilding the document shape from scratch.",
     "opportunity": "A valid initial PRD reduces setup friction, keeps scope changes reviewable, and lets local MCP-based agent workflows stay focused.",
-    "strategic_fit": "This project uses the PACS workflow so the PRD can remain the canonical artifact through planning, implementation, and review.",
+    "strategic_fit": "This project uses the PRD workflow so the PRD can remain the canonical artifact through planning, implementation, and review.",
     "affected_users": [
       "Project maintainer",
       "Engineering contributor"
@@ -64,7 +64,7 @@
       {
         "type": "internal_data",
         "description": "Projects need a canonical PRD artifact before automated review and agent handoff can work consistently.",
-        "source": "PACS framework bootstrap",
+        "source": "PRD framework bootstrap",
         "confidence": "high",
         "observed_at": "__DATE__"
       },
@@ -78,7 +78,7 @@
       {
         "type": "other",
         "description": "Local agent workflows become easier to control when the PRD starts with stable IDs and structured sections.",
-        "source": "PACS multi-project reuse plan",
+        "source": "PRD multi-project reuse plan",
         "confidence": "medium",
         "observed_at": "__DATE__"
       }
@@ -161,7 +161,7 @@
         "dependencies": [],
         "acceptance_criteria": [
           "A schema-valid PRD exists at the project root.",
-          "The PRD can be loaded by local PACS tooling without manual repair."
+          "The PRD can be loaded by local PRD tooling without manual repair."
         ],
         "status": "proposed",
         "release_phase": "mvp"
@@ -219,7 +219,7 @@
     "dependencies": [
       {
         "dependency_id": "D-001",
-        "name": "PACS framework tooling",
+        "name": "PRD framework tooling",
         "description": "Local schema validation, MCP access, and bootstrap support.",
         "type": "internal",
         "owner": null,
@@ -270,7 +270,7 @@
   "project_tracking": {
     "status": "not_started",
     "owner": null,
-    "summary": "The project has been initialized from the PACS bootstrap layer and still needs project-specific refinement.",
+    "summary": "The project has been initialized from the PRD bootstrap layer and still needs project-specific refinement.",
     "updated_at": "__TIMESTAMP__",
     "linked_prd_ids": [
       "__PRD_ID__"
@@ -300,7 +300,7 @@
       {
         "note_id": "PTN-001",
         "note": "One MCP server instance should be configured per project when the framework is reused across multiple repos or worktrees.",
-        "owner": "PACS bootstrap",
+        "owner": "PRD bootstrap",
         "noted_at": "__TIMESTAMP__",
         "linked_prd_ids": [
           "__PRD_ID__"
@@ -338,8 +338,8 @@
   "decisions": [
     {
       "decision_id": "DEC-001",
-      "title": "Use PACS as the initial PRD workflow",
-      "statement": "__PROJECT_NAME__ will use PACS schema validation and local MCP access for PRD-driven development.",
+      "title": "Use PRD as the initial PRD workflow",
+      "statement": "__PROJECT_NAME__ will use PRD schema validation and local MCP access for PRD-driven development.",
       "rationale": "The framework provides a structured, locally controlled workflow for multi-project agent collaboration.",
       "owner": null,
       "decided_at": null,

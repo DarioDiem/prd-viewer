@@ -3,7 +3,7 @@ import path from "node:path";
 
 import { ErrorCode, McpError } from "@modelcontextprotocol/sdk/types.js";
 
-import type { PacsMcpConfig, PacsMcpTransport } from "./config.js";
+import type { PrdMcpConfig, PrdMcpTransport } from "./config.js";
 import type { PrdIndexResult } from "./prd-index.js";
 import type { PrdLoadResult } from "./prd-loader.js";
 import { estimateJsonPayload, type ResponseEnvelope, type ResponseMode } from "./response-modes.js";
@@ -12,9 +12,9 @@ export type MetricRequestChannel = "resource" | "tool";
 export type MetricRequestScope = "focused" | "full_document";
 
 export type MetricEvent = {
-  schema: "pacs.mcp.metric.v1";
+  schema: "prd.mcp.metric.v1";
   recorded_at: string;
-  transport: PacsMcpTransport;
+  transport: PrdMcpTransport;
   request: {
     channel: MetricRequestChannel;
     name: string;
@@ -93,7 +93,7 @@ export type MetricRecordOptions = {
 };
 
 export class MetricsRecorder {
-  constructor(private readonly config: PacsMcpConfig) {}
+  constructor(private readonly config: PrdMcpConfig) {}
 
   async record(options: MetricRecordOptions): Promise<MetricEvent> {
     const event = buildMetricEvent(this.config, options);
@@ -103,14 +103,14 @@ export class MetricsRecorder {
   }
 }
 
-export function buildMetricEvent(config: PacsMcpConfig, options: MetricRecordOptions): MetricEvent {
+export function buildMetricEvent(config: PrdMcpConfig, options: MetricRecordOptions): MetricEvent {
   const responseEstimate = estimateResponse(options.response);
   const requestedMode = normalizeRequestedMode(options.requestedMode);
   const loadSnapshot = options.load?.snapshot ?? null;
   const indexSnapshot = options.index?.snapshot ?? null;
 
   return {
-    schema: "pacs.mcp.metric.v1",
+    schema: "prd.mcp.metric.v1",
     recorded_at: new Date().toISOString(),
     transport: config.transport,
     request: {

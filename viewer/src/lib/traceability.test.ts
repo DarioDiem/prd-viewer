@@ -99,7 +99,7 @@ describe("buildTraceability", () => {
     const traceability = buildTraceability(validPrdFixture());
     const bundle = buildAgentTraceBundle(traceability, "FR-005", "2026-04-21T01:00:00Z");
 
-    expect(bundle.schema).toBe("pacs.trace-summary.v1");
+    expect(bundle.schema).toBe("prd.trace-summary.v1");
     expect(bundle.selected_node).toEqual(
       expect.objectContaining({
         id: "FR-005",

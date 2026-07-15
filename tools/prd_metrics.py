@@ -1,4 +1,4 @@
-"""Shared local JSONL metrics writer for PACS tools."""
+"""Shared local JSONL metrics writer for PRD tools."""
 
 from __future__ import annotations
 

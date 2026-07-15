@@ -1,4 +1,4 @@
-# PACS Delivery Workflow
+# PRD Delivery Workflow
 
 Use this workflow to keep product intent, technical design, and live execution
 connected without copying the same state into several systems.

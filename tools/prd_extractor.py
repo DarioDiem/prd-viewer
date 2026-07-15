@@ -7,7 +7,7 @@ import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-from pacs_metrics import append_metrics
+from prd_metrics import append_metrics
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]

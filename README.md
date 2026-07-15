@@ -1,4 +1,4 @@
-# PRD Creation Framework
+# PRD Viewer
 
 Project-level schema, tools, and skills for versioned PRD JSON generation, validation, review, and agent handoff.
 
@@ -14,7 +14,7 @@ Requirements: Node.js 20.19 or newer and Python 3.11 or newer.
 npm ci
 npm --prefix mcp ci
 npm --prefix viewer ci
-python3 -m pip install -r tools/requirements-pacs-validation.txt
+python3 -m pip install -r tools/requirements-prd-validation.txt
 npm run validate:agents
 python3 tools/prd_schema_compat.py viewer/PRD_web_ui.json --stats-json
 npm --prefix mcp test
@@ -121,12 +121,12 @@ The benchmark uses the pinned local official `@toon-format/cli` converter and ve
 
 ## Agent Context Plugin
 
-`plugins/pacs-context` packages the focused-context skill, a bundled `pacs-prd` MCP runtime, and short session/subagent routing hooks. The MCP server resolves the open project's `pacs.config.json` through MCP Roots, so installed projects do not need `PACS_PROJECT_ROOT`, `PACS_PRD_PATH`, or a checkout of this framework. The hooks do not transcode or load PRD data; they direct agents to focused discovery and `build_agent_packet` with an explicit task preset and token budget.
+`plugins/prd-context` packages the focused-context skill, a bundled `prd-viewer` MCP runtime, and short session/subagent routing hooks. The MCP server resolves the open project's `prd.config.json` through MCP Roots, so installed projects do not need `PRD_PROJECT_ROOT`, `PRD_PATH`, or a checkout of this framework. The hooks do not transcode or load PRD data; they direct agents to focused discovery and `build_agent_packet` with an explicit task preset and token budget.
 
-Projects created with the former `--include-agents` option may keep those local definitions. To remove only the known PACS-vendored assets after moving to the plugin, review the project in Git and run:
+Projects created with the former `--include-agents` option may keep those local definitions. To remove only the known PRD-vendored assets after moving to the plugin, review the project in Git and run:
 
 ```bash
-python3 tools/init_pacs_project.py /path/to/project \
+python3 tools/init_prd_project.py /path/to/project \
   --upgrade-existing \
   --remove-legacy-agents
 ```
@@ -182,5 +182,5 @@ The active consolidated roster is generated from `.agents/*.yaml`:
 
 No license has been granted yet. Public visibility permits inspection, but it
 does not grant permission to copy, modify, or redistribute the code. The
-repository owner must select and add a license before presenting PACS as an
+repository owner must select and add a license before presenting PRD Viewer as an
 open-source project.

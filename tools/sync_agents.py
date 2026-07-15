@@ -7,7 +7,7 @@ import yaml
 import sys
 from datetime import datetime, timezone
 
-from pacs_metrics import append_metrics
+from prd_metrics import append_metrics
 
 REPO_ROOT = pathlib.Path(__file__).resolve().parents[1]
 OA_DIR = REPO_ROOT / ".agents"

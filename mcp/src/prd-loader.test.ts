@@ -11,7 +11,7 @@ import { createFixture, loadSeedPrd } from "./test-fixtures.js";
 const repoRoot = path.resolve(import.meta.dirname, "../..");
 
 test("loads a valid PRD and reuses the cache until the file changes", async () => {
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "pacs-mcp-loader-"));
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "prd-mcp-loader-"));
   const prdPath = path.join(tempDir, "prd.json");
   const seed = await loadSeedPrd();
 
@@ -19,8 +19,8 @@ test("loads a valid PRD and reuses the cache until the file changes", async () =
 
   const loader = new PrdLoader(
     resolveConfig({
-      PACS_PRD_PATH: prdPath,
-      PACS_MCP_METRICS_PATH: path.join(tempDir, "metrics.jsonl")
+      PRD_PATH: prdPath,
+      PRD_MCP_METRICS_PATH: path.join(tempDir, "metrics.jsonl")
     })
   );
 
@@ -47,12 +47,12 @@ test("loads a valid PRD and reuses the cache until the file changes", async () =
 });
 
 test("blocks malformed JSON files", async () => {
-  const fixture = await createFixture("malformed_json", "pacs-mcp-loader-");
+  const fixture = await createFixture("malformed_json", "prd-mcp-loader-");
 
   const loader = new PrdLoader(
     resolveConfig({
-      PACS_PRD_PATH: fixture.prdPath,
-      PACS_MCP_METRICS_PATH: fixture.metricsPath
+      PRD_PATH: fixture.prdPath,
+      PRD_MCP_METRICS_PATH: fixture.metricsPath
     })
   );
 
@@ -63,12 +63,12 @@ test("blocks malformed JSON files", async () => {
 });
 
 test("blocks schema-invalid PRDs", async () => {
-  const fixture = await createFixture("schema_invalid", "pacs-mcp-loader-");
+  const fixture = await createFixture("schema_invalid", "prd-mcp-loader-");
 
   const loader = new PrdLoader(
     resolveConfig({
-      PACS_PRD_PATH: fixture.prdPath,
-      PACS_MCP_METRICS_PATH: fixture.metricsPath
+      PRD_PATH: fixture.prdPath,
+      PRD_MCP_METRICS_PATH: fixture.metricsPath
     })
   );
 
@@ -79,12 +79,12 @@ test("blocks schema-invalid PRDs", async () => {
 });
 
 test("blocks PRDs with required extensions the server does not support yet", async () => {
-  const fixture = await createFixture("required_extension", "pacs-mcp-loader-");
+  const fixture = await createFixture("required_extension", "prd-mcp-loader-");
 
   const loader = new PrdLoader(
     resolveConfig({
-      PACS_PRD_PATH: fixture.prdPath,
-      PACS_MCP_METRICS_PATH: fixture.metricsPath
+      PRD_PATH: fixture.prdPath,
+      PRD_MCP_METRICS_PATH: fixture.metricsPath
     })
   );
 
@@ -94,12 +94,12 @@ test("blocks PRDs with required extensions the server does not support yet", asy
 });
 
 test("blocks PRDs with unknown schema versions", async () => {
-  const fixture = await createFixture("unsupported_schema_version", "pacs-mcp-loader-");
+  const fixture = await createFixture("unsupported_schema_version", "prd-mcp-loader-");
 
   const loader = new PrdLoader(
     resolveConfig({
-      PACS_PRD_PATH: fixture.prdPath,
-      PACS_MCP_METRICS_PATH: fixture.metricsPath
+      PRD_PATH: fixture.prdPath,
+      PRD_MCP_METRICS_PATH: fixture.metricsPath
     })
   );
 

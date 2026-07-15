@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Regression tests for the PACS project bootstrap script."""
+"""Regression tests for the PRD project bootstrap script."""
 
 from __future__ import annotations
 
@@ -12,8 +12,8 @@ from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = REPO_ROOT / "tools" / "init_pacs_project.py"
-class InitPacsProjectTest(unittest.TestCase):
+SCRIPT = REPO_ROOT / "tools" / "init_prd_project.py"
+class InitPrdProjectTest(unittest.TestCase):
     def run_init(self, target_dir: Path, *extra_args: str) -> subprocess.CompletedProcess[str]:
         metrics_path = target_dir.parent / "init.metrics.jsonl"
         return subprocess.run(
@@ -37,11 +37,11 @@ class InitPacsProjectTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             target_dir = Path(temp_dir) / "example-project"
             result = self.run_init(target_dir, "--project-name", "Example Project")
-            self.assertIn("Initialized PACS project scaffold", result.stdout)
+            self.assertIn("Initialized PRD project scaffold", result.stdout)
 
             prd_path = target_dir / "PRD.json"
             trd_path = target_dir / "TRD.md"
-            config_path = target_dir / "pacs.config.json"
+            config_path = target_dir / "prd.config.json"
             agents_path = target_dir / "AGENTS.md"
             registration_path = target_dir / "docs" / "mcp-registration.md"
             workflow_path = target_dir / "docs" / "delivery-workflow.md"
@@ -59,10 +59,10 @@ class InitPacsProjectTest(unittest.TestCase):
             self.assertTrue((target_dir / "schema.strict.json").exists())
             self.assertTrue((target_dir / "schema.json").exists())
             self.assertTrue((target_dir / "schema.versions.json").exists())
-            self.assertTrue((target_dir / "tools" / "pacs_metrics.py").exists())
+            self.assertTrue((target_dir / "tools" / "prd_metrics.py").exists())
             self.assertTrue((target_dir / "tools" / "prd_schema_compat.py").exists())
             self.assertTrue((target_dir / "tools" / "prd_extractor.py").exists())
-            self.assertTrue((target_dir / "tools" / "requirements-pacs-validation.txt").exists())
+            self.assertTrue((target_dir / "tools" / "requirements-prd-validation.txt").exists())
             self.assertFalse((target_dir / "tools" / "prd_toon_roundtrip.py").exists())
             self.assertFalse((target_dir / ".agents").exists())
             self.assertFalse((target_dir / ".codex" / "agents").exists())
@@ -81,7 +81,7 @@ class InitPacsProjectTest(unittest.TestCase):
             self.assertEqual(config["mcp"]["transport"], "stdio")
             self.assertEqual(
                 prd["project_tracking"]["pending_work"][1]["title"],
-                "Install the PACS Context plugin for this project",
+                "Install the PRD Context plugin for this project",
             )
             self.assertEqual(
                 prd["project_tracking"]["pending_work"][0]["external_refs"],
@@ -93,9 +93,9 @@ class InitPacsProjectTest(unittest.TestCase):
             )
             self.assertIn("search_prd", agents_path.read_text(encoding="utf-8"))
             self.assertIn("tools/prd_schema_compat.py PRD.json --stats-json", agents_path.read_text(encoding="utf-8"))
-            self.assertIn("python3 -m pip install -r tools/requirements-pacs-validation.txt", agents_path.read_text(encoding="utf-8"))
+            self.assertIn("python3 -m pip install -r tools/requirements-prd-validation.txt", agents_path.read_text(encoding="utf-8"))
             self.assertIn("Specialist agent definitions are optional", agents_path.read_text(encoding="utf-8"))
-            self.assertIn("codex plugin add pacs-context@pacs-local", registration_path.read_text(encoding="utf-8"))
+            self.assertIn("codex plugin add prd-context@prd-local", registration_path.read_text(encoding="utf-8"))
             self.assertIn("FR/NFR -> PTW -> TRD when needed", workflow_path.read_text(encoding="utf-8"))
             self.assertIn("external_refs", workflow_path.read_text(encoding="utf-8"))
 
@@ -107,7 +107,7 @@ class InitPacsProjectTest(unittest.TestCase):
                     (
                         "import { resolveConfig } from './mcp/dist/config.js';"
                         "import { PrdLoader } from './mcp/dist/prd-loader.js';"
-                        f"const config = resolveConfig({{ ...process.env, PACS_PRD_PATH: {json.dumps(str(prd_path))} }});"
+                        f"const config = resolveConfig({{ ...process.env, PRD_PATH: {json.dumps(str(prd_path))} }});"
                         "const loader = new PrdLoader(config);"
                         "const { snapshot } = await loader.load();"
                         "console.log(JSON.stringify({"
@@ -142,7 +142,7 @@ class InitPacsProjectTest(unittest.TestCase):
                 "/prd",
             )
 
-            config = json.loads((target_dir / "pacs.config.json").read_text(encoding="utf-8"))
+            config = json.loads((target_dir / "prd.config.json").read_text(encoding="utf-8"))
             registration = (target_dir / "docs" / "mcp-registration.md").read_text(
                 encoding="utf-8"
             )
@@ -219,7 +219,7 @@ class InitPacsProjectTest(unittest.TestCase):
             self.assertTrue(custom_agent.exists())
             self.assertTrue(custom_skill_note.exists())
             agents_text = (target_dir / "AGENTS.md").read_text(encoding="utf-8")
-            self.assertIn("installed PACS Context plugin", agents_text)
+            self.assertIn("installed PRD Context plugin", agents_text)
 
             self.run_init(target_dir, "--upgrade-existing")
             self.assertFalse(
@@ -244,7 +244,7 @@ class InitPacsProjectTest(unittest.TestCase):
             self.run_init(target_dir, "--project-name", "Upgrade Project")
 
             prd_path = target_dir / "PRD.json"
-            config_path = target_dir / "pacs.config.json"
+            config_path = target_dir / "prd.config.json"
             original_prd = json.loads(prd_path.read_text(encoding="utf-8"))
             original_prd["meta"]["title"] = "Custom Project PRD"
             prd_path.write_text(json.dumps(original_prd, indent=2) + "\n", encoding="utf-8")
@@ -258,7 +258,7 @@ class InitPacsProjectTest(unittest.TestCase):
 
             result = self.run_init(target_dir, "--upgrade-existing")
 
-            self.assertIn("Upgraded PACS project scaffold", result.stdout)
+            self.assertIn("Upgraded PRD project scaffold", result.stdout)
             self.assertIn("Preserved existing PRD.json", result.stdout)
 
             upgraded_prd = json.loads(prd_path.read_text(encoding="utf-8"))
@@ -269,7 +269,7 @@ class InitPacsProjectTest(unittest.TestCase):
             self.assertEqual(upgraded_config["mcp"]["transport"], "http")
             self.assertEqual(upgraded_config["mcp"]["http"]["port"], 4555)
             self.assertTrue((target_dir / "schema.strict.json").exists())
-            self.assertTrue((target_dir / "tools" / "requirements-pacs-validation.txt").exists())
+            self.assertTrue((target_dir / "tools" / "requirements-prd-validation.txt").exists())
 
 
 if __name__ == "__main__":

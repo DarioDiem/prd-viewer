@@ -22,14 +22,14 @@ const repoRoot = path.resolve(import.meta.dirname, "../..");
 const seedPrdPath = path.resolve(repoRoot, "viewer/PRD_web_ui.json");
 
 async function loadIndexResult() {
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "pacs-mcp-resources-"));
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "prd-mcp-resources-"));
   const prdPath = path.join(tempDir, "prd.json");
   const seed = await fs.readFile(seedPrdPath, "utf8");
   await fs.writeFile(prdPath, seed);
 
   const config = resolveConfig({
-    PACS_PRD_PATH: prdPath,
-    PACS_MCP_METRICS_PATH: path.join(tempDir, "metrics.jsonl")
+    PRD_PATH: prdPath,
+    PRD_MCP_METRICS_PATH: path.join(tempDir, "metrics.jsonl")
   });
   const loader = new PrdLoader(config);
   const indexStore = new PrdIndexStore(loader);

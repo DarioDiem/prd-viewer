@@ -4,20 +4,20 @@ import { fileURLToPath } from "node:url";
 import { PLANNED_RESOURCES, PLANNED_TOOLS, RESPONSE_MODES } from "./surface.js";
 const REPO_ROOT = fileURLToPath(new URL("../..", import.meta.url));
 const DEFAULT_PRD_RELATIVE_PATH = path.join("viewer", "PRD_web_ui.json");
-const DEFAULT_METRICS_RELATIVE_PATH = path.join(".metrics", "pacs_prd_mcp.jsonl");
+const DEFAULT_METRICS_RELATIVE_PATH = path.join(".metrics", "prd_viewer_mcp.jsonl");
 const DEFAULT_HTTP_HOST = "127.0.0.1";
 const DEFAULT_HTTP_PORT = 3334;
 const DEFAULT_HTTP_PATH = "/mcp";
-const PROJECT_CONFIG_NAME = "pacs.config.json";
+const PROJECT_CONFIG_NAME = "prd.config.json";
 const LOCAL_HOSTNAMES = ["localhost", "127.0.0.1", "::1", "[::1]"];
 function resolveRepoRelativePath(repoRoot, candidate) {
     return path.isAbsolute(candidate) ? candidate : path.resolve(repoRoot, candidate);
 }
 export function resolveConfig(env = process.env) {
-    const root = env.PACS_PROJECT_ROOT ? path.resolve(env.PACS_PROJECT_ROOT) : repoRoot();
-    const transport = readTransport(env.PACS_MCP_TRANSPORT);
-    const prdPath = resolveRepoRelativePath(root, env.PACS_PRD_PATH ?? DEFAULT_PRD_RELATIVE_PATH);
-    const metricsPath = resolveRepoRelativePath(root, env.PACS_MCP_METRICS_PATH ?? DEFAULT_METRICS_RELATIVE_PATH);
+    const root = env.PRD_PROJECT_ROOT ? path.resolve(env.PRD_PROJECT_ROOT) : repoRoot();
+    const transport = readTransport(env.PRD_MCP_TRANSPORT);
+    const prdPath = resolveRepoRelativePath(root, env.PRD_PATH ?? DEFAULT_PRD_RELATIVE_PATH);
+    const metricsPath = resolveRepoRelativePath(root, env.PRD_MCP_METRICS_PATH ?? DEFAULT_METRICS_RELATIVE_PATH);
     const http = transport === "http" ? readHttpConfig(env) : null;
     return {
         repoRoot: root,
@@ -32,11 +32,11 @@ export function resolveConfig(env = process.env) {
     };
 }
 export async function resolveConfigFromProjectRoots(rootUris, env = process.env) {
-    if (env.PACS_PRD_PATH) {
+    if (env.PRD_PATH) {
         return resolveConfig(env);
     }
     const candidates = [
-        env.PACS_PROJECT_ROOT,
+        env.PRD_PROJECT_ROOT,
         ...rootUris.map(filePathFromUri).filter((value) => value !== null),
         env.INIT_CWD,
         env.PWD
@@ -47,7 +47,7 @@ export async function resolveConfigFromProjectRoots(rootUris, env = process.env)
             return resolveProjectConfig(projectRoot, env);
         }
     }
-    throw new Error("No pacs.config.json was found for the active project. Open a PACS project or run the PACS project initializer.");
+    throw new Error("No prd.config.json was found for the active project. Open a PRD project or run the PRD project initializer.");
 }
 export async function resolveProjectConfig(projectRoot, env = process.env) {
     const configPath = path.join(projectRoot, PROJECT_CONFIG_NAME);
@@ -58,10 +58,10 @@ export async function resolveProjectConfig(projectRoot, env = process.env) {
     const metricsPath = readPath(metrics?.path, DEFAULT_METRICS_RELATIVE_PATH, "metrics.path");
     return resolveConfig({
         ...env,
-        PACS_PROJECT_ROOT: projectRoot,
-        PACS_PRD_PATH: prdPath,
-        PACS_MCP_METRICS_PATH: metricsPath,
-        PACS_MCP_TRANSPORT: env.PACS_MCP_TRANSPORT ?? "stdio"
+        PRD_PROJECT_ROOT: projectRoot,
+        PRD_PATH: prdPath,
+        PRD_MCP_METRICS_PATH: metricsPath,
+        PRD_MCP_TRANSPORT: env.PRD_MCP_TRANSPORT ?? "stdio"
     });
 }
 export function repoRoot() {
@@ -141,13 +141,13 @@ function readTransport(value) {
     return "stdio";
 }
 function readHttpConfig(env) {
-    const host = env.PACS_MCP_HTTP_HOST ?? DEFAULT_HTTP_HOST;
+    const host = env.PRD_MCP_HTTP_HOST ?? DEFAULT_HTTP_HOST;
     if (!isLocalHostname(host)) {
-        throw new Error(`PACS_MCP_HTTP_HOST must stay on localhost; received ${host}`);
+        throw new Error(`PRD_MCP_HTTP_HOST must stay on localhost; received ${host}`);
     }
-    const port = readPort(env.PACS_MCP_HTTP_PORT);
-    const pathValue = normalizeHttpPath(env.PACS_MCP_HTTP_PATH ?? DEFAULT_HTTP_PATH);
-    const allowedOrigins = readCsv(env.PACS_MCP_HTTP_ALLOWED_ORIGINS);
+    const port = readPort(env.PRD_MCP_HTTP_PORT);
+    const pathValue = normalizeHttpPath(env.PRD_MCP_HTTP_PATH ?? DEFAULT_HTTP_PATH);
+    const allowedOrigins = readCsv(env.PRD_MCP_HTTP_ALLOWED_ORIGINS);
     const allowedHosts = [...new Set(LOCAL_HOSTNAMES)];
     return {
         host,
@@ -164,14 +164,14 @@ function readPort(value) {
     }
     const parsed = Number.parseInt(value, 10);
     if (!Number.isInteger(parsed) || parsed < 0 || parsed > 65535) {
-        throw new Error(`PACS_MCP_HTTP_PORT must be an integer between 0 and 65535; received ${value}`);
+        throw new Error(`PRD_MCP_HTTP_PORT must be an integer between 0 and 65535; received ${value}`);
     }
     return parsed;
 }
 function normalizeHttpPath(value) {
     const trimmed = value.trim();
     if (!trimmed.startsWith("/")) {
-        throw new Error(`PACS_MCP_HTTP_PATH must start with '/'; received ${value}`);
+        throw new Error(`PRD_MCP_HTTP_PATH must start with '/'; received ${value}`);
     }
     return trimmed.length > 1 ? trimmed.replace(/\/+$/, "") : trimmed;
 }

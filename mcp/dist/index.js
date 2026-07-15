@@ -8,7 +8,7 @@ async function main() {
     if (config.transport === "http") {
         const services = createServerServices(config);
         const started = await startHttpServer(config, services);
-        console.error(`[pacs-prd-mcp] streamable HTTP listening on ${started.endpointUrl}`);
+        console.error(`[prd-viewer-mcp] streamable HTTP listening on ${started.endpointUrl}`);
         const shutdown = async () => {
             await started.close().catch(() => undefined);
             process.exit(0);
@@ -35,6 +35,6 @@ async function main() {
     await server.connect(transport);
 }
 main().catch((error) => {
-    console.error("[pacs-prd-mcp] failed to start", error);
+    console.error("[prd-viewer-mcp] failed to start", error);
     process.exitCode = 1;
 });

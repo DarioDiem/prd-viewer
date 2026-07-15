@@ -1,11 +1,11 @@
 {
-  "name": "pacs-prd-tooling",
+  "name": "prd-viewer-tooling",
   "private": true,
   "version": "0.1.0",
   "description": "Local tooling for PRD validation and budgeted agent context.",
   "scripts": {
     "build:plugin": "npm --prefix mcp run build:plugin",
-    "init:project": "python3 tools/init_pacs_project.py",
+    "init:project": "python3 tools/init_prd_project.py",
     "benchmark:toon": "python3 tools/prd_toon_roundtrip.py",
     "validate:agents": "python3 tools/validate_agent_formats.py",
     "sync:agents": "python3 tools/sync_agents.py",

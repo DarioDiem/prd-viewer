@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Scaffold a new PACS-enabled project with a canonical PRD and MCP examples."""
+"""Scaffold a new PRD-enabled project with a canonical PRD and MCP examples."""
 
 from __future__ import annotations
 
@@ -13,12 +13,12 @@ from pathlib import Path
 from string import Template
 from typing import Any
 
-from pacs_metrics import append_metrics
+from prd_metrics import append_metrics
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-TEMPLATES_DIR = REPO_ROOT / "templates" / "pacs-project"
-DEFAULT_METRICS_LOG = REPO_ROOT / ".metrics" / "init_pacs_project.jsonl"
+TEMPLATES_DIR = REPO_ROOT / "templates" / "prd-project"
+DEFAULT_METRICS_LOG = REPO_ROOT / ".metrics" / "init_prd_project.jsonl"
 DEFAULT_FRAMEWORK_ROOT = REPO_ROOT
 CURRENT_SCHEMA_VERSION = "1.2.0"
 CURRENT_SCHEMA_ID = "https://example.com/prd.schema.strict.v1.2.0.json"
@@ -26,10 +26,10 @@ VALIDATION_FILE_BUNDLE = (
     "schema.strict.json",
     "schema.json",
     "schema.versions.json",
-    "tools/pacs_metrics.py",
+    "tools/prd_metrics.py",
     "tools/prd_schema_compat.py",
     "tools/prd_extractor.py",
-    "tools/requirements-pacs-validation.txt",
+    "tools/requirements-prd-validation.txt",
 )
 VALIDATION_DIR_BUNDLE: tuple[str, ...] = ()
 CURATED_AGENT_FILES = (
@@ -67,7 +67,7 @@ CURATED_SKILL_DIRS = (
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Initialize a reusable PACS project scaffold."
+        description="Initialize a reusable PRD project scaffold."
     )
     parser.add_argument("target_dir", type=Path, help="Directory to create.")
     parser.add_argument(
@@ -92,7 +92,7 @@ def parse_args() -> argparse.Namespace:
         "--transport",
         choices=("stdio", "http"),
         default="stdio",
-        help="Preferred transport to record in pacs.config.json. Default: stdio",
+        help="Preferred transport to record in prd.config.json. Default: stdio",
     )
     parser.add_argument(
         "--http-host",
@@ -116,7 +116,7 @@ def parse_args() -> argparse.Namespace:
         "--framework-root",
         type=Path,
         default=DEFAULT_FRAMEWORK_ROOT,
-        help=f"PACS framework root. Default: {DEFAULT_FRAMEWORK_ROOT}",
+        help=f"PRD framework root. Default: {DEFAULT_FRAMEWORK_ROOT}",
     )
     parser.add_argument(
         "--metrics-log",
@@ -132,12 +132,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--include-agents",
         action="store_true",
-        help="Copy a legacy self-contained set of PACS agent definitions and skills into the project.",
+        help="Copy a legacy self-contained set of PRD agent definitions and skills into the project.",
     )
     parser.add_argument(
         "--remove-legacy-agents",
         action="store_true",
-        help="With --upgrade-existing, remove PACS assets previously copied by --include-agents.",
+        help="With --upgrade-existing, remove PRD assets previously copied by --include-agents.",
     )
     parser.add_argument(
         "--upgrade-existing",
@@ -154,7 +154,7 @@ def parse_args() -> argparse.Namespace:
 
 def slugify(value: str) -> str:
     slug = re.sub(r"[^a-z0-9]+", "-", value.lower()).strip("-")
-    return slug or "pacs-project"
+    return slug or "prd-project"
 
 
 def titleize_slug(value: str) -> str:
@@ -327,7 +327,7 @@ def build_prd(
         "meta": {
             "prd_id": prd_id,
             "title": f"{project_name} Product Requirements",
-            "summary": f"A starter PACS PRD scaffold for {project_name} that should be replaced with project-specific product intent before implementation work begins.",
+            "summary": f"A starter PRD scaffold for {project_name} that should be replaced with project-specific product intent before implementation work begins.",
             "product_name": project_name,
             "document_type": "prd",
             "version": "0.1.0",
@@ -382,7 +382,7 @@ def build_prd(
                 {
                     "type": "internal_data",
                     "description": "A structured PRD is needed before implementation can be reviewed and tracked consistently.",
-                    "source": "Initial PACS bootstrap workflow",
+                    "source": "Initial PRD bootstrap workflow",
                     "confidence": "medium",
                     "observed_at": None,
                 },
@@ -406,7 +406,7 @@ def build_prd(
             "business_goals": [
                 {
                     "statement": "Establish a project-specific PRD that can drive implementation and review decisions.",
-                    "rationale": "A canonical artifact is needed before the project can use PACS tooling effectively.",
+                    "rationale": "A canonical artifact is needed before the project can use PRD tooling effectively.",
                     "owner": None,
                     "priority": "primary",
                 }
@@ -486,7 +486,7 @@ def build_prd(
                     "req_id": "FR-001",
                     "title": "Maintain a canonical project PRD",
                     "description": "The project must keep a canonical PRD.json artifact that humans and local agent tools can validate, review, and update.",
-                    "rationale": "The PACS framework depends on one deterministic source of truth for product scope.",
+                    "rationale": "The PRD framework depends on one deterministic source of truth for product scope.",
                     "priority": "must",
                     "persona_ids": ["P-001"],
                     "dependencies": [],
@@ -502,7 +502,7 @@ def build_prd(
                 {
                     "req_id": "NFR-001",
                     "category": "observability",
-                    "description": "Local PACS tooling for the project should emit content-redacted metrics that help evaluate whether focused PRD access is useful.",
+                    "description": "Local PRD tooling for the project should emit content-redacted metrics that help evaluate whether focused PRD access is useful.",
                     "target": "Bootstrap, validation, and MCP workflows log local metrics without storing PRD payloads or large free-text fields.",
                     "priority": "should",
                     "acceptance_criteria": [
@@ -526,7 +526,7 @@ def build_prd(
                 },
                 "acceptance_criteria": [
                     {
-                        "given": "a new project initialized from the PACS bootstrap",
+                        "given": "a new project initialized from the PRD bootstrap",
                         "when": "the developer opens the project files",
                         "then": "the project contains a schema-valid PRD, local agent instructions, and MCP registration guidance",
                     }
@@ -576,7 +576,7 @@ def build_prd(
                         "audience": "Solo developer",
                         "success_criteria": [
                             "The project can validate PRD.json locally.",
-                            "The agent client can register the local PACS MCP server for this project.",
+                            "The agent client can register the local PRD MCP server for this project.",
                         ],
                         "owner": None,
                     }
@@ -587,17 +587,17 @@ def build_prd(
             },
             "operational_readiness": [
                 {
-                    "area": "Local PACS setup",
+                    "area": "Local PRD setup",
                     "owner": None,
                     "status": "in_progress",
-                    "notes": "Complete project-specific PRD refinement and install the PACS Context plugin before relying on agent workflows.",
+                    "notes": "Complete project-specific PRD refinement and install the PRD Context plugin before relying on agent workflows.",
                 }
             ],
         },
         "project_tracking": {
             "status": "in_progress",
             "owner": None,
-            "summary": "Bootstrap scaffold created. Replace placeholder product content and install the PACS Context plugin for focused PRD access.",
+            "summary": "Bootstrap scaffold created. Replace placeholder product content and install the PRD Context plugin for focused PRD access.",
             "updated_at": created_at,
             "linked_prd_ids": [prd_id],
             "pending_work": [
@@ -615,8 +615,8 @@ def build_prd(
                 },
                 {
                     "work_item_id": "PTW-002",
-                    "title": "Install the PACS Context plugin for this project",
-                    "description": "Install the plugin so its bundled MCP server can resolve pacs.config.json and provide focused reads without per-project environment variables.",
+                    "title": "Install the PRD Context plugin for this project",
+                    "description": "Install the plugin so its bundled MCP server can resolve prd.config.json and provide focused reads without per-project environment variables.",
                     "status": "not_started",
                     "priority": "high",
                     "owner": None,
@@ -668,7 +668,7 @@ def build_prd(
                 "decision_id": "DEC-001",
                 "title": "Keep the canonical PRD as JSON on disk",
                 "statement": "The project will treat PRD.json as the canonical source of truth and keep all derived MCP indexes, metrics, and packets rebuildable.",
-                "rationale": "This keeps local agent workflows deterministic and aligned with the PACS framework contract.",
+                "rationale": "This keeps local agent workflows deterministic and aligned with the PRD framework contract.",
                 "owner": None,
                 "decided_at": None,
                 "status": "accepted",
@@ -700,7 +700,7 @@ def build_project_config(
             "path": "PRD.json",
         },
         "metrics": {
-            "path": ".metrics/pacs_prd_mcp.jsonl",
+            "path": ".metrics/prd_viewer_mcp.jsonl",
         },
         "mcp": {
             "transport": transport,
@@ -728,7 +728,7 @@ def main() -> int:
     ensure_target_dir(target_dir, allow_existing=upgrading)
 
     existing_prd = read_json_if_exists(target_dir / "PRD.json") if upgrading else None
-    existing_config = read_json_if_exists(target_dir / "pacs.config.json") if upgrading else None
+    existing_config = read_json_if_exists(target_dir / "prd.config.json") if upgrading else None
     existing_trd = upgrading and (target_dir / "TRD.md").exists()
     existing_has_local_agents = upgrading and any(
         (target_dir / relative).is_file()
@@ -759,11 +759,11 @@ def main() -> int:
     prd_path = target_dir / "PRD.json"
     trd_path = target_dir / "TRD.md"
     metrics_dir = target_dir / ".metrics"
-    project_metrics_path = metrics_dir / "pacs_prd_mcp.jsonl"
+    project_metrics_path = metrics_dir / "prd_viewer_mcp.jsonl"
     mcp_package_root = framework_root / "mcp"
     mcp_entrypoint = mcp_package_root / "dist" / "index.js"
     http_url = f"http://{args.http_host}:{args.http_port}{args.http_path}"
-    server_name = f"{project_id}-pacs-prd"
+    server_name = f"{project_id}-prd-viewer"
     included_agent_files: list[str] = []
     removed_agent_files: list[str] = []
     validation_files = copy_validation_bundle(
@@ -814,7 +814,7 @@ def main() -> int:
         ),
         existing_config,
     )
-    write_json(target_dir / "pacs.config.json", merged_config)
+    write_json(target_dir / "prd.config.json", merged_config)
     write_text(
         target_dir / "AGENTS.md",
         render_template(
@@ -827,14 +827,14 @@ def main() -> int:
                     else "This scaffold starts with a minimal schema-valid PRD. Replace the placeholder product framing, requirements, stories, risks, questions, and decisions with project-specific content before treating the artifact as production-ready."
                 ),
                 "AGENT_MODE_SUMMARY": (
-                    "This project also includes a curated local copy of the PACS `.agents/`, `.codex/agents/`, `.gemini/agents/`, and reusable PRD skills so the bootstrap can run self-contained."
+                    "This project also includes a curated local copy of the PRD `.agents/`, `.codex/agents/`, `.gemini/agents/`, and reusable PRD skills so the bootstrap can run self-contained."
                     if use_local_agents
-                    else "This project uses the installed PACS Context plugin for focused PRD context. Specialist agent definitions are optional and are not copied into the project by default."
+                    else "This project uses the installed PRD Context plugin for focused PRD context. Specialist agent definitions are optional and are not copied into the project by default."
                 ),
                 "AGENT_MODE_WORKFLOW": (
                     "Prefer the local `.agents/`, `.codex/agents/`, `.gemini/agents/`, and `.agents/skills/` copies in this project when your client supports project-local agent discovery."
                     if use_local_agents
-                    else "Use the PACS Context plugin for focused MCP reads. Install or keep project-local specialist agent definitions only when a client workflow explicitly depends on them."
+                    else "Use the PRD Context plugin for focused MCP reads. Install or keep project-local specialist agent definitions only when a client workflow explicitly depends on them."
                 ),
             },
         ),
@@ -872,10 +872,10 @@ def main() -> int:
             target_dir=target_dir,
         )
 
-    print(f"{'Upgraded' if upgrading else 'Initialized'} PACS project scaffold at {target_dir}")
+    print(f"{'Upgraded' if upgrading else 'Initialized'} PRD project scaffold at {target_dir}")
     print(f"- PRD: {prd_path}")
     print(f"- TRD: {trd_path}")
-    print(f"- Config: {target_dir / 'pacs.config.json'}")
+    print(f"- Config: {target_dir / 'prd.config.json'}")
     print(f"- Agent instructions: {target_dir / 'AGENTS.md'}")
     print(f"- MCP registration guide: {target_dir / 'docs' / 'mcp-registration.md'}")
     print(f"- Delivery workflow: {target_dir / 'docs' / 'delivery-workflow.md'}")
@@ -883,7 +883,7 @@ def main() -> int:
     if use_local_agents:
         print("- Included local agent assets: .agents/, .codex/agents/, .gemini/agents/")
     if args.remove_legacy_agents:
-        print(f"- Removed {len(removed_agent_files)} legacy PACS agent asset files")
+        print(f"- Removed {len(removed_agent_files)} legacy PRD agent asset files")
     if upgrading and prd_path.exists() and not args.refresh_prd:
         print("- Preserved existing PRD.json")
     if existing_trd:
@@ -894,7 +894,7 @@ def main() -> int:
         append_metrics(
             metrics_log,
             {
-                "tool": "init_pacs_project",
+                "tool": "init_prd_project",
                 "timestamp": created_at,
                 "target_dir": str(target_dir),
                 "project_id": project_id,
@@ -907,7 +907,7 @@ def main() -> int:
                 "generated_files": [
                     "PRD.json",
                     "TRD.md",
-                    "pacs.config.json",
+                    "prd.config.json",
                     "AGENTS.md",
                     ".gitignore",
                     "docs/mcp-registration.md",

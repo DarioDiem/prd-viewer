@@ -13864,20 +13864,20 @@ var RESPONSE_MODES = ["compact", "standard", "full"];
 // dist/config.js
 var REPO_ROOT = fileURLToPath(new URL("../..", import.meta.url));
 var DEFAULT_PRD_RELATIVE_PATH = path.join("viewer", "PRD_web_ui.json");
-var DEFAULT_METRICS_RELATIVE_PATH = path.join(".metrics", "pacs_prd_mcp.jsonl");
+var DEFAULT_METRICS_RELATIVE_PATH = path.join(".metrics", "prd_viewer_mcp.jsonl");
 var DEFAULT_HTTP_HOST = "127.0.0.1";
 var DEFAULT_HTTP_PORT = 3334;
 var DEFAULT_HTTP_PATH = "/mcp";
-var PROJECT_CONFIG_NAME = "pacs.config.json";
+var PROJECT_CONFIG_NAME = "prd.config.json";
 var LOCAL_HOSTNAMES = ["localhost", "127.0.0.1", "::1", "[::1]"];
 function resolveRepoRelativePath(repoRoot2, candidate) {
   return path.isAbsolute(candidate) ? candidate : path.resolve(repoRoot2, candidate);
 }
 function resolveConfig(env = process.env) {
-  const root = env.PACS_PROJECT_ROOT ? path.resolve(env.PACS_PROJECT_ROOT) : repoRoot();
-  const transport = readTransport(env.PACS_MCP_TRANSPORT);
-  const prdPath = resolveRepoRelativePath(root, env.PACS_PRD_PATH ?? DEFAULT_PRD_RELATIVE_PATH);
-  const metricsPath = resolveRepoRelativePath(root, env.PACS_MCP_METRICS_PATH ?? DEFAULT_METRICS_RELATIVE_PATH);
+  const root = env.PRD_PROJECT_ROOT ? path.resolve(env.PRD_PROJECT_ROOT) : repoRoot();
+  const transport = readTransport(env.PRD_MCP_TRANSPORT);
+  const prdPath = resolveRepoRelativePath(root, env.PRD_PATH ?? DEFAULT_PRD_RELATIVE_PATH);
+  const metricsPath = resolveRepoRelativePath(root, env.PRD_MCP_METRICS_PATH ?? DEFAULT_METRICS_RELATIVE_PATH);
   const http2 = transport === "http" ? readHttpConfig(env) : null;
   return {
     repoRoot: root,
@@ -13892,11 +13892,11 @@ function resolveConfig(env = process.env) {
   };
 }
 async function resolveConfigFromProjectRoots(rootUris, env = process.env) {
-  if (env.PACS_PRD_PATH) {
+  if (env.PRD_PATH) {
     return resolveConfig(env);
   }
   const candidates = [
-    env.PACS_PROJECT_ROOT,
+    env.PRD_PROJECT_ROOT,
     ...rootUris.map(filePathFromUri).filter((value) => value !== null),
     env.INIT_CWD,
     env.PWD
@@ -13907,7 +13907,7 @@ async function resolveConfigFromProjectRoots(rootUris, env = process.env) {
       return resolveProjectConfig(projectRoot, env);
     }
   }
-  throw new Error("No pacs.config.json was found for the active project. Open a PACS project or run the PACS project initializer.");
+  throw new Error("No prd.config.json was found for the active project. Open a PRD project or run the PRD project initializer.");
 }
 async function resolveProjectConfig(projectRoot, env = process.env) {
   const configPath = path.join(projectRoot, PROJECT_CONFIG_NAME);
@@ -13918,10 +13918,10 @@ async function resolveProjectConfig(projectRoot, env = process.env) {
   const metricsPath = readPath(metrics?.path, DEFAULT_METRICS_RELATIVE_PATH, "metrics.path");
   return resolveConfig({
     ...env,
-    PACS_PROJECT_ROOT: projectRoot,
-    PACS_PRD_PATH: prdPath,
-    PACS_MCP_METRICS_PATH: metricsPath,
-    PACS_MCP_TRANSPORT: env.PACS_MCP_TRANSPORT ?? "stdio"
+    PRD_PROJECT_ROOT: projectRoot,
+    PRD_PATH: prdPath,
+    PRD_MCP_METRICS_PATH: metricsPath,
+    PRD_MCP_TRANSPORT: env.PRD_MCP_TRANSPORT ?? "stdio"
   });
 }
 function repoRoot() {
@@ -13996,13 +13996,13 @@ function readTransport(value) {
   return "stdio";
 }
 function readHttpConfig(env) {
-  const host = env.PACS_MCP_HTTP_HOST ?? DEFAULT_HTTP_HOST;
+  const host = env.PRD_MCP_HTTP_HOST ?? DEFAULT_HTTP_HOST;
   if (!isLocalHostname(host)) {
-    throw new Error(`PACS_MCP_HTTP_HOST must stay on localhost; received ${host}`);
+    throw new Error(`PRD_MCP_HTTP_HOST must stay on localhost; received ${host}`);
   }
-  const port = readPort(env.PACS_MCP_HTTP_PORT);
-  const pathValue = normalizeHttpPath(env.PACS_MCP_HTTP_PATH ?? DEFAULT_HTTP_PATH);
-  const allowedOrigins = readCsv(env.PACS_MCP_HTTP_ALLOWED_ORIGINS);
+  const port = readPort(env.PRD_MCP_HTTP_PORT);
+  const pathValue = normalizeHttpPath(env.PRD_MCP_HTTP_PATH ?? DEFAULT_HTTP_PATH);
+  const allowedOrigins = readCsv(env.PRD_MCP_HTTP_ALLOWED_ORIGINS);
   const allowedHosts = [...new Set(LOCAL_HOSTNAMES)];
   return {
     host,
@@ -14019,14 +14019,14 @@ function readPort(value) {
   }
   const parsed = Number.parseInt(value, 10);
   if (!Number.isInteger(parsed) || parsed < 0 || parsed > 65535) {
-    throw new Error(`PACS_MCP_HTTP_PORT must be an integer between 0 and 65535; received ${value}`);
+    throw new Error(`PRD_MCP_HTTP_PORT must be an integer between 0 and 65535; received ${value}`);
   }
   return parsed;
 }
 function normalizeHttpPath(value) {
   const trimmed = value.trim();
   if (!trimmed.startsWith("/")) {
-    throw new Error(`PACS_MCP_HTTP_PATH must start with '/'; received ${value}`);
+    throw new Error(`PRD_MCP_HTTP_PATH must start with '/'; received ${value}`);
   }
   return trimmed.length > 1 ? trimmed.replace(/\/+$/, "") : trimmed;
 }
@@ -22616,7 +22616,7 @@ function buildMetricEvent(config2, options) {
   const loadSnapshot = options.load?.snapshot ?? null;
   const indexSnapshot = options.index?.snapshot ?? null;
   return {
-    schema: "pacs.mcp.metric.v1",
+    schema: "prd.mcp.metric.v1",
     recorded_at: (/* @__PURE__ */ new Date()).toISOString(),
     transport: config2.transport,
     request: {
@@ -23919,7 +23919,7 @@ function buildAgentPacketResult(load, indexResult, ids = [], sections = [], goal
   const maxTokens = Math.min(32e3, Math.max(256, Math.round(options.maxTokens ?? 6e3)));
   const includeUnresolved = options.includeUnresolved ?? (preset === "review" || preset === "triage");
   const packet = {
-    schema: "pacs.agent-packet.v2",
+    schema: "prd.agent-packet.v2",
     goal,
     preset,
     max_tokens: maxTokens,
@@ -24081,7 +24081,7 @@ function createServer(config2, services = createServerServices(config2), resolve
     record: async (...args) => (await resolveServices()).metrics.record(...args)
   };
   const server = new McpServer({
-    name: "pacs-prd-mcp",
+    name: "prd-viewer-mcp",
     version: "0.1.0"
   }, {
     instructions: "This server is local-only and read-only. Treat the PRD JSON on disk as canonical. Prefer focused discovery followed by a budgeted build_agent_packet request. Avoid full-document payloads unless the task requires whole-document validation or migration."
@@ -24197,7 +24197,7 @@ function createServer(config2, services = createServerServices(config2), resolve
     });
   });
   server.registerResource("server-info", "prd://server/info", {
-    title: "PACS PRD MCP server info",
+    title: "PRD MCP server info",
     description: "Reports the local MCP contract, active PRD path, and planned capability surface.",
     mimeType: "application/json"
   }, async (uri) => {
@@ -24217,7 +24217,7 @@ function createServer(config2, services = createServerServices(config2), resolve
     });
   });
   server.registerResource("server-info-mode", new ResourceTemplate("prd://server/info{?mode}", { list: void 0 }), {
-    title: "PACS PRD MCP server info",
+    title: "PRD MCP server info",
     description: "Reports the local MCP contract, active PRD path, and planned capability surface.",
     mimeType: "application/json"
   }, async (uri) => {
@@ -24594,7 +24594,7 @@ function createActiveProjectServicesResolver(listRootUris, env = process.env) {
   };
 }
 async function resolveActiveConfig(listRootUris, env = process.env) {
-  const rootUris = env.PACS_PRD_PATH ? [] : await listRootUris();
+  const rootUris = env.PRD_PATH ? [] : await listRootUris();
   return resolveConfigFromProjectRoots(rootUris, env);
 }
 
@@ -26109,7 +26109,7 @@ async function main() {
   if (config2.transport === "http") {
     const services = createServerServices(config2);
     const started = await startHttpServer(config2, services);
-    console.error(`[pacs-prd-mcp] streamable HTTP listening on ${started.endpointUrl}`);
+    console.error(`[prd-viewer-mcp] streamable HTTP listening on ${started.endpointUrl}`);
     const shutdown = async () => {
       await started.close().catch(() => void 0);
       process.exit(0);
@@ -26136,6 +26136,6 @@ async function main() {
   await server.connect(transport);
 }
 main().catch((error2) => {
-  console.error("[pacs-prd-mcp] failed to start", error2);
+  console.error("[prd-viewer-mcp] failed to start", error2);
   process.exitCode = 1;
 });

@@ -6,7 +6,7 @@ export type DiagnosticDetailValue = string | number | boolean | null | Array<str
 export type DiagnosticDetails = Record<string, DiagnosticDetailValue>;
 
 export type DiagnosticEvent = {
-  schema: "pacs.viewer.diagnostic-event.v1";
+  schema: "prd.viewer.diagnostic-event.v1";
   event_id: string;
   timestamp: string;
   action: DiagnosticAction;
@@ -17,7 +17,7 @@ export type DiagnosticEvent = {
 };
 
 export type DiagnosticSnapshot = {
-  schema: "pacs.viewer.diagnostic-snapshot.v1";
+  schema: "prd.viewer.diagnostic-snapshot.v1";
   exported_at: string;
   event_count: number;
   events: DiagnosticEvent[];
@@ -47,7 +47,7 @@ export function createDiagnosticEvent({
   timestamp?: string;
 }): DiagnosticEvent {
   return {
-    schema: "pacs.viewer.diagnostic-event.v1",
+    schema: "prd.viewer.diagnostic-event.v1",
     event_id: `${timestamp}:${action}:${outcome}:${documentRevision}`,
     timestamp,
     action,
@@ -60,7 +60,7 @@ export function createDiagnosticEvent({
 
 export function buildDiagnosticSnapshot(events: DiagnosticEvent[], exportedAt = new Date().toISOString()): DiagnosticSnapshot {
   return {
-    schema: "pacs.viewer.diagnostic-snapshot.v1",
+    schema: "prd.viewer.diagnostic-snapshot.v1",
     exported_at: exportedAt,
     event_count: events.length,
     events,

@@ -9,7 +9,7 @@ export type SearchResult = {
     status: string | null;
 };
 export type AgentPacket = {
-    schema: "pacs.agent-packet.v2";
+    schema: "prd.agent-packet.v2";
     goal: string | null;
     preset: AgentPacketPreset;
     max_tokens: number;

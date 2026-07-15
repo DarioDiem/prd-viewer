@@ -16,15 +16,15 @@ const repoRoot = path.resolve(import.meta.dirname, "../..");
 const seedPrdPath = path.resolve(repoRoot, "viewer/PRD_web_ui.json");
 
 async function loadState() {
-  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "pacs-mcp-metrics-"));
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "prd-mcp-metrics-"));
   const prdPath = path.join(tempDir, "prd.json");
   const metricsPath = path.join(tempDir, "events", "metrics.jsonl");
   const seed = await fs.readFile(seedPrdPath, "utf8");
   await fs.writeFile(prdPath, seed);
 
   const config = resolveConfig({
-    PACS_PRD_PATH: prdPath,
-    PACS_MCP_METRICS_PATH: metricsPath
+    PRD_PATH: prdPath,
+    PRD_MCP_METRICS_PATH: metricsPath
   });
   const loader = new PrdLoader(config);
   const indexStore = new PrdIndexStore(loader);
@@ -131,7 +131,7 @@ test("MetricsRecorder writes JSONL metrics and preserves failure context without
   const [successEvent, failureEvent] = lines;
 
   assert.equal(lines.length, 2);
-  assert.equal(successEvent.schema, "pacs.mcp.metric.v1");
+  assert.equal(successEvent.schema, "prd.mcp.metric.v1");
   assert.deepEqual(successEvent.request.input.ids, ["FR-012", "PTW-010"]);
   assert.equal(successEvent.request.input.goal_length, 15);
   assert.equal(successEvent.request.input.preset, "review");

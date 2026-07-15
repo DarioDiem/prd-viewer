@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "pacs-prd": {
+    "prd-viewer": {
       "command": "node",
       "args": ["./mcp/index.mjs"],
       "cwd": ".",

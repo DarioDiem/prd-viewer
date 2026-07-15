@@ -84,7 +84,7 @@ export type FocusedTraceGraph = TraceGraph & {
 };
 
 export type AgentTraceBundle = {
-  schema: "pacs.trace-summary.v1";
+  schema: "prd.trace-summary.v1";
   exported_at: string;
   selected_node_id: string;
   selected_node: TraceNode | null;
@@ -268,7 +268,7 @@ export function buildAgentTraceBundle(
   const graph = buildFocusedTraceGraph(traceability, selectedNodeId);
 
   return {
-    schema: "pacs.trace-summary.v1",
+    schema: "prd.trace-summary.v1",
     exported_at: exportedAt,
     selected_node_id: selectedNodeId,
     selected_node: graph.selectedNode,
