@@ -5,7 +5,7 @@
     "summary": "A local-first web reviewer UI for PRD.json that gives humans a dashboard, schema-aware section views, validation, traceability, and safe export/writeback while preserving PRD.json as the canonical artifact for AI agents.",
     "product_name": "PRD Viewer",
     "document_type": "prd",
-    "version": "0.1.32",
+    "version": "0.1.33",
     "status": "draft",
     "lifecycle_stage": "definition",
     "owners": {
@@ -21,7 +21,7 @@
     "reviewers": [],
     "approvers": [],
     "created_at": "2026-04-20T00:00:00Z",
-    "updated_at": "2026-07-15T02:55:22Z",
+    "updated_at": "2026-07-15T21:04:13Z",
     "target_release": null,
     "stakeholders": [
       {
@@ -1604,6 +1604,12 @@
         "owner": "Engineering",
         "status": "ready",
         "notes": "DEC-011 is implemented at https://github.com/DarioDiem/prd-viewer. The public repository started from a sanitized current-tree snapshot, has no inherited Git objects or medical-project branding, and passes independent privacy scans and CI on main."
+      },
+      {
+        "area": "Open-source licensing",
+        "owner": "Repository owner",
+        "status": "ready",
+        "notes": "DEC-012 is implemented with a repository-wide Apache License 2.0 covering the code, schemas, templates, documentation, Viewer, and PRD Context plugin."
       }
     ]
   },
@@ -1611,7 +1617,7 @@
     "status": "in_progress",
     "owner": null,
     "summary": "The local-first reviewer MVP and public repository preparation are complete. The PRD framework and Viewer are published from a separate clean-history repository with public contribution and security guidance, automated validation gates, clean dependency audits, independent export verification, and no inherited private Git objects. Shared-deployment governance remains a separate blocker.",
-    "updated_at": "2026-07-15T02:55:22Z",
+    "updated_at": "2026-07-15T21:04:13Z",
     "linked_prd_ids": [
       "38491764-5485-4218-A991-A9D83BE84B7F"
     ],
@@ -1941,12 +1947,13 @@
           "PTW-012",
           "Q-009",
           "PTB-003",
-          "DEC-011"
+          "DEC-011",
+          "DEC-012"
         ],
         "external_refs": [
           "https://github.com/DarioDiem/prd-viewer"
         ],
-        "notes": "Completed with viewer/TRD.md, CONTRIBUTING.md, SECURITY.md, aligned source-of-truth guidance, a GitHub Actions validation workflow, clean npm audits, removal of tracked Playwright output, schema and agent validation, 32 MCP tests, 63 Viewer unit/component tests, 10 Viewer browser tests, plugin rebuild, privacy scans, and verified fast-forward ancestry to PRD-v1. DEC-011 is implemented by the separate PRD Viewer repository at https://github.com/DarioDiem/prd-viewer, created from a sanitized snapshot with no inherited private Git objects or medical-project branding."
+        "notes": "Completed with viewer/TRD.md, CONTRIBUTING.md, SECURITY.md, aligned source-of-truth guidance, a GitHub Actions validation workflow, repository-wide Apache License 2.0, clean npm audits, removal of tracked Playwright output, schema and agent validation, 32 MCP tests, 63 Viewer unit/component tests, 10 Viewer browser tests, plugin rebuild, privacy scans, and verified fast-forward ancestry to PRD-v1. DEC-011 is implemented by the separate PRD Viewer repository at https://github.com/DarioDiem/prd-viewer, created from a sanitized snapshot with no inherited private Git objects or medical-project branding. DEC-012 records the accepted public licensing choice."
       }
     ],
     "issues_found": [
@@ -2495,6 +2502,19 @@
       "rationale": "A new repository creates a verifiable object-level boundary, keeps unrelated private history private, avoids coordinated force-push risk, and gives the public project a focused identity.",
       "owner": "Repository owner and Engineering",
       "decided_at": "2026-07-15T01:44:04Z",
+      "status": "accepted",
+      "linked_req_ids": [
+        "FR-012",
+        "NFR-003"
+      ]
+    },
+    {
+      "decision_id": "DEC-012",
+      "title": "PRD Viewer uses Apache License 2.0",
+      "statement": "License the repository code, schemas, templates, documentation, Viewer, and PRD Context plugin under the Apache License 2.0 as one repository-wide license.",
+      "rationale": "Apache License 2.0 permits commercial and private reuse, includes an explicit patent grant, and avoids splitting code and documentation across different license terms. It does not require downstream PRDs or applications to be made public.",
+      "owner": "Repository owner",
+      "decided_at": "2026-07-15T21:04:13Z",
       "status": "accepted",
       "linked_req_ids": [
         "FR-012",

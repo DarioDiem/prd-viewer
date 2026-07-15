@@ -2,6 +2,7 @@
   "name": "prd-viewer-mcp",
   "private": true,
   "version": "0.1.0",
+  "license": "Apache-2.0",
   "type": "module",
   "description": "Local-only MCP server for derived PRD access in the PRD framework.",
   "engines": {

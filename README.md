@@ -180,7 +180,6 @@ The active consolidated roster is generated from `.agents/*.yaml`:
 
 ## Licensing
 
-No license has been granted yet. Public visibility permits inspection, but it
-does not grant permission to copy, modify, or redistribute the code. The
-repository owner must select and add a license before presenting PRD Viewer as an
-open-source project.
+PRD Viewer is licensed under the [Apache License 2.0](LICENSE). The license
+applies repository-wide to the code, schemas, templates, documentation, Viewer,
+and PRD Context plugin. Copyright 2026 DarioDiem.

@@ -2,6 +2,7 @@
   "name": "prd-viewer-tooling",
   "private": true,
   "version": "0.1.0",
+  "license": "Apache-2.0",
   "description": "Local tooling for PRD validation and budgeted agent context.",
   "scripts": {
     "build:plugin": "npm --prefix mcp run build:plugin",
