@@ -1,0 +1,20 @@
+{
+  "name": "pacs-local",
+  "interface": {
+    "displayName": "PACS Local Plugins"
+  },
+  "plugins": [
+    {
+      "name": "pacs-context",
+      "source": {
+        "source": "local",
+        "path": "./plugins/pacs-context"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

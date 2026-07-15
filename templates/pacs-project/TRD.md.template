@@ -1,0 +1,63 @@
+---
+trd_id: TRD-001
+linked_prd_id: ${PRD_ID}
+linked_req_ids:
+  - FR-001
+  - NFR-001
+---
+
+# ${PROJECT_NAME} Technical Requirements
+
+## Purpose and scope
+
+Describe how the linked PRD requirements will be implemented. Record explicit
+in-scope and out-of-scope technical boundaries; do not redefine product scope.
+
+## Architecture
+
+Replace this placeholder before approval.
+
+```mermaid
+flowchart LR
+  Actor["Approved actor"] --> Boundary["System boundary"]
+```
+
+Document trust boundaries, component responsibilities, and dependency direction.
+
+## Interfaces and contracts
+
+List each external interface and its canonical contract. For an HTTP API, add and
+link `contracts/openapi.yaml` using OpenAPI 3.1.2. Do not add an OpenAPI file when
+the project has no HTTP API.
+
+## Data model and ownership
+
+Describe authoritative data stores, ownership, retention, and consistency rules.
+Use a Mermaid `erDiagram` when relationships are easier to review visually.
+
+## Key sequences
+
+Add Mermaid sequence diagrams for flows whose ordering, retries, or failure
+behavior are part of the design.
+
+## Runtime and operations
+
+Record deployment shape, configuration boundaries, observability, failure modes,
+recovery expectations, and the linked NFRs they satisfy.
+
+## Verification matrix
+
+| PRD requirement | Design or contract | Verification evidence |
+| --- | --- | --- |
+| FR-001 | Replace with the implementing section or contract | Replace with a test, check, or review artifact |
+| NFR-001 | Replace with the implementing section or contract | Replace with a measurable check or report |
+
+## Linked decisions
+
+Reference `DEC-###` records from `PRD.json` and summarize their consequences here.
+Do not duplicate the decision log in this document.
+
+## Open technical questions
+
+List unresolved implementation questions and move any accepted decision into the
+PRD `decisions` array.

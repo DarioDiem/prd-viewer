@@ -1,0 +1,4 @@
+interface:
+  display_name: "PRD Constraints and Risks"
+  short_description: "Plan constraints, timelines, metrics, and risks"
+  default_prompt: "Use $prd-constraints-risk-planning to derive constraints, milestones, dependencies, success metrics, and risks for this PRD."

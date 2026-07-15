@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - prd-v1
+      - djrg/scaffold-prd-viewer
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.19.0
+          cache: npm
+          cache-dependency-path: |
+            package-lock.json
+            mcp/package-lock.json
+            viewer/package-lock.json
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: tools/requirements-pacs-validation.txt
+      - name: Install dependencies
+        run: |
+          npm ci
+          npm --prefix mcp ci
+          npm --prefix viewer ci
+          python3 -m pip install -r tools/requirements-pacs-validation.txt
+      - name: Validate PRD and agent contracts
+        run: |
+          npm run validate:agents
+          python3 tools/prd_schema_compat.py viewer/PRD_web_ui.json --stats-json
+          python3 -m unittest tools.test_init_pacs_project
+      - name: Audit dependencies
+        run: |
+          npm audit --audit-level=high
+          npm --prefix mcp audit --audit-level=high
+          npm --prefix viewer audit --audit-level=high
+      - name: Test MCP
+        run: |
+          npm --prefix mcp run check
+          npm --prefix mcp test
+          npm --prefix mcp run build
+      - name: Test Viewer
+        run: |
+          npm --prefix viewer run check
+          npm --prefix viewer test
+          npm --prefix viewer run build
+      - name: Install Chromium
+        run: npm --prefix viewer exec -- playwright install --with-deps chromium
+      - name: Run Viewer browser tests
+        run: npm --prefix viewer run test:e2e

@@ -1,0 +1,23 @@
+{
+  "project": {
+    "id": "example-project",
+    "name": "Example PACS Project"
+  },
+  "prd": {
+    "path": "PRD.json"
+  },
+  "metrics": {
+    "path": ".metrics/pacs_prd_mcp.jsonl"
+  },
+  "mcp": {
+    "transport": "stdio",
+    "http": {
+      "host": "127.0.0.1",
+      "port": 3334,
+      "path": "/mcp",
+      "allowedOrigins": [
+        "http://localhost:5173"
+      ]
+    }
+  }
+}

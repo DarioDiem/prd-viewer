@@ -1,0 +1,4 @@
+interface:
+  display_name: "PRD Orchestrator Execution"
+  short_description: "Coordinate PRD specialist agents and repairs"
+  default_prompt: "Use $prd-orchestrator-execution to plan the PRD agent sequence, merge outputs, and route validation repairs. Initialize schema_contract for new PRDs, check schema.versions.json for existing PRDs, preserve extensions, and use focused token-budgeted context packets; final output remains strict JSON."

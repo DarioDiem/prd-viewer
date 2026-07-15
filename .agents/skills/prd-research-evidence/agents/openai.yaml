@@ -1,0 +1,4 @@
+interface:
+  display_name: "PRD Research Evidence"
+  short_description: "Ground PRDs in traceable evidence and goals"
+  default_prompt: "Use $prd-research-evidence to build the PRD problem framing and business goals from traceable evidence."

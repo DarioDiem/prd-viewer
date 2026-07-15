@@ -1,0 +1,26 @@
+{
+  "name": "pacs-context",
+  "version": "0.1.0+codex.20260715010959",
+  "description": "Bundled, project-aware PRD and TRD context routing for PACS agent workflows.",
+  "author": {
+    "name": "imafem"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "PACS Context",
+    "shortDescription": "Load only the PRD context an agent needs.",
+    "longDescription": "Discovers the active PACS project and routes product and technical work through focused MCP reads and token-budgeted agent packets.",
+    "developerName": "imafem",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Context routing"
+    ],
+    "defaultPrompt": [
+      "Build a budgeted packet for the next PRD item.",
+      "Trace these requirements into the TRD.",
+      "Review unresolved PRD decisions without loading the full file."
+    ]
+  },
+  "mcpServers": "./.mcp.json"
+}

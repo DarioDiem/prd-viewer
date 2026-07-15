@@ -1,0 +1,4 @@
+interface:
+  display_name: "PRD User Stories Quality"
+  short_description: "Create personas and INVEST user stories"
+  default_prompt: "Use $prd-user-stories-quality to convert these PRD requirements into grounded personas and linked user stories."

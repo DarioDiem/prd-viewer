@@ -1,0 +1,4 @@
+interface:
+  display_name: "PRD Requirements Quality"
+  short_description: "Write testable and prioritized PRD requirements"
+  default_prompt: "Use $prd-requirements-quality to turn this brief and research into functional, non-functional, and non-goal PRD requirements."

@@ -1,0 +1,4 @@
+interface:
+  display_name: "PRD Schema Contract"
+  short_description: "Enforce PRD JSON schema and normalization"
+  default_prompt: "Use $prd-schema-contract to validate this PRD JSON against the schema and normalize any missing or invalid structure. Treat JSON as canonical; check schema.versions.json for schema_contract compatibility; use focused MCP reads and token-budgeted context packets."

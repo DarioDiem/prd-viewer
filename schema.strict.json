@@ -1,0 +1,2062 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/prd.schema.strict.v1.2.0.json",
+  "title": "PRD Schema (Strict)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "meta",
+    "problem",
+    "goals",
+    "assumptions",
+    "personas",
+    "requirements",
+    "user_stories",
+    "constraints",
+    "delivery",
+    "risks",
+    "open_questions",
+    "decisions"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "prd_id",
+        "title",
+        "summary",
+        "product_name",
+        "document_type",
+        "version",
+        "status",
+        "lifecycle_stage",
+        "owners",
+        "authors",
+        "reviewers",
+        "approvers",
+        "created_at",
+        "updated_at",
+        "target_release",
+        "stakeholders",
+        "source_brief",
+        "links"
+      ],
+      "properties": {
+        "prd_id": {
+          "type": "string",
+          "pattern": "^[0-9a-fA-F-]{36}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "product_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "document_type": {
+          "type": "string",
+          "enum": [
+            "prd"
+          ]
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "draft",
+            "in_review",
+            "approved",
+            "implemented",
+            "deprecated"
+          ]
+        },
+        "lifecycle_stage": {
+          "type": "string",
+          "enum": [
+            "discovery",
+            "definition",
+            "delivery",
+            "launch",
+            "live"
+          ]
+        },
+        "owners": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "product",
+            "engineering",
+            "design",
+            "business",
+            "compliance"
+          ],
+          "properties": {
+            "product": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "engineering": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "design": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "business": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "compliance": {
+              "type": [
+                "string",
+                "null"
+              ]
+            }
+          }
+        },
+        "authors": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "reviewers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "approvers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "target_release": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "stakeholders": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/stakeholder"
+          }
+        },
+        "source_brief": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/link"
+          }
+        },
+        "schema_contract": {
+          "$ref": "#/$defs/schema_contract"
+        }
+      }
+    },
+    "problem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "background",
+        "opportunity",
+        "strategic_fit",
+        "affected_users",
+        "evidence"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "background": {
+          "type": "string",
+          "minLength": 1
+        },
+        "opportunity": {
+          "type": "string",
+          "minLength": 1
+        },
+        "strategic_fit": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "affected_users": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        }
+      }
+    },
+    "goals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "business_goals",
+        "user_outcomes",
+        "success_metrics",
+        "guardrail_metrics",
+        "non_goals"
+      ],
+      "properties": {
+        "business_goals": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/business_goal"
+          }
+        },
+        "user_outcomes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/user_outcome"
+          }
+        },
+        "success_metrics": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/metric"
+          }
+        },
+        "guardrail_metrics": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/metric"
+          }
+        },
+        "non_goals": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "assumptions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/assumption"
+      }
+    },
+    "personas": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/persona"
+      }
+    },
+    "requirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "functional",
+        "non_functional"
+      ],
+      "properties": {
+        "functional": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/functional_requirement"
+          }
+        },
+        "non_functional": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/non_functional_requirement"
+          }
+        }
+      }
+    },
+    "user_stories": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/user_story"
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "technical",
+        "legal_compliance",
+        "dependencies"
+      ],
+      "properties": {
+        "technical": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/technical_constraint"
+          }
+        },
+        "legal_compliance": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/legal_compliance"
+          }
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dependency"
+          }
+        }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "target_launch",
+        "milestones",
+        "rollout_plan",
+        "operational_readiness"
+      ],
+      "properties": {
+        "target_launch": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "milestones": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/milestone"
+          }
+        },
+        "rollout_plan": {
+          "$ref": "#/$defs/rollout_plan"
+        },
+        "operational_readiness": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/readiness_item"
+          }
+        }
+      }
+    },
+    "project_tracking": {
+      "$ref": "#/$defs/project_tracking"
+    },
+    "risks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/risk"
+      }
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/open_question"
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/decision"
+      }
+    },
+    "extensions": {
+      "$ref": "#/$defs/extensions_container"
+    }
+  },
+  "$defs": {
+    "link": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "url"
+      ],
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        }
+      }
+    },
+    "stakeholder": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "role",
+        "team",
+        "approval_required"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "team": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "approval_required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "description",
+        "source",
+        "confidence",
+        "observed_at"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "metric",
+            "user_research",
+            "competitor",
+            "support_ticket",
+            "regulatory",
+            "internal_data",
+            "other"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "type": "string",
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ]
+        },
+        "observed_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        }
+      }
+    },
+    "business_goal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "statement",
+        "rationale",
+        "owner",
+        "priority"
+      ],
+      "properties": {
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rationale": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "owner": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "primary",
+            "secondary"
+          ]
+        }
+      }
+    },
+    "user_outcome": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "actor",
+        "desired_outcome",
+        "measurement_signal"
+      ],
+      "properties": {
+        "actor": {
+          "type": "string",
+          "minLength": 1
+        },
+        "desired_outcome": {
+          "type": "string",
+          "minLength": 1
+        },
+        "measurement_signal": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "metric",
+        "baseline",
+        "target",
+        "unit",
+        "measurement_method",
+        "timeframe_days"
+      ],
+      "properties": {
+        "metric": {
+          "type": "string",
+          "minLength": 1
+        },
+        "baseline": {
+          "type": [
+            "string",
+            "number",
+            "null"
+          ]
+        },
+        "target": {
+          "type": [
+            "string",
+            "number"
+          ]
+        },
+        "unit": {
+          "type": "string",
+          "minLength": 1
+        },
+        "measurement_method": {
+          "type": "string",
+          "minLength": 1
+        },
+        "timeframe_days": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "assumption": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "assumption_id",
+        "statement",
+        "category",
+        "validation_plan",
+        "owner",
+        "status"
+      ],
+      "properties": {
+        "assumption_id": {
+          "type": "string",
+          "pattern": "^A-[0-9]{3}$"
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "user",
+            "business",
+            "technical",
+            "operational",
+            "legal",
+            "market",
+            "data"
+          ]
+        },
+        "validation_plan": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "owner": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "open",
+            "validated",
+            "invalidated",
+            "deferred"
+          ]
+        }
+      }
+    },
+    "persona": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "persona_id",
+        "name",
+        "role",
+        "goals",
+        "needs",
+        "pain_points",
+        "current_workarounds",
+        "frequency_of_use",
+        "technical_proficiency",
+        "environment"
+      ],
+      "properties": {
+        "persona_id": {
+          "type": "string",
+          "pattern": "^P-[0-9]{3}$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "goals": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "needs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "pain_points": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "current_workarounds": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "frequency_of_use": {
+          "type": "string",
+          "enum": [
+            "daily",
+            "weekly",
+            "monthly",
+            "occasional"
+          ]
+        },
+        "technical_proficiency": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "environment": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "functional_requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "req_id",
+        "title",
+        "description",
+        "rationale",
+        "priority",
+        "persona_ids",
+        "dependencies",
+        "acceptance_criteria",
+        "status",
+        "release_phase"
+      ],
+      "properties": {
+        "req_id": {
+          "type": "string",
+          "pattern": "^FR-[0-9]{3}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rationale": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "must",
+            "should",
+            "could",
+            "wont"
+          ]
+        },
+        "persona_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^P-[0-9]{3}$"
+          }
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "acceptance_criteria": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "proposed",
+            "approved",
+            "deferred",
+            "removed"
+          ]
+        },
+        "release_phase": {
+          "type": "string",
+          "enum": [
+            "mvp",
+            "ga",
+            "post_ga",
+            "future"
+          ]
+        }
+      }
+    },
+    "non_functional_requirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "req_id",
+        "category",
+        "description",
+        "target",
+        "priority",
+        "acceptance_criteria"
+      ],
+      "properties": {
+        "req_id": {
+          "type": "string",
+          "pattern": "^NFR-[0-9]{3}$"
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "performance",
+            "security",
+            "scalability",
+            "accessibility",
+            "reliability",
+            "compliance",
+            "usability",
+            "observability",
+            "privacy"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "target": {
+          "type": "string",
+          "minLength": 1
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "must",
+            "should",
+            "could",
+            "wont"
+          ]
+        },
+        "acceptance_criteria": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "user_story": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "story_id",
+        "epic",
+        "persona_id",
+        "priority",
+        "release_phase",
+        "statement",
+        "acceptance_criteria",
+        "linked_req_ids",
+        "story_points",
+        "edge_cases"
+      ],
+      "properties": {
+        "story_id": {
+          "type": "string",
+          "pattern": "^US-[0-9]{3}$"
+        },
+        "epic": {
+          "type": "string",
+          "minLength": 1
+        },
+        "persona_id": {
+          "type": "string",
+          "pattern": "^P-[0-9]{3}$"
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "must",
+            "should",
+            "could"
+          ]
+        },
+        "release_phase": {
+          "type": "string",
+          "enum": [
+            "mvp",
+            "ga",
+            "post_ga",
+            "future"
+          ]
+        },
+        "statement": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "as_a",
+            "i_want",
+            "so_that"
+          ],
+          "properties": {
+            "as_a": {
+              "type": "string",
+              "minLength": 1
+            },
+            "i_want": {
+              "type": "string",
+              "minLength": 1
+            },
+            "so_that": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        },
+        "acceptance_criteria": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/gwt"
+          }
+        },
+        "linked_req_ids": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "pattern": "^(FR|NFR)-[0-9]{3}$"
+          }
+        },
+        "story_points": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "edge_cases": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "gwt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "given",
+        "when",
+        "then"
+      ],
+      "properties": {
+        "given": {
+          "type": "string",
+          "minLength": 1
+        },
+        "when": {
+          "type": "string",
+          "minLength": 1
+        },
+        "then": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "technical_constraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "constraint_id",
+        "description",
+        "imposed_by",
+        "impact"
+      ],
+      "properties": {
+        "constraint_id": {
+          "type": "string",
+          "pattern": "^TC-[0-9]{3}$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "imposed_by": {
+          "type": "string",
+          "enum": [
+            "team",
+            "architecture",
+            "third_party",
+            "platform"
+          ]
+        },
+        "impact": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "legal_compliance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "regulation",
+        "requirement",
+        "region",
+        "owner",
+        "evidence_source"
+      ],
+      "properties": {
+        "regulation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requirement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "region": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "evidence_source": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dependency_id",
+        "name",
+        "description",
+        "type",
+        "owner",
+        "required_by",
+        "status"
+      ],
+      "properties": {
+        "dependency_id": {
+          "type": "string",
+          "pattern": "^D-[0-9]{3}$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "internal",
+            "external",
+            "third_party",
+            "platform"
+          ]
+        },
+        "owner": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "required_by": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "in_progress",
+            "blocked",
+            "complete"
+          ]
+        }
+      }
+    },
+    "milestone": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "date",
+        "deliverable",
+        "entry_criteria",
+        "exit_criteria",
+        "owner"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "date": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date"
+        },
+        "deliverable": {
+          "type": "string",
+          "minLength": 1
+        },
+        "entry_criteria": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "exit_criteria": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "owner": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "rollout_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "strategy",
+        "phases",
+        "communications",
+        "training",
+        "support_handoff"
+      ],
+      "properties": {
+        "strategy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "phases": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "audience",
+              "success_criteria",
+              "owner"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "audience": {
+                "type": "string",
+                "minLength": 1
+              },
+              "success_criteria": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "owner": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "communications": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "training": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "support_handoff": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "readiness_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "area",
+        "owner",
+        "status",
+        "notes"
+      ],
+      "properties": {
+        "area": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "not_started",
+            "in_progress",
+            "ready",
+            "blocked"
+          ]
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "project_tracking": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "owner",
+        "summary",
+        "updated_at",
+        "linked_prd_ids",
+        "pending_work",
+        "issues_found",
+        "blockers",
+        "notes"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "not_started",
+            "in_progress",
+            "at_risk",
+            "blocked",
+            "completed",
+            "on_hold",
+            "cancelled"
+          ]
+        },
+        "owner": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "summary": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "linked_prd_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F-]{36}$"
+          }
+        },
+        "pending_work": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/project_tracking_work_item"
+          }
+        },
+        "issues_found": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/project_tracking_issue"
+          }
+        },
+        "blockers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/project_tracking_blocker"
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/project_tracking_note"
+          }
+        }
+      }
+    },
+    "project_tracking_work_item": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "work_item_id",
+        "title",
+        "description",
+        "status",
+        "priority",
+        "owner",
+        "linked_prd_ids",
+        "linked_entity_ids",
+        "notes"
+      ],
+      "properties": {
+        "work_item_id": {
+          "type": "string",
+          "pattern": "^PTW-[0-9]{3}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "not_started",
+            "in_progress",
+            "blocked",
+            "done",
+            "deferred"
+          ]
+        },
+        "priority": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "owner": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "linked_prd_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F-]{36}$"
+          }
+        },
+        "linked_entity_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/project_tracking_entity_id"
+          }
+        },
+        "external_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/external_reference"
+          }
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "project_tracking_issue": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "issue_id",
+        "title",
+        "description",
+        "status",
+        "severity",
+        "owner",
+        "linked_prd_ids",
+        "linked_entity_ids",
+        "notes"
+      ],
+      "properties": {
+        "issue_id": {
+          "type": "string",
+          "pattern": "^PTI-[0-9]{3}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "open",
+            "investigating",
+            "resolved",
+            "deferred"
+          ]
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "owner": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "linked_prd_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F-]{36}$"
+          }
+        },
+        "linked_entity_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/project_tracking_entity_id"
+          }
+        },
+        "external_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/external_reference"
+          }
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "project_tracking_blocker": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "blocker_id",
+        "title",
+        "description",
+        "status",
+        "severity",
+        "owner",
+        "linked_prd_ids",
+        "linked_entity_ids",
+        "unblock_criteria",
+        "notes"
+      ],
+      "properties": {
+        "blocker_id": {
+          "type": "string",
+          "pattern": "^PTB-[0-9]{3}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "mitigated",
+            "cleared"
+          ]
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high",
+            "critical"
+          ]
+        },
+        "owner": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "linked_prd_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F-]{36}$"
+          }
+        },
+        "linked_entity_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/project_tracking_entity_id"
+          }
+        },
+        "external_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/external_reference"
+          }
+        },
+        "unblock_criteria": {
+          "type": "string",
+          "minLength": 1
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "project_tracking_note": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "note_id",
+        "note",
+        "owner",
+        "noted_at",
+        "linked_prd_ids",
+        "linked_entity_ids"
+      ],
+      "properties": {
+        "note_id": {
+          "type": "string",
+          "pattern": "^PTN-[0-9]{3}$"
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "noted_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "linked_prd_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-fA-F-]{36}$"
+          }
+        },
+        "linked_entity_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/project_tracking_entity_id"
+          }
+        },
+        "external_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/external_reference"
+          }
+        }
+      }
+    },
+    "risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "risk_id",
+        "description",
+        "category",
+        "probability",
+        "impact",
+        "score",
+        "mitigation",
+        "owner",
+        "trigger"
+      ],
+      "properties": {
+        "risk_id": {
+          "type": "string",
+          "pattern": "^R-[0-9]{3}$"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "category": {
+          "type": "string",
+          "enum": [
+            "technical",
+            "market",
+            "legal",
+            "resource",
+            "schedule",
+            "operational"
+          ]
+        },
+        "probability": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "impact": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "score": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9
+        },
+        "mitigation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "trigger": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "open_question": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "question_id",
+        "question",
+        "raised_by",
+        "raised_at",
+        "status",
+        "resolution"
+      ],
+      "properties": {
+        "question_id": {
+          "type": "string",
+          "pattern": "^Q-[0-9]{3}$"
+        },
+        "question": {
+          "type": "string",
+          "minLength": 1
+        },
+        "raised_by": {
+          "type": "string",
+          "minLength": 1
+        },
+        "raised_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "open",
+            "resolved",
+            "deferred"
+          ]
+        },
+        "resolution": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "decision_id",
+        "title",
+        "statement",
+        "rationale",
+        "owner",
+        "decided_at",
+        "status",
+        "linked_req_ids"
+      ],
+      "properties": {
+        "decision_id": {
+          "type": "string",
+          "pattern": "^DEC-[0-9]{3}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "statement": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rationale": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "owner": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "decided_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "proposed",
+            "accepted",
+            "superseded",
+            "rejected"
+          ]
+        },
+        "linked_req_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^(FR|NFR)-[0-9]{3}$"
+          }
+        }
+      }
+    },
+    "schema_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_id",
+        "schema_version",
+        "compatible_schema_versions",
+        "compatibility_mode",
+        "extension_policy",
+        "migrations",
+        "extensions"
+      ],
+      "properties": {
+        "schema_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "schema_version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "compatible_schema_versions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "compatibility_mode": {
+          "type": "string",
+          "enum": [
+            "exact",
+            "backward_compatible",
+            "forward_compatible",
+            "legacy_unversioned",
+            "unknown"
+          ]
+        },
+        "extension_policy": {
+          "type": "string",
+          "enum": [
+            "core_only",
+            "registered_extensions",
+            "experimental_extensions"
+          ]
+        },
+        "migrations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/schema_migration"
+          }
+        },
+        "extensions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/extension_descriptor"
+          }
+        }
+      }
+    },
+    "schema_migration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from_version",
+        "to_version",
+        "status",
+        "migration_path",
+        "backward_compatible",
+        "notes"
+      ],
+      "properties": {
+        "from_version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "to_version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "not_needed",
+            "available",
+            "required",
+            "blocked",
+            "deprecated"
+          ]
+        },
+        "migration_path": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "backward_compatible": {
+          "type": "boolean"
+        },
+        "notes": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "extension_descriptor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "extension_id",
+        "name",
+        "version",
+        "required",
+        "compatibility",
+        "owner",
+        "schema_ref",
+        "description"
+      ],
+      "properties": {
+        "extension_id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_\\.-]*$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "required": {
+          "type": "boolean"
+        },
+        "compatibility": {
+          "type": "string",
+          "enum": [
+            "core_compatible",
+            "requires_viewer_support",
+            "experimental",
+            "deprecated"
+          ]
+        },
+        "owner": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "schema_ref": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "extensions_container": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registry",
+        "data"
+      ],
+      "properties": {
+        "registry": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/extension_descriptor"
+          }
+        },
+        "data": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "external_reference": {
+      "type": "string",
+      "format": "uri",
+      "minLength": 1
+    },
+    "project_tracking_entity_id": {
+      "type": "string",
+      "pattern": "^(FR|NFR|US|TC|R|Q|A|DEC|P|D|PTW|PTI|PTB|PTN)-[0-9]{3}$"
+    }
+  },
+  "x-framework-name": "PRD Creation Framework",
+  "x-framework-version": "0.1.0",
+  "x-schema-version": "1.2.0",
+  "x-compatibility-policy": "Semantic versioning: patch versions are fully compatible, minor versions must be backward compatible unless marked otherwise in schema.versions.json, and major versions may require migration."
+}

@@ -1,0 +1,2507 @@
+{
+  "meta": {
+    "prd_id": "38491764-5485-4218-A991-A9D83BE84B7F",
+    "title": "PRD Reviewer Local/Web UI",
+    "summary": "A local-first web reviewer UI for PRD.json that gives humans a dashboard, schema-aware section views, validation, traceability, and safe export/writeback while preserving PRD.json as the canonical artifact for AI agents.",
+    "product_name": "PRD Reviewer UI",
+    "document_type": "prd",
+    "version": "0.1.30",
+    "status": "draft",
+    "lifecycle_stage": "definition",
+    "owners": {
+      "product": null,
+      "engineering": null,
+      "design": null,
+      "business": null,
+      "compliance": null
+    },
+    "authors": [
+      "Codex"
+    ],
+    "reviewers": [],
+    "approvers": [],
+    "created_at": "2026-04-20T00:00:00Z",
+    "updated_at": "2026-07-15T01:44:04Z",
+    "target_release": null,
+    "stakeholders": [
+      {
+        "name": "PRD author",
+        "role": "Creates and revises PRD.json content",
+        "team": "Product",
+        "approval_required": false
+      },
+      {
+        "name": "PRD reviewer",
+        "role": "Reviews scope, open questions, risks, and decisions",
+        "team": "Product and operations",
+        "approval_required": false
+      },
+      {
+        "name": "Engineering maintainer",
+        "role": "Owns schema validation, file safety, and implementation",
+        "team": "Engineering",
+        "approval_required": true
+      },
+      {
+        "name": "Approval owner",
+        "role": "Signs off on review readiness and release scope",
+        "team": "Product",
+        "approval_required": true
+      },
+      {
+        "name": "Compliance owner",
+        "role": "Reviews privacy and retention if comments, reviewer identity, or shared deployment are introduced",
+        "team": "Compliance",
+        "approval_required": true
+      }
+    ],
+    "source_brief": "User request on 2026-04-20 to create a PRD for the local/web PRD.json reviewer UI, using the previously recommended shape and preserving agent-friendly PRD JSON.",
+    "links": [
+      {
+        "label": "JSON Forms documentation",
+        "url": "https://jsonforms.io/docs/"
+      },
+      {
+        "label": "svelte-jsoneditor repository",
+        "url": "https://github.com/josdejong/svelte-jsoneditor"
+      },
+      {
+        "label": "React Flow concepts",
+        "url": "https://reactflow.dev/learn/concepts/terms-and-definitions"
+      },
+      {
+        "label": "VS Code JSON language documentation",
+        "url": "https://code.visualstudio.com/Docs/languages/json"
+      },
+      {
+        "label": "PostgreSQL JSON type documentation",
+        "url": "https://www.postgresql.org/docs/current/datatype-json.html"
+      },
+      {
+        "label": "SQLite JSON functions documentation",
+        "url": "https://www.sqlite.org/json1.html"
+      }
+    ],
+    "schema_contract": {
+      "schema_id": "https://example.com/prd.schema.strict.v1.2.0.json",
+      "schema_version": "1.2.0",
+      "compatible_schema_versions": [
+        "1.2.0",
+        "1.1.0",
+        "1.0.0"
+      ],
+      "compatibility_mode": "exact",
+      "extension_policy": "core_only",
+      "migrations": [
+        {
+          "from_version": "1.0.0",
+          "to_version": "1.1.0",
+          "status": "available",
+          "migration_path": "Add optional top-level project_tracking and preserve 1.0.0 documents as backward-compatible under schema.versions.json.",
+          "backward_compatible": true,
+          "notes": "Schema 1.1.0 introduces first-class project tracking without forcing migration of existing 1.0.0 PRDs."
+        },
+        {
+          "from_version": "1.1.0",
+          "to_version": "1.2.0",
+          "status": "available",
+          "migration_path": "Add optional external_refs URI arrays to project-tracking records when external workflow links are available.",
+          "backward_compatible": true,
+          "notes": "Schema 1.2.0 links durable PRD tracking records to external issues, pull requests, project boards, or sprint iterations without duplicating their live state."
+        }
+      ],
+      "extensions": []
+    }
+  },
+  "problem": {
+    "statement": "Reviewing PRD.json in this repo is still a document-inspection problem: the artifact is schema-constrained, optimized for machine validation, and difficult for humans to review efficiently without a dedicated interface.",
+    "background": "This repo already contains schema-defined PRD artifacts, validation tooling, and PRD-focused agent skills. The current viewer PRD captures delivery readiness, risks, questions, and decisions, but it still lacks a first-class project-tracking section for TODOs, issues, blockers, and status notes.",
+    "opportunity": "A local/web reviewer UI can turn the existing JSON into a navigable, schema-aware review experience with dashboard summaries, section-specific editing, validation, traceability, and safe writeback, while preserving PRD.json as the source of truth.",
+    "strategic_fit": "The UI complements the existing PRD generation and validation workflow by adding a human review layer without changing the machine-readable JSON contract agents depend on, while also evolving into a reusable framework that a solo developer can apply to later projects with the same viewer, schema discipline, and future MCP access patterns.",
+    "affected_users": [
+      "PRD authors",
+      "PRD reviewers",
+      "Approval owners",
+      "Engineering maintainers",
+      "AI implementation agents"
+    ],
+    "evidence": [
+      {
+        "type": "internal_data",
+        "description": "README.md describes this repo as a PRD JSON generation skill pack with schema.strict.json used for strict machine validation.",
+        "source": "README.md",
+        "confidence": "high",
+        "observed_at": "2026-04-20"
+      },
+      {
+        "type": "internal_data",
+        "description": "schema.strict.json uses a closed top-level contract and rejects undocumented properties, making schema-aware UI validation and contract evolution important.",
+        "source": "schema.strict.json",
+        "confidence": "high",
+        "observed_at": "2026-05-03"
+      },
+      {
+        "type": "internal_data",
+        "description": "viewer/PRD_web_ui.json already tracks readiness, risks, open questions, and decisions separately, but it does not provide one first-class project status surface for pending work, issues found, and blockers.",
+        "source": "viewer/PRD_web_ui.json",
+        "confidence": "high",
+        "observed_at": "2026-05-03"
+      },
+      {
+        "type": "other",
+        "description": "JSON Forms supports declarative form UIs using JSON Schema plus UI schema, matching the need for schema-driven section editors.",
+        "source": "https://jsonforms.io/docs/",
+        "confidence": "high",
+        "observed_at": "2026-04-20"
+      },
+      {
+        "type": "other",
+        "description": "svelte-jsoneditor and vanilla-jsoneditor support JSON tree, table, text, query, transform, and schema validation modes for power-user editing.",
+        "source": "https://github.com/josdejong/svelte-jsoneditor",
+        "confidence": "high",
+        "observed_at": "2026-04-20"
+      },
+      {
+        "type": "other",
+        "description": "React Flow models interactive graphs as nodes and edges, which maps well to requirement, story, decision, dependency, and risk traceability.",
+        "source": "https://reactflow.dev/learn/concepts/terms-and-definitions",
+        "confidence": "high",
+        "observed_at": "2026-04-20"
+      },
+      {
+        "type": "other",
+        "description": "VS Code JSON support already provides schema-backed validation, IntelliSense, hovers, formatting, and folding for developer editing workflows.",
+        "source": "https://code.visualstudio.com/Docs/languages/json",
+        "confidence": "high",
+        "observed_at": "2026-04-20"
+      },
+      {
+        "type": "other",
+        "description": "PostgreSQL recommends jsonb for most application JSON storage, but a DB introduces persistence and migration ownership beyond the MVP.",
+        "source": "https://www.postgresql.org/docs/current/datatype-json.html",
+        "confidence": "high",
+        "observed_at": "2026-04-20"
+      },
+      {
+        "type": "other",
+        "description": "SQLite includes JSON functions by default in modern versions and can support a local derived index if search or workflow state becomes necessary.",
+        "source": "https://www.sqlite.org/json1.html",
+        "confidence": "high",
+        "observed_at": "2026-04-20"
+      }
+    ]
+  },
+  "goals": {
+    "business_goals": [
+      {
+        "statement": "Shorten PRD review cycles by letting reviewers assess structure, completeness, validation status, and blockers from one interface.",
+        "rationale": "Reviewers currently have to reconstruct meaning from raw JSON, schema files, and cross-section links.",
+        "owner": null,
+        "priority": "primary"
+      },
+      {
+        "statement": "Reduce invalid or incomplete PRD changes before they reach implementation agents.",
+        "rationale": "Agents depend on stable IDs, strict schema compliance, and complete traceability to plan and implement work reliably.",
+        "owner": null,
+        "priority": "primary"
+      },
+      {
+        "statement": "Preserve PRD.json as the canonical source of truth while improving human review ergonomics.",
+        "rationale": "The repo is already JSON-first; moving authority to a DB too early would create synchronization and migration risk.",
+        "owner": null,
+        "priority": "primary"
+      },
+      {
+        "statement": "Create a foundation for future collaboration features only if review usage proves the need.",
+        "rationale": "Comments, assignments, and approvals may justify a derived DB later, but are not required to validate the core review experience.",
+        "owner": null,
+        "priority": "secondary"
+      },
+      {
+        "statement": "Turn the viewer into a reusable solo-developer framework for building later projects with the same PRD contract, review UI, and future local MCP support.",
+        "rationale": "If the viewer can refine its own framework while staying local-first and schema-driven, the same stack can be reused to build other projects without restarting the toolchain design from scratch.",
+        "owner": null,
+        "priority": "secondary"
+      }
+    ],
+    "user_outcomes": [
+      {
+        "actor": "PRD reviewer",
+        "desired_outcome": "Can determine whether a PRD draft is ready for approval without reading raw JSON line by line.",
+        "measurement_signal": "Median review time decreases and comments focus on substantive scope issues rather than navigation or formatting confusion."
+      },
+      {
+        "actor": "PRD author",
+        "desired_outcome": "Can see missing sections, invalid fields, unresolved questions, and broken links before requesting review.",
+        "measurement_signal": "Fewer repair loops are needed after the first review pass."
+      },
+      {
+        "actor": "Engineering maintainer",
+        "desired_outcome": "Can validate PRD.json against schema.strict.json and verify safe round-trip save behavior.",
+        "measurement_signal": "Every saved PRD passes schema validation and snapshot regression checks."
+      },
+      {
+        "actor": "AI implementation agent",
+        "desired_outcome": "Can consume the same canonical PRD.json plus derived trace summaries without ambiguity or hidden application-only state.",
+        "measurement_signal": "Agent task planning references stable IDs and does not require data from a non-canonical database."
+      }
+    ],
+    "success_metrics": [
+      {
+        "metric": "Schema-valid PRD save rate",
+        "baseline": null,
+        "target": "100%",
+        "unit": "percent of save attempts",
+        "measurement_method": "Validate every save against schema.strict.json before file write or export.",
+        "timeframe_days": 90
+      },
+      {
+        "metric": "Semantic round-trip fidelity",
+        "baseline": null,
+        "target": "100%",
+        "unit": "percent of accepted edits",
+        "measurement_method": "Regression tests compare loaded, edited, and re-saved PRD.json fixtures for preserved meaning and IDs.",
+        "timeframe_days": 90
+      },
+      {
+        "metric": "Median time to open and render a PRD",
+        "baseline": null,
+        "target": "<= 2",
+        "unit": "seconds",
+        "measurement_method": "Measure from file open to first fully rendered and validated document state on reference hardware.",
+        "timeframe_days": 60
+      },
+      {
+        "metric": "Weekly active internal reviewers",
+        "baseline": null,
+        "target": ">= 3",
+        "unit": "reviewers per week",
+        "measurement_method": "Count unique internal users who complete at least one review session in the UI each week during pilot.",
+        "timeframe_days": 90
+      },
+      {
+        "metric": "Schema compatibility visibility",
+        "baseline": null,
+        "target": "100%",
+        "unit": "percent of loaded PRDs with visible compatibility status",
+        "measurement_method": "For every loaded PRD, compare meta.schema_contract and schema.versions.json and show exact, backward-compatible, migration-required, or legacy-unversioned status in the UI.",
+        "timeframe_days": 90
+      },
+      {
+        "metric": "Agent context reduction for repeat PRD work",
+        "baseline": null,
+        "target": ">= 50",
+        "unit": "percent reduction in average agent context bytes for repeated PRD queries once MCP projections are added",
+        "measurement_method": "Compare full-document agent payload size against derived section, entity, or trace packets served from the future local MCP layer for repeated planning and implementation tasks.",
+        "timeframe_days": 120
+      }
+    ],
+    "guardrail_metrics": [
+      {
+        "metric": "Invalid save attempts blocked",
+        "baseline": null,
+        "target": "100%",
+        "unit": "percent of invalid save attempts",
+        "measurement_method": "Count rejected saves and confirm no canonical file write occurs.",
+        "timeframe_days": 90
+      },
+      {
+        "metric": "p95 render and validation latency",
+        "baseline": null,
+        "target": "<= 3",
+        "unit": "seconds",
+        "measurement_method": "Track load and validation time across representative small and large PRD fixtures.",
+        "timeframe_days": 60
+      },
+      {
+        "metric": "Crash-free review sessions",
+        "baseline": null,
+        "target": ">= 99.5%",
+        "unit": "percent of sessions",
+        "measurement_method": "Client error telemetry or local structured logs across active reviewer sessions.",
+        "timeframe_days": 90
+      },
+      {
+        "metric": "Metrics log parse failure rate",
+        "baseline": null,
+        "target": "<= 1",
+        "unit": "percent of metrics rows",
+        "measurement_method": "Count JSONL rows the reviewer UI cannot parse or cannot map to a savings summary.",
+        "timeframe_days": 90
+      },
+      {
+        "metric": "Unsupported required extension block rate",
+        "baseline": null,
+        "target": "100%",
+        "unit": "percent of PRDs with unsupported required extensions blocked from unsafe editing",
+        "measurement_method": "Load PRDs with required extension declarations and verify the UI blocks writeback unless the extension is supported or explicitly ignored by an authorized maintainer.",
+        "timeframe_days": 90
+      }
+    ],
+    "non_goals": [
+      "The MVP does not replace PRD.json with a separate authoritative database or index.",
+      "The MVP does not support concurrent multi-user editing or merge conflict resolution.",
+      "The MVP does not auto-generate, rewrite, or invent PRD content without explicit user approval.",
+      "The MVP does not publish a public-facing, multi-tenant PRD portal.",
+      "The MVP does not require a hosted backend for read-only review, validation, or local export."
+    ]
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A-001",
+      "statement": "The reviewer UI is review-first and schema-aware; PRD.json remains the authoritative artifact for v1.",
+      "category": "technical",
+      "validation_plan": "Confirm the expected workflow with the repo owner before implementation: read-only review, edit/writeback, or both.",
+      "owner": null,
+      "status": "open"
+    },
+    {
+      "assumption_id": "A-002",
+      "statement": "schema.strict.json remains the canonical validation contract for the reviewer UI.",
+      "category": "technical",
+      "validation_plan": "Wire validation tests directly to schema.strict.json and fail CI if UI validation diverges from the schema.",
+      "owner": "Engineering",
+      "status": "open"
+    },
+    {
+      "assumption_id": "A-003",
+      "statement": "The first useful release can run local-first in a browser or thin local shell without a mandatory backend service.",
+      "category": "operational",
+      "validation_plan": "Prototype file open, validation, export, and writeback in the target runtime before building collaboration features.",
+      "owner": "Engineering",
+      "status": "open"
+    },
+    {
+      "assumption_id": "A-004",
+      "statement": "Most reviewers understand PRD concepts but should not need to understand raw JSON structure.",
+      "category": "user",
+      "validation_plan": "Run a pilot review with at least one non-implementation reviewer and collect navigation, terminology, and approval feedback.",
+      "owner": "Product",
+      "status": "open"
+    },
+    {
+      "assumption_id": "A-005",
+      "statement": "A database is not justified until there is proven need for concurrent editing, persistent comments, assignments, audit history, or cross-PRD querying.",
+      "category": "technical",
+      "validation_plan": "Track pilot requests for collaboration features and revisit the DB decision after at least three complete review cycles.",
+      "owner": "Product",
+      "status": "open"
+    }
+  ],
+  "personas": [
+    {
+      "persona_id": "P-001",
+      "name": "PRD Review Lead",
+      "role": "Product or operational stakeholder who reviews PRD scope for completeness, clarity, and approval readiness.",
+      "goals": [
+        "Confirm the PRD matches intended project scope.",
+        "Catch missing ownership, unresolved questions, and scope drift before approval."
+      ],
+      "needs": [
+        "A readable sectioned view that avoids raw JSON scanning.",
+        "A blocker summary for open questions, risks, and validation failures.",
+        "Fast navigation from summary items to detailed PRD content."
+      ],
+      "pain_points": [
+        "Raw JSON is difficult to scan during review sessions.",
+        "Important blockers are spread across many sections.",
+        "It is hard to tell which items still need signoff."
+      ],
+      "current_workarounds": [
+        "Exports PRD content into documents or spreadsheets for review.",
+        "Asks a maintainer to summarize what changed.",
+        "Uses chat or meetings to track open decisions."
+      ],
+      "frequency_of_use": "weekly",
+      "technical_proficiency": "medium",
+      "environment": "Desktop browser during product or project review sessions."
+    },
+    {
+      "persona_id": "P-002",
+      "name": "PRD Maintainer",
+      "role": "Developer or agent maintainer responsible for keeping PRD.json schema-valid, traceable, and safe for downstream agents.",
+      "goals": [
+        "Keep PRD structure valid and publishable.",
+        "Catch broken IDs, missing links, and stale fields before review."
+      ],
+      "needs": [
+        "Fast schema validation with path-level error reporting.",
+        "Coverage checks for linked requirements and stories.",
+        "Safe writeback that preserves the last valid canonical file."
+      ],
+      "pain_points": [
+        "Manual schema checking takes time.",
+        "Broken cross-links are easy to miss in large PRDs.",
+        "Repeated edits can introduce duplicate or stale IDs."
+      ],
+      "current_workarounds": [
+        "Runs local validation commands.",
+        "Inspects raw diffs in the editor.",
+        "Verifies links by hand before handing the PRD to reviewers."
+      ],
+      "frequency_of_use": "daily",
+      "technical_proficiency": "high",
+      "environment": "Local development workstation with CLI tools and browser access."
+    },
+    {
+      "persona_id": "P-003",
+      "name": "Implementation Trace Agent",
+      "role": "AI or automation agent that consumes the PRD to plan and implement scoped work with traceability.",
+      "goals": [
+        "Preserve traceability from requirements to implementation work.",
+        "Detect missing context before generating tasks or code changes."
+      ],
+      "needs": [
+        "Stable IDs and backlinks across requirements, stories, and decisions.",
+        "A machine-readable trace summary for the current PRD state.",
+        "Visibility into unresolved questions and dependencies."
+      ],
+      "pain_points": [
+        "Ambiguous stories cause implementation drift.",
+        "Trace data is scattered across sections.",
+        "ID changes can break downstream task mapping."
+      ],
+      "current_workarounds": [
+        "Reads the full PRD before acting.",
+        "Builds scratch trace maps outside the document.",
+        "Asks for clarification when links or dependencies are missing."
+      ],
+      "frequency_of_use": "daily",
+      "technical_proficiency": "high",
+      "environment": "Local agent runtime, CLI workspace, and reviewer UI output."
+    },
+    {
+      "persona_id": "P-004",
+      "name": "Approval Owner",
+      "role": "Decision-maker who grants final approval once the PRD is internally consistent and review-complete.",
+      "goals": [
+        "Approve only PRDs that are internally consistent.",
+        "Keep approval decisions tied to the canonical document."
+      ],
+      "needs": [
+        "A clear blocker list before approval is possible.",
+        "A visible status for validation, open questions, and must-have coverage.",
+        "Confidence that approval does not depend on hidden application state."
+      ],
+      "pain_points": [
+        "Approval is slowed by unclear document state.",
+        "Open blockers can be missed in long review cycles.",
+        "There is no single human-friendly source for review readiness."
+      ],
+      "current_workarounds": [
+        "Asks for status in meetings or chat.",
+        "Keeps manual approval notes outside the PRD.",
+        "Relies on someone else to summarize review outcomes."
+      ],
+      "frequency_of_use": "occasional",
+      "technical_proficiency": "medium",
+      "environment": "Browser-based review workflow and approval meetings."
+    }
+  ],
+  "requirements": {
+    "functional": [
+      {
+        "req_id": "FR-001",
+        "title": "Open canonical PRD in browser",
+        "description": "The reviewer UI must open a PRD.json file in a browser session and treat that file as the canonical document for review and optional editing.",
+        "rationale": "A browser front end is useful only if it works directly against the canonical file rather than a duplicate authoritative store.",
+        "priority": "must",
+        "persona_ids": [
+          "P-001",
+          "P-002"
+        ],
+        "dependencies": [
+          "D-001",
+          "D-003"
+        ],
+        "acceptance_criteria": [
+          "A reviewer can open the UI in a browser and load PRD.json from a local workspace path or file picker.",
+          "The UI shows the active PRD source path or source label for the current session.",
+          "The document can be viewed without importing it into a separate authoritative database first."
+        ],
+        "status": "proposed",
+        "release_phase": "mvp"
+      },
+      {
+        "req_id": "FR-002",
+        "title": "Show review dashboard",
+        "description": "The UI should present a human-friendly dashboard that summarizes the current PRD's structure, project status, validation state, risks, decisions, and open blockers.",
+        "rationale": "A summary view reduces time spent reading raw JSON and helps reviewers focus on incomplete or risky areas.",
+        "priority": "should",
+        "persona_ids": [
+          "P-001",
+          "P-004"
+        ],
+        "dependencies": [
+          "FR-001",
+          "FR-003"
+        ],
+        "acceptance_criteria": [
+          "The dashboard shows counts or presence indicators for top-level PRD sections, functional requirements, non-functional requirements, user stories, project-tracking pending work, project-tracking issues, project-tracking blockers, open questions, proposed decisions, high-score risks, validation issues, compatibility status, and trace links.",
+          "The dashboard highlights validation errors, active project-tracking blockers, open questions, high-score risks, missing required content, proposed decisions, and broken traceability references as separate review signals.",
+          "A reviewer can navigate from each dashboard summary control or blocking signal to the relevant section in one action, and the destination section is visibly selected."
+        ],
+        "status": "proposed",
+        "release_phase": "mvp"
+      },
+      {
+        "req_id": "FR-003",
+        "title": "Validate against strict schema",
+        "description": "The reviewer UI must validate the loaded PRD.json against schema.strict.json and surface violations at section and field level.",
+        "rationale": "Strict schema compliance keeps the PRD consumable by downstream agents and tools.",
+        "priority": "must",
+        "persona_ids": [
+          "P-002",
+          "P-003"
+        ],
+        "dependencies": [
+          "D-001",
+          "FR-001"
+        ],
+        "acceptance_criteria": [
+          "The UI validates the document on load and again before any canonical save or export.",
+          "Validation messages include the JSON path or section, the failing rule, and a human-readable message.",
+          "The UI blocks canonical writeback while required schema violations remain unresolved."
+        ],
+        "status": "proposed",
+        "release_phase": "mvp"
+      },
+      {
+        "req_id": "FR-004",
+        "title": "Edit PRD by section",
+        "description": "The UI should let reviewers edit PRD content through section-specific forms while keeping a raw JSON editor available for maintainers.",
+        "rationale": "Section-specific editing lowers accidental schema breakage while raw JSON access remains useful for power users.",
+        "priority": "should",
+        "persona_ids": [
+          "P-001",
+          "P-002"
+        ],
+        "dependencies": [
+          "FR-001",
+          "FR-003",
+          "D-001"
+        ],
+        "acceptance_criteria": [
+          "The UI provides schema-driven section editors for MVP editing sections: requirements, user_stories, project_tracking, risks, open_questions, decisions, and delivery.operational_readiness.",
+          "The schema-driven editors expose required fields, enum choices, nullable fields, and nested acceptance criteria without requiring reviewers to edit raw JSON for routine MVP changes.",
+          "List-based MVP editing sections support adding, removing, duplicating, and reordering items where schema.strict.json allows arrays.",
+          "Raw JSON edit mode remains available for maintainers for every top-level section and validates the full PRD before applying changes.",
+          "Unsaved changes remain local to the session until the user saves or exports, and the pending writeback preview identifies changed sections and representative JSON paths."
+        ],
+        "status": "proposed",
+        "release_phase": "mvp"
+      },
+      {
+        "req_id": "FR-005",
+        "title": "Render traceability views",
+        "description": "The UI should derive and display traceability relationships among PRD entities as both a matrix and an interactive graph.",
+        "rationale": "Reviewers and agents need to inspect how goals, requirements, stories, decisions, risks, dependencies, and open questions connect.",
+        "priority": "should",
+        "persona_ids": [
+          "P-002",
+          "P-003",
+          "P-004"
+        ],
+        "dependencies": [
+          "FR-001",
+          "FR-003",
+          "D-002"
+        ],
+        "acceptance_criteria": [
+          "The UI renders a matrix for linkable PRD entities using identifiers present in the document, including project_tracking linked_entity_ids when the section exists.",
+          "The UI renders a graph view that exposes inbound and outbound relationships for a selected node.",
+          "Broken or missing references are flagged in both matrix and graph views.",
+          "The UI can export an agent-ready trace summary that references stable IDs."
+        ],
+        "status": "proposed",
+        "release_phase": "mvp"
+      },
+      {
+        "req_id": "FR-006",
+        "title": "Export and write back safely",
+        "description": "The UI should support exporting a review snapshot and writing approved changes back to the canonical PRD.json file.",
+        "rationale": "Review is incomplete unless approved edits can be persisted without corrupting the canonical document.",
+        "priority": "should",
+        "persona_ids": [
+          "P-002",
+          "P-004"
+        ],
+        "dependencies": [
+          "FR-001",
+          "FR-003",
+          "FR-004",
+          "D-003"
+        ],
+        "acceptance_criteria": [
+          "The UI previews the pending diff or changed sections before writeback is confirmed.",
+          "The UI can write validated changes back to the same canonical PRD.json file.",
+          "The UI can export a read-only review snapshot without changing the canonical file.",
+          "A failed writeback leaves the last valid canonical file intact."
+        ],
+        "status": "proposed",
+        "release_phase": "mvp"
+      },
+      {
+        "req_id": "FR-007",
+        "title": "Support derived index or database later",
+        "description": "The UI could generate an optional derived index or database for faster search, persistent review state, or cross-PRD querying without replacing PRD.json as the source of truth.",
+        "rationale": "A derived store can improve workflow speed later, but must remain optional until collaboration needs justify added persistence complexity.",
+        "priority": "could",
+        "persona_ids": [
+          "P-002",
+          "P-003"
+        ],
+        "dependencies": [
+          "FR-001",
+          "FR-003",
+          "FR-005",
+          "D-005"
+        ],
+        "acceptance_criteria": [
+          "The derived index can be rebuilt from the canonical PRD.json at any time.",
+          "Disabling or deleting the derived index does not prevent viewing, validating, or writing back PRD.json.",
+          "The UI labels derived store data as cache, index, or workflow data rather than authoritative document content.",
+          "A future DB migration proposal identifies which data remains canonical JSON and which data becomes application workflow state."
+        ],
+        "status": "proposed",
+        "release_phase": "future"
+      },
+      {
+        "req_id": "FR-008",
+        "title": "Show approval readiness",
+        "description": "The UI should show whether the loaded PRD is ready for approval based on schema validity, must-have coverage, open blockers, project-tracking status, and unresolved decisions.",
+        "rationale": "Approval owners need a compact readiness view before signing off on a PRD draft.",
+        "priority": "should",
+        "persona_ids": [
+          "P-001",
+          "P-004"
+        ],
+        "dependencies": [
+          "FR-002",
+          "FR-003",
+          "FR-005"
+        ],
+        "acceptance_criteria": [
+          "The readiness view lists schema failures, active project-tracking blockers, unresolved open questions, proposed decisions, high-score risks, missing must-requirement story coverage, and broken traceability links that block approval.",
+          "The readiness view distinguishes blockers from warnings, where blockers prevent approval and warnings identify follow-up review work such as unassigned project-tracking owners or stale status notes.",
+          "Each readiness signal includes a category, severity, source section, and stable PRD ID or JSON path when available.",
+          "Approval guidance is derived from PRD content, schema validation results, schema compatibility results, and derived traceability only, not hidden application-only state.",
+          "The exported review snapshot includes the same readiness categories and severity labels shown in the UI."
+        ],
+        "status": "proposed",
+        "release_phase": "mvp"
+      },
+      {
+        "req_id": "FR-009",
+        "title": "View agent context efficiency metrics",
+        "description": "A future UI may summarize content-redacted MCP metrics for focused reads, packet token budgets, truncation, and full-document fallbacks.",
+        "rationale": "Context efficiency should be measured at the selection layer agents actually use, without coupling the reviewer MVP to an optional encoding format.",
+        "priority": "should",
+        "persona_ids": [
+          "P-002",
+          "P-003"
+        ],
+        "dependencies": [
+          "FR-002",
+          "D-006"
+        ],
+        "acceptance_criteria": [
+          "The UI reads content-redacted pacs-prd MCP metrics without reading PRD payloads from the metrics log.",
+          "The UI displays focused-read rate, packet token estimates, budget truncation, and full-document fallback counts.",
+          "The UI can filter metrics by MCP resource or tool without treating metrics data as canonical PRD content."
+        ],
+        "status": "deferred",
+        "release_phase": "future"
+      },
+      {
+        "req_id": "FR-010",
+        "title": "Show schema version and extension compatibility",
+        "description": "The UI should read meta.schema_contract, schema.versions.json, and optional extensions metadata to show whether a loaded PRD is exactly compatible, backward compatible, legacy unversioned, migration-required, or blocked by unsupported required extensions.",
+        "rationale": "The PRD system is now a framework with multiple possible PRD implementations, so users need explicit compatibility status before reviewing, editing, or handing documents to agents.",
+        "priority": "should",
+        "persona_ids": [
+          "P-002",
+          "P-003",
+          "P-004"
+        ],
+        "dependencies": [
+          "FR-001",
+          "FR-003",
+          "D-007"
+        ],
+        "acceptance_criteria": [
+          "The UI displays the PRD document version separately from the schema contract version.",
+          "The UI reports exact, backward-compatible, migration-required, unknown, or legacy-unversioned status using schema.versions.json.",
+          "The UI lists declared extensions, required extensions, unsupported extensions, and extension schema references when present.",
+          "The UI blocks unsafe writeback when a required extension is unsupported, when a migration-required schema version has not been migrated, or when the viewer cannot preserve a loaded project_tracking section losslessly."
+        ],
+        "status": "proposed",
+        "release_phase": "mvp"
+      },
+      {
+        "req_id": "FR-011",
+        "title": "Render first-class project tracking",
+        "description": "The UI should render a dedicated top-level project_tracking section with overall status, pending work, issues found, blockers, owners, linked entities, external workflow references, and status notes while preserving the section through load, edit, export, and writeback.",
+        "rationale": "Project execution state should live in the canonical PRD instead of being reconstructed from scattered readiness notes, questions, and decisions.",
+        "priority": "must",
+        "persona_ids": [
+          "P-001",
+          "P-002",
+          "P-004"
+        ],
+        "dependencies": [
+          "FR-002",
+          "FR-003",
+          "FR-004",
+          "FR-006",
+          "D-001",
+          "D-007"
+        ],
+        "acceptance_criteria": [
+          "The UI exposes project_tracking as a first-class section in navigation, section detail, dashboard summaries, change preview, and review snapshot export.",
+          "The UI shows overall status, owner, pending work, issues found, blockers, and notes even when some linked_entity_ids are broken, and it surfaces those broken links instead of dropping the records.",
+          "The structured project-tracking editor preserves and validates optional external_refs URLs for PTW, PTI, PTB, and PTN records.",
+          "The UI validates the full PRD before applying project_tracking edits and preserves project_tracking losslessly through export and canonical writeback."
+        ],
+        "status": "proposed",
+        "release_phase": "mvp"
+      },
+      {
+        "req_id": "FR-012",
+        "title": "Provide a reusable local framework and MCP-ready foundation",
+        "description": "The viewer should refine the PRD framework through its own implementation and define a future local MCP server path, using the official Model Context Protocol TypeScript SDK, so a solo developer can reuse the final framework, viewer, and derived MCP access patterns to build later projects without treating the full PRD as the default agent payload.",
+        "rationale": "The viewer is both a product and a proving ground for the framework; making the reusable framework path explicit prevents the implementation from becoming a one-off tool that cannot scale to later solo-developer projects or agentic workflows.",
+        "priority": "should",
+        "persona_ids": [
+          "P-002",
+          "P-003"
+        ],
+        "dependencies": [
+          "FR-007",
+          "FR-010",
+          "D-007",
+          "D-008"
+        ],
+        "acceptance_criteria": [
+          "The PRD explicitly defines a future local MCP layer that exposes derived summaries, section packets, traceability packets, readiness, compatibility, and project-tracking views without replacing PRD.json as the canonical artifact.",
+          "The future MCP server direction is aligned to the official Model Context Protocol TypeScript SDK so the viewer stack, framework evolution, and solo-developer reuse path stay on one supported TypeScript implementation track.",
+          "The reusable-framework path keeps local-first operation, modest hardware expectations, and low-overhead derived access as baseline constraints for later solo-developer projects.",
+          "The future MCP path includes local metrics for request volume, response size, latency, cache behavior, and full-document fallback so the solo developer can later verify whether the server meaningfully reduces agent context cost."
+        ],
+        "status": "proposed",
+        "release_phase": "future"
+      }
+    ],
+    "non_functional": [
+      {
+        "req_id": "NFR-001",
+        "category": "performance",
+        "description": "The UI should load and render a PRD.json file quickly enough for interactive review on a standard developer laptop.",
+        "target": "Initial dashboard render completes in 2 seconds or less for a PRD.json file up to 1 MB with up to 1,000 linked entities.",
+        "priority": "should",
+        "acceptance_criteria": [
+          "The initial dashboard appears within the target time on the benchmark fixture.",
+          "Section-to-section navigation remains responsive within 300 ms for typical review actions.",
+          "Traceability generation completes within 3 seconds on the same fixture."
+        ]
+      },
+      {
+        "req_id": "NFR-002",
+        "category": "security",
+        "description": "The UI should restrict writeback and admin actions to explicit authorized local sessions for the MVP, with stronger identity-based authorization deferred until any shared deployment is approved.",
+        "target": "No browser session can modify PRD.json unless the user explicitly grants a writable local file handle for that session; shared deployments must add identity-based authorization before enabling writeback.",
+        "priority": "should",
+        "acceptance_criteria": [
+          "Read-only file-picker sessions cannot trigger a same-file save or writeback request.",
+          "Writable sessions require an explicit File System Access API handle or equivalent local-shell permission before the Save action is enabled.",
+          "Unsupported browsers and sessions without a writable handle remain export-only and show a clear writeback limitation.",
+          "Any future shared or hosted deployment disables writeback until user identity, authorization policy, and audit expectations are defined."
+        ]
+      },
+      {
+        "req_id": "NFR-003",
+        "category": "privacy",
+        "description": "The UI should keep PRD content local by default and avoid external transmission unless the user explicitly opts in.",
+        "target": "No PRD content is sent to third-party services during open, edit, validate, or save flows by default.",
+        "priority": "should",
+        "acceptance_criteria": [
+          "The default open, edit, validate, and save path makes no outbound third-party network calls containing PRD content.",
+          "Exporting or sharing content requires an explicit user action.",
+          "Any optional external integration is disabled until configured by the operator."
+        ]
+      },
+      {
+        "req_id": "NFR-004",
+        "category": "reliability",
+        "description": "The UI must preserve the canonical PRD.json file when save or export operations fail.",
+        "target": "Interrupted or failed writeback leaves the last valid PRD.json readable and unchanged.",
+        "priority": "must",
+        "acceptance_criteria": [
+          "A failed save does not replace the last valid canonical file with partial content.",
+          "Validation failure prevents a corrupt writeback from starting.",
+          "The UI can recover from an interrupted staged write without losing the previous document version."
+        ]
+      },
+      {
+        "req_id": "NFR-005",
+        "category": "accessibility",
+        "description": "The core dashboard, editors, validation panels, and traceability views should be operable with accessible controls.",
+        "target": "Core UI paths meet WCAG 2.1 AA expectations.",
+        "priority": "should",
+        "acceptance_criteria": [
+          "Core actions are reachable by keyboard without a mouse.",
+          "Focus states and form labels are visible and programmatically associated.",
+          "Validation errors are announced to assistive technology.",
+          "Keyboard and screen-reader users can review project-tracking status badges, blocker lists, item rows, and linked-entity navigation with visible focus states and labels."
+        ]
+      },
+      {
+        "req_id": "NFR-006",
+        "category": "observability",
+        "description": "The UI should emit structured events for key review and writeback actions.",
+        "target": "Load, validate, save, export, and traceability operations produce timestamped, document-scoped logs.",
+        "priority": "could",
+        "acceptance_criteria": [
+          "Each core action writes a structured event with an action name, timestamp, and outcome.",
+          "Error logs include enough context to diagnose the failure without exposing full PRD content by default.",
+          "Reviewers can inspect the most recent local or application logs during troubleshooting."
+        ]
+      },
+      {
+        "req_id": "NFR-007",
+        "category": "reliability",
+        "description": "The viewer should preserve project_tracking losslessly across load, edit, export, and save for every supported schema fixture.",
+        "target": "100% project-tracking round-trip fidelity for supported schema fixtures.",
+        "priority": "should",
+        "acceptance_criteria": [
+          "Loading and saving a PRD with project_tracking preserves all PTW, PTI, PTB, and PTN records without dropping linked_entity_ids, linked_prd_ids, or external_refs.",
+          "Validation failures in project_tracking block writeback without replacing the last valid loaded PRD.",
+          "Regression fixtures cover empty, populated, and malformed project_tracking sections."
+        ]
+      }
+    ]
+  },
+  "user_stories": [
+    {
+      "story_id": "US-001",
+      "epic": "Human PRD Review",
+      "persona_id": "P-001",
+      "priority": "must",
+      "release_phase": "mvp",
+      "statement": {
+        "as_a": "PRD review lead",
+        "i_want": "to review PRD.json in a structured web view with dashboard summaries and section navigation",
+        "so_that": "I can confirm the proposed scope and blockers without reading raw JSON"
+      },
+      "acceptance_criteria": [
+        {
+          "given": "a valid PRD.json file is loaded",
+          "when": "I open the review dashboard",
+          "then": "the UI renders section summaries for goals, requirements, user stories, risks, decisions, and open questions"
+        },
+        {
+          "given": "a dashboard item shows a blocker",
+          "when": "I select the item",
+          "then": "the UI navigates to the relevant section and item"
+        },
+        {
+          "given": "the PRD has validation errors",
+          "when": "I review the dashboard",
+          "then": "the UI renders section summaries for goals, requirements, user stories, project tracking, risks, decisions, and open questions"
+        }
+      ],
+      "linked_req_ids": [
+        "FR-001",
+        "FR-002",
+        "FR-004",
+        "NFR-005",
+        "FR-011"
+      ],
+      "story_points": null,
+      "edge_cases": [
+        "The PRD contains malformed JSON and only an error state can be rendered.",
+        "A linked item referenced from the review view does not exist in the current revision.",
+        "The document is large enough that navigation must remain responsive across sections."
+      ]
+    },
+    {
+      "story_id": "US-002",
+      "epic": "Schema Validation",
+      "persona_id": "P-002",
+      "priority": "must",
+      "release_phase": "mvp",
+      "statement": {
+        "as_a": "PRD maintainer",
+        "i_want": "to validate PRD.json against the strict schema and ID rules",
+        "so_that": "I can catch structural and traceability errors before the document is shared for approval or implementation"
+      },
+      "acceptance_criteria": [
+        {
+          "given": "a PRD file is loaded into the validator",
+          "when": "validation runs",
+          "then": "the UI lists schema errors with JSON paths and human-readable messages"
+        },
+        {
+          "given": "two items share the same ID or a link points to a missing ID",
+          "when": "validation runs",
+          "then": "the summary flags each broken reference"
+        },
+        {
+          "given": "the document contains unresolved validation failures",
+          "when": "I attempt to write back to PRD.json",
+          "then": "the UI blocks the write and leaves the canonical file unchanged"
+        },
+        {
+          "given": "a loaded PRD contains malformed project_tracking data",
+          "when": "I validate or attempt to save the document",
+          "then": "the UI reports the failing project_tracking path and blocks canonical writeback"
+        }
+      ],
+      "linked_req_ids": [
+        "FR-003",
+        "FR-006",
+        "NFR-004",
+        "NFR-006",
+        "FR-011"
+      ],
+      "story_points": null,
+      "edge_cases": [
+        "A required top-level section is missing from the document.",
+        "A date-time field uses an invalid format.",
+        "A required array is empty even though the schema expects at least one item.",
+        "project_tracking entries reference missing entities."
+      ]
+    },
+    {
+      "story_id": "US-003",
+      "epic": "Traceability",
+      "persona_id": "P-003",
+      "priority": "should",
+      "release_phase": "mvp",
+      "statement": {
+        "as_a": "implementation trace agent",
+        "i_want": "to trace each requirement to its stories, decisions, dependencies, and source context",
+        "so_that": "I can implement the right scope and report missing context before acting"
+      },
+      "acceptance_criteria": [
+        {
+          "given": "a requirement is selected",
+          "when": "I open the traceability view",
+          "then": "the UI shows linked stories, decisions, dependencies, and unresolved questions where available"
+        },
+        {
+          "given": "I request an agent-ready summary",
+          "when": "the UI generates the trace bundle",
+          "then": "the output includes stable IDs and current statuses for each linked item"
+        },
+        {
+          "given": "a linked item changes in a new revision",
+          "when": "I refresh traceability",
+          "then": "the UI highlights affected relationships"
+        }
+      ],
+      "linked_req_ids": [
+        "FR-005",
+        "FR-007"
+      ],
+      "story_points": null,
+      "edge_cases": [
+        "A requirement has multiple linked stories and the trace view must show all of them.",
+        "A requirement is removed but still referenced by an older story.",
+        "An open question exists without a linked requirement or story."
+      ]
+    },
+    {
+      "story_id": "US-004",
+      "epic": "Approval Readiness",
+      "persona_id": "P-004",
+      "priority": "must",
+      "release_phase": "mvp",
+      "statement": {
+        "as_a": "approval owner",
+        "i_want": "to review unresolved blockers and approval readiness from the reviewer UI",
+        "so_that": "only internally consistent PRDs are signed off"
+      },
+      "acceptance_criteria": [
+        {
+          "given": "the PRD has open questions, schema failures, or unresolved must-have coverage",
+          "when": "I open the approval readiness view",
+          "then": "the blockers are shown before approval is recommended"
+        },
+        {
+          "given": "the PRD has no blocking issues",
+          "when": "I review approval readiness",
+          "then": "the UI shows a ready state that references the validation timestamp and source PRD file"
+        },
+        {
+          "given": "validation is stale because the document changed",
+          "when": "I open the approval readiness view",
+          "then": "the UI requires validation to rerun before approval readiness is considered current"
+        },
+        {
+          "given": "the loaded PRD contains an active project_tracking blocker",
+          "when": "I inspect approval readiness",
+          "then": "the blocker appears alongside schema, question, decision, and traceability blockers before approval is recommended"
+        }
+      ],
+      "linked_req_ids": [
+        "FR-002",
+        "FR-003",
+        "FR-008",
+        "FR-011"
+      ],
+      "story_points": null,
+      "edge_cases": [
+        "Multiple approvers need separate signoff outside the MVP UI.",
+        "Approval is attempted while a high-score risk remains unresolved.",
+        "Readiness output is exported but the canonical file changes afterward."
+      ]
+    },
+    {
+      "story_id": "US-005",
+      "epic": "Agent Context Efficiency",
+      "persona_id": "P-002",
+      "priority": "should",
+      "release_phase": "future",
+      "statement": {
+        "as_a": "PRD maintainer",
+        "i_want": "to view focused-read and packet-budget efficiency from content-redacted MCP metrics",
+        "so_that": "I can tune agent context budgets and detect unnecessary full-document fallbacks"
+      },
+      "acceptance_criteria": [
+        {
+          "given": "the MCP metrics log contains focused requests and full-document fallbacks",
+          "when": "I open the context efficiency dashboard",
+          "then": "the UI shows request counts, focused-read rate, fallback rate, and failure categories"
+        },
+        {
+          "given": "packet metrics include token estimates and budget metadata",
+          "when": "I inspect a build_agent_packet row",
+          "then": "the UI shows preset, estimated tokens, configured budget, and whether content was truncated"
+        },
+        {
+          "given": "an agent requests a full-document payload",
+          "when": "I review context efficiency",
+          "then": "the UI records the fallback separately from focused reads without storing PRD content"
+        }
+      ],
+      "linked_req_ids": [
+        "FR-009",
+        "NFR-006"
+      ],
+      "story_points": null,
+      "edge_cases": [
+        "The metrics log does not exist yet because no MCP request has run.",
+        "A JSONL row is malformed or from an older event version.",
+        "A packet is truncated because selected content exceeds its token budget."
+      ]
+    },
+    {
+      "story_id": "US-006",
+      "epic": "Schema Compatibility",
+      "persona_id": "P-002",
+      "priority": "should",
+      "release_phase": "mvp",
+      "statement": {
+        "as_a": "PRD maintainer",
+        "i_want": "to see schema version, migration, and extension compatibility before editing a PRD",
+        "so_that": "I can avoid corrupting documents that use a newer framework version or unsupported required extensions"
+      },
+      "acceptance_criteria": [
+        {
+          "given": "a loaded PRD declares meta.schema_contract.schema_version",
+          "when": "I open the compatibility panel",
+          "then": "the UI shows declared schema version, current schema version, compatibility mode, and migration status"
+        },
+        {
+          "given": "a loaded PRD has no schema_contract declaration",
+          "when": "I open the compatibility panel",
+          "then": "the UI marks it as legacy unversioned while still allowing schema validation against the selected strict schema"
+        },
+        {
+          "given": "a loaded PRD declares a required extension that the viewer does not support",
+          "when": "I attempt to save changes",
+          "then": "the UI blocks writeback or requires explicit authorized override with preservation of extension data"
+        }
+      ],
+      "linked_req_ids": [
+        "FR-010",
+        "NFR-004",
+        "NFR-006",
+        "FR-011"
+      ],
+      "story_points": null,
+      "edge_cases": [
+        "The schema manifest is missing or cannot be parsed.",
+        "The PRD declares a future schema version unknown to the current viewer.",
+        "An optional extension has data but no registered schema reference.",
+        "A future schema version requires project_tracking support."
+      ]
+    },
+    {
+      "story_id": "US-007",
+      "epic": "Project Tracking",
+      "persona_id": "P-002",
+      "priority": "must",
+      "release_phase": "mvp",
+      "statement": {
+        "as_a": "PRD maintainer",
+        "i_want": "to record project status, pending work, issues, blockers, and notes in a first-class project_tracking section",
+        "so_that": "the execution state stays attached to the canonical PRD instead of being split across readiness notes, questions, and separate issue lists"
+      },
+      "acceptance_criteria": [
+        {
+          "given": "the viewer loads a PRD that contains project_tracking",
+          "when": "I open the project-tracking section",
+          "then": "I can review overall status, pending work, issues found, blockers, owners, and notes in one structured view"
+        },
+        {
+          "given": "a project-tracking item links to requirements, stories, risks, questions, decisions, or other tracking items",
+          "when": "I inspect that record",
+          "then": "the linked_entity_ids are visible and broken links are called out instead of silently omitted"
+        },
+        {
+          "given": "I update project-tracking content through the viewer",
+          "when": "I save or export the PRD",
+          "then": "the section remains schema-valid and round-trips without losing status metadata or links"
+        }
+      ],
+      "linked_req_ids": [
+        "FR-004",
+        "FR-005",
+        "FR-011",
+        "NFR-007"
+      ],
+      "story_points": null,
+      "edge_cases": [
+        "The PRD uses project_tracking but the owner fields are still null.",
+        "A blocker links to a decision that has since been superseded.",
+        "A maintainer removes a project-tracking row that is still referenced by another tracking item."
+      ]
+    },
+    {
+      "story_id": "US-008",
+      "epic": "Reusable Framework",
+      "persona_id": "P-002",
+      "priority": "should",
+      "release_phase": "future",
+      "statement": {
+        "as_a": "solo developer",
+        "i_want": "the viewer and PRD framework to expose a future local MCP layer using the official TypeScript SDK",
+        "so_that": "I can reuse the final framework, viewer, and derived PRD access patterns to build later projects without paying full-document token costs on every agent task"
+      },
+      "acceptance_criteria": [
+        {
+          "given": "I am working on a later project that uses the same PRD framework",
+          "when": "I need agent access to the project PRD",
+          "then": "the framework defines a local MCP-ready path for section, entity, traceability, readiness, and project-tracking projections instead of requiring full-document reads by default"
+        },
+        {
+          "given": "the future MCP layer is introduced",
+          "when": "I review the implementation direction",
+          "then": "it uses the official TypeScript MCP SDK and keeps PRD.json as the canonical artifact while any index or cache remains derived"
+        },
+        {
+          "given": "I run the stack on a solo-developer machine",
+          "when": "the viewer and future MCP layer are both active",
+          "then": "the design remains local-first and avoids unnecessary background infrastructure or heavyweight hosted dependencies"
+        }
+      ],
+      "linked_req_ids": [
+        "FR-007",
+        "FR-010",
+        "FR-012"
+      ],
+      "story_points": null,
+      "edge_cases": [
+        "The MCP layer falls back to full-document reads too often and does not materially reduce agent payload size.",
+        "A derived local index becomes stale and disagrees with the canonical PRD.json.",
+        "The future SDK choice drifts away from the viewer's TypeScript implementation and fragments maintenance."
+      ]
+    }
+  ],
+  "constraints": {
+    "technical": [
+      {
+        "constraint_id": "TC-001",
+        "description": "PRD.json must remain the canonical artifact in v1; any database, cache, or search index must be derived from that file and must not become the source of truth.",
+        "imposed_by": "architecture",
+        "impact": "Keeps the reviewer workflow simple, reviewable in Git, and aligned with AI-agent consumption."
+      },
+      {
+        "constraint_id": "TC-002",
+        "description": "Every load, edit, save, and export must be validated against schema.strict.json and must fail closed on violations rather than silently repairing data.",
+        "imposed_by": "architecture",
+        "impact": "Prevents schema drift and ensures deterministic reviewer feedback."
+      },
+      {
+        "constraint_id": "TC-003",
+        "description": "The MVP must run local-first in a browser or thin local shell and support explicit file open/save without requiring a mandatory backend service.",
+        "imposed_by": "platform",
+        "impact": "Reduces setup friction and keeps the initial delivery viable with the current JSON-first repo."
+      },
+      {
+        "constraint_id": "TC-004",
+        "description": "Serialization must be deterministic and semantically lossless so reviewers get stable diffs and no accidental document drift on round-trip.",
+        "imposed_by": "team",
+        "impact": "Preserves review trust and avoids noisy rewrites that obscure meaningful changes."
+      },
+      {
+        "constraint_id": "TC-005",
+        "description": "Any collaboration layer added later must be additive and non-authoritative; it cannot replace PRD.json as the canonical artifact without a separate migration PRD.",
+        "imposed_by": "architecture",
+        "impact": "Allows future comments, assignments, or sync features without forcing premature persistence architecture."
+      },
+      {
+        "constraint_id": "TC-006",
+        "description": "Release gating must include schema validation, round-trip fixtures, accessibility checks, and large-document smoke tests before promotion.",
+        "imposed_by": "team",
+        "impact": "Blocks regressions that would make the reviewer UI unsafe to trust."
+      }
+    ],
+    "legal_compliance": [
+      {
+        "regulation": "Mexico LFPDPPP",
+        "requirement": "If reviewer identities, comments, access logs, or exported artifacts are persisted or shared, minimize collected personal data, define retention and deletion rules, and protect access appropriately before any shared deployment.",
+        "region": "Mexico",
+        "owner": null,
+        "evidence_source": "Project context: Mexico-based workspace and potential reviewer identity data"
+      }
+    ],
+    "dependencies": [
+      {
+        "dependency_id": "D-001",
+        "name": "schema.strict.json contract",
+        "description": "The reviewer UI depends on a stable strict schema contract for validation, save gating, and regression tests.",
+        "type": "internal",
+        "owner": "Engineering",
+        "required_by": "2026-04-27",
+        "status": "pending"
+      },
+      {
+        "dependency_id": "D-002",
+        "name": "Representative PRD.json fixture corpus",
+        "description": "The UI needs representative valid PRDs and malformed edge cases to test rendering, validation, traceability, and round-trip behavior.",
+        "type": "internal",
+        "owner": "Engineering",
+        "required_by": "2026-04-27",
+        "status": "pending"
+      },
+      {
+        "dependency_id": "D-003",
+        "name": "Local file access runtime",
+        "description": "The MVP depends on browser file open/save APIs or a thin local shell that can access PRD.json directly.",
+        "type": "platform",
+        "owner": "Engineering",
+        "required_by": "2026-05-04",
+        "status": "complete"
+      },
+      {
+        "dependency_id": "D-004",
+        "name": "Git history and PR workflow",
+        "description": "Reviewer changes should be persisted as file diffs and reviewable changes in source control rather than hidden application state.",
+        "type": "internal",
+        "owner": "Product",
+        "required_by": "2026-05-11",
+        "status": "pending"
+      },
+      {
+        "dependency_id": "D-005",
+        "name": "Deferred shared collaboration store",
+        "description": "Only needed if concurrent editing, threaded comments, assignments, or cross-session history become required; until then, derive state from JSON and Git history.",
+        "type": "platform",
+        "owner": "Engineering",
+        "required_by": null,
+        "status": "pending"
+      },
+      {
+        "dependency_id": "D-006",
+        "name": "PACS MCP metrics log",
+        "description": "The PACS context workflow records content-redacted focused-read, packet-size, and full-document-fallback metrics at .metrics/pacs_prd_mcp.jsonl.",
+        "type": "internal",
+        "owner": "Engineering",
+        "required_by": "2026-05-04",
+        "status": "complete"
+      },
+      {
+        "dependency_id": "D-007",
+        "name": "Schema version manifest",
+        "description": "The reviewer UI and compatibility tooling depend on schema.versions.json to resolve current schema version, compatibility policy, migration requirements, and extension behavior.",
+        "type": "internal",
+        "owner": "Engineering",
+        "required_by": "2026-05-04",
+        "status": "in_progress"
+      },
+      {
+        "dependency_id": "D-008",
+        "name": "Official MCP TypeScript SDK",
+        "description": "The reusable framework path depends on the official TypeScript MCP SDK as the supported base for a future local MCP server that serves derived PRD packets without replacing the canonical JSON artifact.",
+        "type": "external",
+        "owner": "Engineering",
+        "required_by": null,
+        "status": "complete"
+      }
+    ]
+  },
+  "delivery": {
+    "target_launch": null,
+    "milestones": [
+      {
+        "name": "Scope and contract freeze",
+        "date": "2026-04-27",
+        "deliverable": "Approved reviewer workflow map, canonical JSON editing rules, and schema validation behavior.",
+        "entry_criteria": [
+          "schema.strict.json reviewed",
+          "Core use cases identified",
+          "DB decision captured as deferred and derived for v1"
+        ],
+        "exit_criteria": [
+          "Scope, file boundaries, and validation gate signed off",
+          "MVP and future collaboration boundaries documented"
+        ],
+        "owner": "Product"
+      },
+      {
+        "name": "Read-only reviewer MVP",
+        "date": "2026-05-04",
+        "deliverable": "UI can load PRD.json, render dashboard and sections, and show validation results.",
+        "entry_criteria": [
+          "Scope frozen",
+          "Fixtures prepared"
+        ],
+        "exit_criteria": [
+          "Load, search, and validation work on sample files",
+          "Errors are understandable to reviewers",
+          "Traceability data can be derived for at least requirements and stories"
+        ],
+        "owner": "Engineering"
+      },
+      {
+        "name": "Edit and save path",
+        "date": "2026-05-11",
+        "deliverable": "Editable document UI with deterministic save/export and round-trip checks.",
+        "entry_criteria": [
+          "Read-only MVP stable",
+          "Serialization rules decided"
+        ],
+        "exit_criteria": [
+          "Schema-valid saves persist",
+          "Invalid saves are blocked",
+          "Round-trip fixture tests pass"
+        ],
+        "owner": "Engineering"
+      },
+      {
+        "name": "Pilot review workflow",
+        "date": "2026-05-18",
+        "deliverable": "Small-group review flow with readiness summary, traceability, and acceptance handoff.",
+        "entry_criteria": [
+          "Edit/save path stable",
+          "Training draft ready"
+        ],
+        "exit_criteria": [
+          "Pilot reviewers complete at least one full review cycle",
+          "Top usability blockers are triaged",
+          "DB/collaboration requests are logged for later decision"
+        ],
+        "owner": "Design"
+      },
+      {
+        "name": "Launch readiness and handoff",
+        "date": "2026-05-25",
+        "deliverable": "Release candidate, support runbook, known limitations, and monitoring checklist.",
+        "entry_criteria": [
+          "Pilot feedback resolved or deferred",
+          "Operational checks complete"
+        ],
+        "exit_criteria": [
+          "Support accepts handoff",
+          "Release criteria met",
+          "Fallback path to direct JSON editing documented"
+        ],
+        "owner": "Product"
+      }
+    ],
+    "rollout_plan": {
+      "strategy": "Ship a local-first browser reviewer that reads and writes PRD.json directly, then expand from internal dogfood to a limited pilot before deciding whether any shared collaboration layer is justified. Keep any database path deferred and derived until collaboration use cases prove they need shared state.",
+      "phases": [
+        {
+          "name": "Dogfood",
+          "audience": "PRD authors and engineering maintainers",
+          "success_criteria": [
+            "Sample files open and save locally",
+            "Schema errors are surfaced clearly",
+            "No data loss occurs on round-trip"
+          ],
+          "owner": "Engineering"
+        },
+        {
+          "name": "Limited pilot",
+          "audience": "Selected PRD reviewers and approvers",
+          "success_criteria": [
+            "At least three reviewers complete a full review",
+            "Invalid saves are blocked",
+            "Feedback backlog is triaged quickly"
+          ],
+          "owner": "Product"
+        },
+        {
+          "name": "Internal rollout",
+          "audience": "All PRD authors, reviewers, and implementation agents for this repo",
+          "success_criteria": [
+            "Review time stays within target",
+            "Support volume is manageable",
+            "Canonical JSON policy is followed"
+          ],
+          "owner": "Product"
+        },
+        {
+          "name": "Collaboration expansion decision",
+          "audience": "Product, engineering, and compliance",
+          "success_criteria": [
+            "Shared DB is approved only if collaboration demand is proven",
+            "Compliance owner signs off before shared identity or comments are persisted",
+            "Migration path remains derived from JSON unless a separate PRD supersedes this decision"
+          ],
+          "owner": "Product"
+        }
+      ],
+      "communications": [
+        "Announce that PRD.json is the canonical artifact in v1 and invalid saves are blocked.",
+        "Publish a short setup guide for opening, validating, editing, and exporting PRD.json.",
+        "Share a pilot schedule, feedback channel, and known limitations before rollout.",
+        "Explain that collaboration features and any DB layer will be introduced only if the pilot proves the need."
+      ],
+      "training": [
+        "Run a 15-minute walkthrough of file open, dashboard, validation, traceability, edit, and save/export flows.",
+        "Provide a one-page checklist for schema errors, diff review, and recovery steps.",
+        "Give reviewers a checklist for approval readiness and decision capture."
+      ],
+      "support_handoff": [
+        "Name the first-line support owner and escalation path for schema or save failures.",
+        "Create an issue template for validation, serialization, rendering, and traceability defects.",
+        "Document the fallback path to direct JSON editing if the UI is unavailable.",
+        "Publish release notes and known limitations for pilot users."
+      ]
+    },
+    "operational_readiness": [
+      {
+        "area": "Schema validation and fixture coverage",
+        "owner": "Engineering",
+        "status": "ready",
+        "notes": "Shared fixture factories now cover valid PRDs, malformed JSON, schema-invalid PRDs, unsupported schema versions, required extensions, and broken trace links; validation, compatibility, traceability, load, validate, edit/apply, export, snapshot export, and blocked writeback regression tests verify fail-closed behavior without replacing the last valid loaded PRD."
+      },
+      {
+        "area": "Dashboard drill-down navigation",
+        "owner": "Engineering",
+        "status": "ready",
+        "notes": "Status tiles and readiness blocker signals now act as one-action navigation controls; section-backed targets update the selected section visibly, and destination panels receive focus for keyboard and screen-reader continuity."
+      },
+      {
+        "area": "Schema-driven MVP section editing",
+        "owner": "Engineering",
+        "status": "ready",
+        "notes": "The section editor now provides structured MVP editors for requirements, user stories, risks, open questions, decisions, and delivery.operational_readiness, including schema-backed required fields, enum controls, nullable fields, nested acceptance criteria, and add/remove/duplicate/reorder controls; raw JSON maintainer mode remains available and both edit paths validate the full PRD before applying changes."
+      },
+      {
+        "area": "Approval readiness detail",
+        "owner": "Engineering",
+        "status": "ready",
+        "notes": "The readiness panel now derives categorized blocker and warning signals from schema validation, open questions, decisions, high-score risks, must-have story coverage, traceability, and schema compatibility; each signal exposes severity, source section, stable ID or JSON path, and the exported review snapshot carries the same readiness categories."
+      },
+      {
+        "area": "MVP performance and accessibility gates",
+        "owner": "Engineering",
+        "status": "ready",
+        "notes": "The viewer now has a representative large-PRD fixture with schema coverage, a browser smoke test for large-document load/render/navigation thresholds, and an accessibility pass covering keyboard dashboard navigation, focus transitions, active section semantics, readiness signal labels, live validation messages, and traceability graph keyboard alternatives."
+      },
+      {
+        "area": "Local file open/save and export",
+        "owner": "Engineering",
+        "status": "ready",
+        "notes": "Browser file open, section-scoped JSON edits, pending writeback preview by changed section and sampled JSON paths, strict validation before apply/export/save, read-only PRD and review snapshot exports, and File System Access API writeback are implemented; failed saves keep pending changes local and unsupported browsers remain export-only."
+      },
+      {
+        "area": "Access control for shared deployment",
+        "owner": "Engineering",
+        "status": "not_started",
+        "notes": "Only needed if the app moves beyond local-only usage."
+      },
+      {
+        "area": "Privacy and compliance review",
+        "owner": "Compliance",
+        "status": "blocked",
+        "notes": "No named compliance owner has been assigned yet; finalize retention and identity handling before any shared deployment."
+      },
+      {
+        "area": "Observability and error reporting",
+        "owner": "Engineering",
+        "status": "ready",
+        "notes": "The viewer now records local-only structured diagnostic events for load, validate, edit, export, save, and failure paths; events are shown in a diagnostics panel, can be exported as a local diagnostic snapshot, and are sanitized to exclude PRD content, secrets, raw JSON, and large field values."
+      },
+      {
+        "area": "Support and escalation",
+        "owner": "Product",
+        "status": "ready",
+        "notes": "A local MVP runbook in viewer/docs/local-mvp-runbook.md now covers setup, validation gates, browser limitations, failed writeback recovery, malformed PRD reporting, and triage ownership for schema issues, UI bugs, PRD content problems, and compliance concerns."
+      },
+      {
+        "area": "Agent context selection and metrics",
+        "owner": "Engineering",
+        "status": "ready",
+        "notes": "The local MCP server provides focused discovery and token-budgeted agent packets, records content-redacted request and fallback metrics, and leaves any future viewer visualization deferred outside the MVP."
+      },
+      {
+        "area": "Viewer scaffold and selected toolchain",
+        "owner": "Engineering",
+        "status": "ready",
+        "notes": "Initial Vite, React, and TypeScript scaffold lives under viewer/ with source files, tool-stack notes, and read-only PRD summary wiring."
+      },
+      {
+        "area": "TDD harness and Playwright coverage",
+        "owner": "Engineering",
+        "status": "ready",
+        "notes": "Vitest plus Testing Library provide green unit and component coverage, while Playwright Test provides green Chromium E2E coverage for the current read-only reviewer workflow."
+      },
+      {
+        "area": "Schema version and extension compatibility",
+        "owner": "Engineering",
+        "status": "ready",
+        "notes": "The viewer reads schema.versions.json plus meta.schema_contract to report exact, legacy, unknown, migration-required, and required-extension compatibility states before unsafe writeback."
+      },
+      {
+        "area": "Browser schema validation",
+        "owner": "Engineering",
+        "status": "ready",
+        "notes": "The viewer validates the loaded PRD against schema.strict.json in-browser on load and from the Validate action, with status and issue counts visible in the dashboard."
+      },
+      {
+        "area": "Local PRD file open",
+        "owner": "Engineering",
+        "status": "ready",
+        "notes": "The viewer can open a local JSON file through the browser File API, validate it, replace the active dashboard only when schema-valid, and show parse/schema errors without corrupting the current document view."
+      },
+      {
+        "area": "Section content inspection",
+        "owner": "Engineering",
+        "status": "ready",
+        "notes": "The selected-section workspace now derives reviewable item rows with IDs, status metadata, titles, and summaries so reviewers can inspect PRD content without reading raw JSON."
+      },
+      {
+        "area": "Traceability matrix derivation",
+        "owner": "Engineering",
+        "status": "ready",
+        "notes": "The viewer derives requirement, story, decision, dependency, and persona relationships from stable PRD IDs, renders a traceability matrix, and flags broken references that schema pattern validation cannot catch."
+      },
+      {
+        "area": "Traceability graph and agent trace export",
+        "owner": "Engineering",
+        "status": "ready",
+        "notes": "The viewer renders a selected-node React Flow graph for inbound and outbound trace links, keeps broken references visible in focused graph state, and exports an agent-ready trace summary JSON bundle with stable IDs and current statuses."
+      },
+      {
+        "area": "Public repository and merge readiness",
+        "owner": "Engineering",
+        "status": "in_progress",
+        "notes": "DEC-011 selects a separate clean-history public repository so unrelated private history is never copied. The current tree and validation gates are ready; the clean snapshot, public remote, and final visibility verification remain."
+      }
+    ]
+  },
+  "project_tracking": {
+    "status": "in_progress",
+    "owner": null,
+    "summary": "The local-first reviewer MVP and current-tree public repository preparation are complete, including the linked Viewer TRD, public contribution and security guidance, automated validation gates, clean dependency audits, and fast-forward merge readiness. DEC-011 requires publication from a separate clean-history repository so unrelated private history remains private; shared-deployment governance remains a separate blocker.",
+    "updated_at": "2026-07-15T01:44:04Z",
+    "linked_prd_ids": [
+      "38491764-5485-4218-A991-A9D83BE84B7F"
+    ],
+    "pending_work": [
+      {
+        "work_item_id": "PTW-001",
+        "title": "Implement viewer project-tracking surface",
+        "description": "Surface project_tracking in the dashboard, section rail, section detail, change preview, review snapshot, and validated writeback so reviewers can track pending work, issues, blockers, and notes inside the canonical PRD.",
+        "status": "done",
+        "priority": "critical",
+        "owner": "Engineering",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "FR-002",
+          "FR-004",
+          "FR-006",
+          "FR-008",
+          "FR-011",
+          "US-001",
+          "US-004",
+          "US-007"
+        ],
+        "external_refs": [],
+        "notes": "Implemented in the viewer section model, dashboard metrics, dedicated project-tracking panel, selected-section rendering, approval-readiness signals, change preview diffing, and review snapshot export. project_tracking is now visible as a first-class top-level section and preserves through validated export and writeback flows because the viewer edits and serializes the full canonical PRD document."
+      },
+      {
+        "work_item_id": "PTW-002",
+        "title": "Add structured editing and validation for project tracking",
+        "description": "Extend schema-driven editing, load/save/export paths, and regression coverage to preserve project_tracking losslessly and block invalid edits.",
+        "status": "done",
+        "priority": "high",
+        "owner": "Engineering",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "FR-003",
+          "FR-004",
+          "FR-006",
+          "FR-011",
+          "NFR-007",
+          "US-002",
+          "US-007"
+        ],
+        "notes": "Implemented with schema-driven project_tracking editing for overview fields, pending work, issues, blockers, and notes; the viewer now validates the full PRD before applying structured edits, preserves project_tracking through export and writeback flows, and blocks invalid project_tracking changes without replacing the active valid document. Regression coverage now exercises valid apply/export behavior and fail-closed invalid edit handling."
+      },
+      {
+        "work_item_id": "PTW-003",
+        "title": "Resolve remaining governance blockers for release readiness",
+        "description": "Assign ownership for compliance and launch decisions, then close or accept the remaining proposed decisions and open questions that still block readiness.",
+        "status": "blocked",
+        "priority": "medium",
+        "owner": null,
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "FR-008",
+          "Q-001",
+          "Q-002",
+          "DEC-001",
+          "DEC-002",
+          "DEC-003",
+          "DEC-004",
+          "DEC-005"
+        ],
+        "notes": "The local-only MVP is functionally ahead of the PRD governance state."
+      },
+      {
+        "work_item_id": "PTW-004",
+        "title": "Freeze the local MCP contract and implementation plan",
+        "description": "Define the local-only MCP server contract, resource and tool surface, read-only safety rules, source-file selection rules, response-shaping modes, and phased delivery plan for the official TypeScript SDK implementation.",
+        "status": "done",
+        "priority": "high",
+        "owner": "Engineering",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "FR-007",
+          "FR-010",
+          "FR-012",
+          "US-008",
+          "DEC-010",
+          "D-008"
+        ],
+        "notes": "Frozen in mcp/README.md plus mcp/src/surface.ts: stdio-first, local-only, read-only, viewer/PRD_web_ui.json as the default artifact, planned resource and tool inventory, and planned response-shaping modes."
+      },
+      {
+        "work_item_id": "PTW-005",
+        "title": "Scaffold the local TypeScript MCP server",
+        "description": "Create the MCP server package, official TypeScript SDK wiring, local scripts, and a minimal health or info capability so the server can run and be inspected locally.",
+        "status": "done",
+        "priority": "high",
+        "owner": "Engineering",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "PTW-004",
+          "FR-012",
+          "US-008",
+          "DEC-010",
+          "D-008"
+        ],
+        "notes": "Implemented in mcp/ with the official TypeScript SDK, local npm scripts, a stdio entrypoint, and the initial prd://server/info resource plus server_info tool."
+      },
+      {
+        "work_item_id": "PTW-006",
+        "title": "Implement canonical PRD loading, validation, and reload detection",
+        "description": "Load the active PRD JSON from disk, validate it against schema.strict.json, cache the parsed artifact, and reload only when file contents or metadata change.",
+        "status": "done",
+        "priority": "critical",
+        "owner": "Engineering",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "PTW-004",
+          "FR-003",
+          "FR-007",
+          "FR-010",
+          "FR-012",
+          "TC-002",
+          "TC-004"
+        ],
+        "notes": "Implemented in mcp/src/prd-loader.ts with stat-based cache reuse, SHA-256 file snapshots, strict schema validation via Ajv, schema compatibility checks from schema.versions.json, fail-closed blocking for malformed JSON, schema-invalid PRDs, required extensions, and lossy compatibility states, plus focused loader regression tests."
+      },
+      {
+        "work_item_id": "PTW-007",
+        "title": "Build the normalized in-memory PRD index",
+        "description": "Derive stable indexes by section, entity ID, and trace link so later MCP resources and tools can serve compact targeted views instead of re-scanning the whole PRD on every request.",
+        "status": "done",
+        "priority": "high",
+        "owner": "Engineering",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "PTW-006",
+          "FR-002",
+          "FR-007",
+          "FR-012",
+          "US-004",
+          "US-008"
+        ],
+        "notes": "Implemented in mcp/src/prd-index.ts with cached section, entity, inbound-link, outbound-link, and broken-link indexes built only from schema-valid PRDs; server_info now exposes index snapshots and regression tests cover valid builds, broken references, cache reuse, and blocked upstream loads."
+      },
+      {
+        "work_item_id": "PTW-008",
+        "title": "Expose core MCP resources for compact PRD reads",
+        "description": "Add resources for summary, named sections, entity lookups, trace views, readiness, compatibility, and project_tracking so agents can request focused PRD context instead of the full document.",
+        "status": "done",
+        "priority": "high",
+        "owner": "Engineering",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "PTW-006",
+          "PTW-007",
+          "FR-002",
+          "FR-007",
+          "FR-010",
+          "FR-011",
+          "FR-012",
+          "US-004",
+          "US-007",
+          "US-008"
+        ],
+        "notes": "Implemented via static resources for summary, compatibility, readiness, and project tracking plus templated resources for section, entity, and trace reads; server_info still exposes server/load/index diagnostics and focused resource builders are covered by resource regression tests."
+      },
+      {
+        "work_item_id": "PTW-009",
+        "title": "Expose core MCP tools for search and agent packets",
+        "description": "Add search, entity, linked-entity, blocker, open-question, proposed-decision, and agent-packet tools so solo-developer agent workflows can ask for only the minimum needed PRD context.",
+        "status": "done",
+        "priority": "high",
+        "owner": "Engineering",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "PTW-007",
+          "PTW-008",
+          "FR-007",
+          "FR-010",
+          "FR-012",
+          "US-008"
+        ],
+        "notes": "Implemented in mcp/src/tools.ts plus server registrations for search_prd, get_entity, get_linked_entities, list_blockers, list_open_questions, list_proposed_decisions, and build_agent_packet; outputs stay compact by default and regression tests cover search ranking, linked-entity lookup, unresolved lists, and compact packet assembly."
+      },
+      {
+        "work_item_id": "PTW-010",
+        "title": "Add packet compaction modes and token-cost estimates",
+        "description": "Support compact, standard, and full response modes for MCP tools and resources, and include byte and token estimates so the solo developer can compare focused packets against full-document fallback reads.",
+        "status": "done",
+        "priority": "medium",
+        "owner": "Engineering",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "PTW-008",
+          "PTW-009",
+          "FR-012",
+          "US-008"
+        ],
+        "notes": "Implemented in mcp/src/response-modes.ts and wired through mcp/src/server.ts so resources accept ?mode=compact|standard|full and tools accept a mode input; every wrapped response now returns byte, character, and approximate token estimates plus savings against the active canonical PRD size, and regression tests in mcp/src/response-modes.test.ts cover shaping and estimate behavior."
+      },
+      {
+        "work_item_id": "PTW-011",
+        "title": "Add local MCP metrics and diagnostics",
+        "description": "Record local-only structured metrics for request type, latency, response size, cache hits, source artifact, and full-document fallback rate so the team can later judge whether the MCP layer is useful without logging PRD content.",
+        "status": "done",
+        "priority": "medium",
+        "owner": "Engineering",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "PTW-004",
+          "PTW-006",
+          "PTW-010",
+          "FR-012",
+          "NFR-003"
+        ],
+        "notes": "Implemented in mcp/src/metrics.ts and wired through mcp/src/server.ts so every resource and tool request appends a local JSONL metric record with request channel, target, requested mode, sanitized input metadata, load and index cache state, latency, response byte and token estimates, and focused-vs-full-document scope; the metrics writer creates the parent directory on demand, avoids payload logging, redacts free-text inputs, and regression tests in mcp/src/metrics.test.ts cover redaction and failure-path recording."
+      },
+      {
+        "work_item_id": "PTW-012",
+        "title": "Add safety gates, fixtures, and MCP integration coverage",
+        "description": "Cover malformed PRDs, unsupported schema versions, required extensions, broken trace links, invalid resource or tool requests, and inspector-level integration flows so the local MCP server fails closed and stays trustworthy.",
+        "status": "done",
+        "priority": "critical",
+        "owner": "Engineering",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "PTW-005",
+          "PTW-006",
+          "PTW-008",
+          "PTW-009",
+          "FR-003",
+          "FR-010",
+          "FR-012",
+          "TC-002",
+          "TC-006"
+        ],
+        "notes": "Implemented with reusable local fixtures in mcp/src/test-fixtures.ts, loader and index fixture coverage updates, stdio integration coverage in mcp/src/server.integration.test.ts, and query-capable resource templates in mcp/src/server.ts so summary, readiness, compatibility, project-tracking, server-info, section, entity, and trace reads can be exercised through the real MCP transport; the package README now documents the local MCP Inspector workflow and the regression suite covers blocked loads, broken trace links, invalid resource requests, invalid tool calls, and failure-path metric emission."
+      },
+      {
+        "work_item_id": "PTW-013",
+        "title": "Add optional localhost HTTP transport after stdio stabilizes",
+        "description": "Once the stdio-first server is stable, add optional localhost-only HTTP transport and origin checks for clients that benefit from browser-friendly or remote-process attachment without changing the local-only trust model.",
+        "status": "done",
+        "priority": "low",
+        "owner": "Engineering",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "PTW-005",
+          "PTW-012",
+          "FR-012",
+          "TC-003"
+        ],
+        "notes": "Implemented in mcp/src/http-server.ts and mcp/src/index.ts with optional Streamable HTTP transport selected by PACS_MCP_TRANSPORT=http, localhost-only host validation, optional explicit origin allowlists, health checks, and matching npm scripts; mcp/src/http-server.test.ts covers localhost client success and non-local origin rejection, and the package README documents the runtime contract and environment variables."
+      },
+      {
+        "work_item_id": "PTW-014",
+        "title": "Implement the reusable PACS project bootstrap layer",
+        "description": "Add a project scaffold, initialization script, validation coverage, and local MCP registration guidance so new projects can adopt the PACS framework without manual file copying.",
+        "status": "done",
+        "priority": "medium",
+        "owner": "Engineering",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "PTW-013",
+          "FR-012",
+          "US-008",
+          "NFR-003",
+          "PTN-005"
+        ],
+        "notes": "Implemented with template-backed scaffolding in templates/pacs-project/, the metrics-enabled tools/init_pacs_project.py bootstrap script, regression coverage in tools/test_init_pacs_project.py, a root npm init:project command, and updated MCP/extraction docs that show how a new project registers the shared pacs-prd server over stdio or optional localhost HTTP."
+      },
+      {
+        "work_item_id": "PTW-015",
+        "title": "Link project tracking to external workflow records",
+        "description": "Add optional external_refs URLs to project-tracking records, expose them in structured editing, and document when PRD, TRD, GitHub issues, tasks, and sprints are updated.",
+        "status": "done",
+        "priority": "high",
+        "owner": "Engineering",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "FR-011",
+          "NFR-007",
+          "PTI-003"
+        ],
+        "external_refs": [],
+        "notes": "Implemented in schema 1.2.0, the viewer project-tracking editor, PACS bootstrap output, and docs/delivery-workflow.md. External systems remain authoritative for granular execution state."
+      },
+      {
+        "work_item_id": "PTW-016",
+        "title": "Prepare the Viewer branch and repository for public release",
+        "description": "Document the Viewer technical design, add public contribution and security boundaries, automate the release validation gates, remove generated test artifacts from version control, verify focused MCP configuration, and produce merge-readiness evidence for PRD-v1.",
+        "status": "in_progress",
+        "priority": "critical",
+        "owner": "Engineering",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "FR-003",
+          "FR-012",
+          "NFR-003",
+          "NFR-005",
+          "NFR-006",
+          "TC-006",
+          "PTW-012",
+          "Q-009",
+          "PTB-003",
+          "DEC-011"
+        ],
+        "external_refs": [],
+        "notes": "Current-tree work is complete with viewer/TRD.md, CONTRIBUTING.md, SECURITY.md, aligned source-of-truth guidance, a GitHub Actions validation workflow, clean npm audits, removal of tracked Playwright output, schema and agent validation, 32 MCP tests, 63 Viewer unit/component tests, 10 Viewer browser tests, plugin rebuild, secret-pattern scans, and verified fast-forward ancestry to PRD-v1. DEC-011 now requires a separate clean-history public repository; add its canonical URL after creation and complete final public visibility verification."
+      }
+    ],
+    "issues_found": [
+      {
+        "issue_id": "PTI-001",
+        "title": "No first-class project status surface in the viewer",
+        "description": "Reviewers still have to infer TODOs, blockers, and known issues from readiness, operational_readiness, open questions, and decisions instead of reading one structured project state section.",
+        "status": "resolved",
+        "severity": "high",
+        "owner": "Product",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "FR-002",
+          "FR-008",
+          "FR-011",
+          "US-004",
+          "US-007"
+        ],
+        "notes": "Resolved by first-class project_tracking rendering in the viewer dashboard, navigation, section detail, readiness, and snapshot flows."
+      },
+      {
+        "issue_id": "PTI-002",
+        "title": "Current viewer implementation hardcodes top-level section handling",
+        "description": "The viewer currently assumes the existing section set for summaries, navigation, change previews, and section detail rendering, so new core sections require explicit implementation work.",
+        "status": "open",
+        "severity": "high",
+        "owner": "Engineering",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "FR-001",
+          "FR-002",
+          "FR-004",
+          "FR-006",
+          "FR-011",
+          "R-001"
+        ],
+        "notes": "Without follow-up implementation, project_tracking would exist in the PRD but remain invisible in the UI."
+      },
+      {
+        "issue_id": "PTI-003",
+        "title": "Project tracking can drift from risks, questions, and decisions",
+        "description": "If teams duplicate the same state across project_tracking, risks, open questions, decisions, and readiness notes without clear boundaries, reviewers may trust conflicting project status signals.",
+        "status": "resolved",
+        "severity": "medium",
+        "owner": null,
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "FR-011",
+          "R-009",
+          "PTN-001",
+          "PTW-015"
+        ],
+        "external_refs": [],
+        "notes": "Resolved by docs/delivery-workflow.md, which defines source-of-truth boundaries and lifecycle transitions for PRD, TRD, GitHub issues, tasks, and sprints."
+      },
+      {
+        "issue_id": "PTI-004",
+        "title": "Repeated full-document PRD reads remain a token sink for agent workflows",
+        "description": "Without a focused local MCP access layer, solo-developer agent workflows still tend to load more PRD context than they need, which wastes tokens and makes later framework reuse less efficient.",
+        "status": "open",
+        "severity": "medium",
+        "owner": "Engineering",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "FR-012",
+          "US-008",
+          "PTW-004",
+          "PTW-008",
+          "PTW-009",
+          "PTW-010",
+          "PTW-011"
+        ],
+        "notes": "This is a quality and scale problem for the framework path, not a blocker for the current local-only viewer MVP."
+      }
+    ],
+    "blockers": [
+      {
+        "blocker_id": "PTB-001",
+        "title": "Viewer implementation needed structured project_tracking editing",
+        "description": "The viewer previously rendered project_tracking without structured editing or dedicated lossless regression coverage, which left the local editing path incomplete.",
+        "status": "cleared",
+        "severity": "high",
+        "owner": "Engineering",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "PTW-002",
+          "FR-011"
+        ],
+        "unblock_criteria": "Implemented structured editing, validation-specific failure handling, and regression coverage for project_tracking.",
+        "notes": "Cleared by the schema-driven project_tracking editor, full-document validation before apply, preserved export/writeback flows, and dedicated regression coverage for valid and invalid project_tracking edits."
+      },
+      {
+        "blocker_id": "PTB-002",
+        "title": "Release governance still lacks named ownership and final decisions",
+        "description": "The viewer PRD still has unresolved launch and compliance ownership plus several proposed decisions, so readiness remains blocked even though the local-only MVP is materially complete.",
+        "status": "active",
+        "severity": "medium",
+        "owner": null,
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "Q-001",
+          "Q-002",
+          "DEC-001",
+          "DEC-002",
+          "DEC-003",
+          "DEC-004",
+          "DEC-005"
+        ],
+        "unblock_criteria": "Assign owners, resolve the open questions, and accept or retire the remaining proposed decisions.",
+        "notes": "Project tracking should make this mismatch visible without requiring manual synthesis across sections."
+      },
+      {
+        "blocker_id": "PTB-003",
+        "title": "Public release must not inherit unrelated private history",
+        "description": "The source repository contains unrelated private history that must never enter the public repository object database.",
+        "status": "cleared",
+        "severity": "high",
+        "owner": null,
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "PTW-016",
+          "Q-009",
+          "NFR-003",
+          "DEC-011"
+        ],
+        "external_refs": [],
+        "unblock_criteria": "Publish only from a new repository initialized from a sanitized current-tree snapshot with no inherited Git objects.",
+        "notes": "Cleared by DEC-011. The private source repository and its history remain unchanged; only the validated framework and Viewer snapshot may enter the public repository."
+      }
+    ],
+    "notes": [
+      {
+        "note_id": "PTN-001",
+        "note": "project_tracking records execution state and follow-up work; risks stay future-facing, open_questions stay unresolved unknowns, decisions stay architectural or product choices, and delivery remains milestone and readiness planning.",
+        "owner": "Engineering",
+        "noted_at": "2026-05-03T12:00:00Z",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "R-009"
+        ]
+      },
+      {
+        "note_id": "PTN-002",
+        "note": "The local-only MVP is functionally complete; project_tracking now has first-class rendering and structured editing support, and the remaining work is shared-deployment and governance readiness.",
+        "owner": "Engineering",
+        "noted_at": "2026-05-03T12:00:00Z",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "PTW-001",
+          "PTW-002",
+          "PTW-003"
+        ]
+      },
+      {
+        "note_id": "PTN-003",
+        "note": "The viewer is intended to build and refine its own framework so that a solo developer can later reuse the final schema, review UI, and future local MCP layer to build other projects with lower agent context cost.",
+        "owner": "Engineering",
+        "noted_at": "2026-05-03T14:30:00Z",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "FR-012",
+          "US-008",
+          "PTW-004"
+        ]
+      },
+      {
+        "note_id": "PTN-004",
+        "note": "The first MCP milestone should stay local-only, read-only, stdio-first, and officially aligned to the TypeScript SDK; packet compaction and usefulness metrics should be in place before optional HTTP transport or any write-capable tooling is considered.",
+        "owner": "Engineering",
+        "noted_at": "2026-05-03T15:10:00Z",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "FR-012",
+          "DEC-010",
+          "PTW-004",
+          "PTW-010",
+          "PTW-011",
+          "PTW-013"
+        ]
+      },
+      {
+        "note_id": "PTN-005",
+        "note": "The reusable multi-project extraction path is now documented in docs/framework-extraction-plan.md with a concrete per-project config contract example in docs/pacs.config.example.json, so future PACS adopters can instantiate one PRD plus one MCP server instance per project instead of treating this repo layout as the only supported shape.",
+        "owner": "Engineering",
+        "noted_at": "2026-05-04T16:40:00Z",
+        "linked_prd_ids": [
+          "38491764-5485-4218-A991-A9D83BE84B7F"
+        ],
+        "linked_entity_ids": [
+          "FR-012",
+          "US-008",
+          "PTW-013"
+        ]
+      }
+    ]
+  },
+  "risks": [
+    {
+      "risk_id": "R-001",
+      "description": "Schema drift or validator mismatch causes the UI to accept or reject documents differently from schema.strict.json.",
+      "category": "technical",
+      "probability": "medium",
+      "impact": "high",
+      "score": 6,
+      "mitigation": "Lock schema versioning, add fixture regression tests, and fail closed on every write path.",
+      "owner": "Engineering",
+      "trigger": "schema.strict.json changes without matching test updates or validation regressions appear in fixtures."
+    },
+    {
+      "risk_id": "R-002",
+      "description": "Teams push for threaded comments, approvals, or concurrent editing before the local review flow is stable, pulling the project into premature collaboration architecture.",
+      "category": "schedule",
+      "probability": "medium",
+      "impact": "medium",
+      "score": 4,
+      "mitigation": "Keep v1 local-first and canonical-JSON-only, and gate any shared collaboration layer behind an explicit usage threshold.",
+      "owner": "Product",
+      "trigger": "Requests for multi-user editing or shared comments appear before the pilot has validated the basic review flow."
+    },
+    {
+      "risk_id": "R-003",
+      "description": "Browser file access or local shell packaging behaves differently across environments, breaking open/save or export flows.",
+      "category": "technical",
+      "probability": "medium",
+      "impact": "high",
+      "score": 6,
+      "mitigation": "Support standard file dialogs, provide explicit export paths, and keep a packaged local fallback option available.",
+      "owner": "Engineering",
+      "trigger": "Users cannot reliably open or save PRD.json in the target browser or runtime."
+    },
+    {
+      "risk_id": "R-004",
+      "description": "Round-trip serialization introduces noisy diffs or loses semantic content, undermining reviewer trust.",
+      "category": "operational",
+      "probability": "medium",
+      "impact": "medium",
+      "score": 4,
+      "mitigation": "Use deterministic serialization, preserve IDs and field meaning, and compare saved output against fixture snapshots.",
+      "owner": "Engineering",
+      "trigger": "Saved documents reopen with unrelated diffs, missing fields, or unstable field ordering."
+    },
+    {
+      "risk_id": "R-005",
+      "description": "Privacy and compliance ambiguity blocks any shared or cloud-hosted deployment once reviewer identities, comments, or access logs are persisted.",
+      "category": "legal",
+      "probability": "medium",
+      "impact": "high",
+      "score": 6,
+      "mitigation": "Assign a compliance owner, define retention and access policies, and keep the first release local-only until policy is approved.",
+      "owner": "Compliance",
+      "trigger": "A shared deployment or persisted review history is requested before compliance ownership is named."
+    },
+    {
+      "risk_id": "R-006",
+      "description": "Large PRD files make validation and rendering slow enough to hurt adoption and make the UI feel unreliable.",
+      "category": "technical",
+      "probability": "medium",
+      "impact": "medium",
+      "score": 4,
+      "mitigation": "Use incremental parsing, lazy rendering, and performance tests against the largest realistic PRD fixtures.",
+      "owner": "Engineering",
+      "trigger": "p95 load or validation time crosses the target on representative large documents."
+    },
+    {
+      "risk_id": "R-007",
+      "description": "A derived database or index becomes treated as authoritative by mistake, creating conflicts between UI state and PRD.json.",
+      "category": "technical",
+      "probability": "low",
+      "impact": "high",
+      "score": 3,
+      "mitigation": "Label derived data clearly, rebuild indexes from PRD.json, and prohibit canonical writes from any store that cannot export a schema-valid PRD.json.",
+      "owner": "Engineering",
+      "trigger": "Reviewers or agents reference data that exists only in a derived store and not in PRD.json."
+    },
+    {
+      "risk_id": "R-008",
+      "description": "A PRD created for a different framework version or a required extension is edited as if it were core-only, causing data loss or invalid agent assumptions.",
+      "category": "technical",
+      "probability": "medium",
+      "impact": "high",
+      "score": 6,
+      "mitigation": "Use schema.versions.json, meta.schema_contract, and extension declarations to block unsafe writeback unless migration or extension support is confirmed.",
+      "owner": "Engineering",
+      "trigger": "A PRD declares a future schema version, migration-required version, or unsupported required extension."
+    },
+    {
+      "risk_id": "R-009",
+      "description": "Project-tracking entries become stale or duplicate external workflow state, causing reviewers to trust outdated status inside the PRD.",
+      "category": "operational",
+      "probability": "medium",
+      "impact": "medium",
+      "score": 4,
+      "mitigation": "Keep project_tracking scoped to PRD execution status, warn on stale owners or notes, and document boundaries between project tracking, risks, open questions, decisions, and delivery readiness.",
+      "owner": "Engineering",
+      "trigger": "Project-tracking status conflicts with delivery readiness, risks, or open questions without an updated note explaining the difference."
+    }
+  ],
+  "open_questions": [
+    {
+      "question_id": "Q-001",
+      "question": "What is the target launch date and pilot cohort for the first reviewer release?",
+      "raised_by": "Codex",
+      "raised_at": "2026-04-20T00:00:00Z",
+      "status": "open",
+      "resolution": null
+    },
+    {
+      "question_id": "Q-002",
+      "question": "Who owns compliance and privacy review for reviewer identities, comments, retention, and any future shared deployment?",
+      "raised_by": "Codex",
+      "raised_at": "2026-04-20T00:00:00Z",
+      "status": "open",
+      "resolution": null
+    },
+    {
+      "question_id": "Q-003",
+      "question": "At what collaboration threshold do we introduce a shared database or sync layer instead of relying on derived caches and Git history?",
+      "raised_by": "Codex",
+      "raised_at": "2026-04-20T00:00:00Z",
+      "status": "open",
+      "resolution": null
+    },
+    {
+      "question_id": "Q-004",
+      "question": "Do we need persistent inline comments or approvals in v1, or is read, edit, save, readiness export, and Git diff review enough?",
+      "raised_by": "Codex",
+      "raised_at": "2026-04-20T00:00:00Z",
+      "status": "open",
+      "resolution": null
+    },
+    {
+      "question_id": "Q-005",
+      "question": "Should the first implementation use a browser-only file API, a Vite local app with a thin file server, or a packaged local shell?",
+      "raised_by": "Codex",
+      "raised_at": "2026-04-20T00:00:00Z",
+      "status": "open",
+      "resolution": null
+    },
+    {
+      "question_id": "Q-006",
+      "question": "Which visual graph library should be selected for the traceability view after prototype validation?",
+      "raised_by": "Codex",
+      "raised_at": "2026-04-20T00:00:00Z",
+      "status": "open",
+      "resolution": null
+    },
+    {
+      "question_id": "Q-007",
+      "question": "Should optional encoding benchmark metrics be retained or exposed in the reviewer UI?",
+      "raised_by": "Codex",
+      "raised_at": "2026-04-20T00:00:00Z",
+      "status": "resolved",
+      "resolution": "No. Optional encoding benchmarks remain local and outside the reviewer and agent compliance paths; context efficiency is measured through content-redacted MCP metrics."
+    },
+    {
+      "question_id": "Q-008",
+      "question": "Which extension namespaces should be supported first for users who adapt this PRD framework to different PRD methodologies or domain-specific requirement models?",
+      "raised_by": "Codex",
+      "raised_at": "2026-04-20T00:00:00Z",
+      "status": "open",
+      "resolution": null
+    },
+    {
+      "question_id": "Q-009",
+      "question": "Should public release rewrite the private source history or publish from a separate clean-history repository?",
+      "raised_by": "Codex",
+      "raised_at": "2026-07-15T01:34:23Z",
+      "status": "resolved",
+      "resolution": "Publish from a separate clean-history repository containing only the validated PRD framework and Viewer snapshot. Keep the source repository and all unrelated history private."
+    }
+  ],
+  "decisions": [
+    {
+      "decision_id": "DEC-001",
+      "title": "Canonical JSON first",
+      "statement": "PRD.json remains the canonical source of truth in v1; any database, index, or shared store is deferred and derived unless collaboration needs justify it.",
+      "rationale": "This keeps the reviewer MVP simple, preserves a single reviewable artifact for humans and AI agents, and avoids persistence migration work before the workflow proves value.",
+      "owner": "Product and Engineering",
+      "decided_at": null,
+      "status": "proposed",
+      "linked_req_ids": [
+        "FR-001",
+        "FR-006",
+        "FR-007",
+        "NFR-004"
+      ]
+    },
+    {
+      "decision_id": "DEC-002",
+      "title": "Strict schema gate",
+      "statement": "schema.strict.json is the authoritative validation contract for every load, edit, save, and export.",
+      "rationale": "A strict gate prevents silent drift and keeps reviewer feedback deterministic for humans and agents.",
+      "owner": "Engineering",
+      "decided_at": null,
+      "status": "proposed",
+      "linked_req_ids": [
+        "FR-003",
+        "FR-006",
+        "NFR-004"
+      ]
+    },
+    {
+      "decision_id": "DEC-003",
+      "title": "Local-first browser delivery",
+      "statement": "The initial release is a local-first browser UI or thin local shell that can open, validate, and save PRD.json directly; a backend is optional, not required.",
+      "rationale": "Direct file handling minimizes setup friction and fits the current JSON-first repo.",
+      "owner": "Engineering",
+      "decided_at": null,
+      "status": "proposed",
+      "linked_req_ids": [
+        "FR-001",
+        "FR-006",
+        "NFR-003"
+      ]
+    },
+    {
+      "decision_id": "DEC-004",
+      "title": "Git diffs as v1 audit trail",
+      "statement": "Reviewer history in v1 is represented by Git diffs and file versions, not by a separate application-side revision store.",
+      "rationale": "This keeps review artifacts aligned with the source file and avoids duplicate state.",
+      "owner": "Product and Engineering",
+      "decided_at": null,
+      "status": "proposed",
+      "linked_req_ids": [
+        "FR-006",
+        "FR-008"
+      ]
+    },
+    {
+      "decision_id": "DEC-005",
+      "title": "Schema-driven UI preferred",
+      "statement": "The implementation should prefer schema-driven section forms and validation over manually duplicating the PRD contract in UI code.",
+      "rationale": "The repo already has a strict schema; reusing it reduces drift and makes future schema changes easier to support.",
+      "owner": "Engineering",
+      "decided_at": null,
+      "status": "proposed",
+      "linked_req_ids": [
+        "FR-003",
+        "FR-004"
+      ]
+    },
+    {
+      "decision_id": "DEC-006",
+      "title": "Focused MCP context is the default agent path",
+      "statement": "Agents should use focused MCP discovery and token-budgeted build_agent_packet requests by default. Lightweight plugin hooks may inject routing guidance, while TOON remains an opt-in benchmark outside compliance, merge, release, and viewer paths.",
+      "rationale": "Selection removes far more context than transcoding, preserves canonical JSON, works through an agent-facing tool contract, and avoids format-specific accuracy and maintenance costs.",
+      "owner": "Engineering",
+      "decided_at": "2026-07-14T22:05:47Z",
+      "status": "accepted",
+      "linked_req_ids": [
+        "FR-009",
+        "NFR-006"
+      ]
+    },
+    {
+      "decision_id": "DEC-007",
+      "title": "Vite React TypeScript scaffold",
+      "statement": "The PRD viewer starts as a Vite, React, and TypeScript app under viewer/, with Ajv for schema validation, JSON Forms for section editors, vanilla-jsoneditor for raw JSON mode, and @xyflow/react reserved for traceability graph work.",
+      "rationale": "This stack matches the local-first browser constraint, supports schema-driven UI, keeps the initial implementation backend-free, and aligns the future editor and graph requirements without introducing an authoritative database.",
+      "owner": "Engineering",
+      "decided_at": "2026-04-20T20:56:43Z",
+      "status": "accepted",
+      "linked_req_ids": [
+        "FR-001",
+        "FR-003",
+        "FR-004",
+        "FR-005",
+        "NFR-001",
+        "NFR-003",
+        "NFR-005"
+      ]
+    },
+    {
+      "decision_id": "DEC-008",
+      "title": "TDD and Playwright test stack",
+      "statement": "The viewer implementation uses Vitest with React Testing Library for fast unit and component tests, and Playwright Test as the required browser E2E framework.",
+      "rationale": "Vitest aligns with the Vite app shell for quick local feedback, Testing Library keeps component tests focused on user-visible behavior, and Playwright covers real browser workflows required for file, validation, navigation, and export paths.",
+      "owner": "Engineering",
+      "decided_at": "2026-04-20T20:56:43Z",
+      "status": "accepted",
+      "linked_req_ids": [
+        "FR-001",
+        "FR-002",
+        "FR-003",
+        "FR-004",
+        "FR-006",
+        "FR-008",
+        "NFR-001",
+        "NFR-004",
+        "NFR-005"
+      ]
+    },
+    {
+      "decision_id": "DEC-009",
+      "title": "Approval readiness stays separate from project tracking",
+      "statement": "The viewer should show approval readiness and project_tracking as related but distinct views: readiness answers whether the PRD can be approved, while project_tracking records execution status, pending work, issues, blockers, and notes.",
+      "rationale": "Collapsing both concepts into one panel would mix approval gates with delivery state and make it harder to distinguish approval blockers from follow-up work.",
+      "owner": "Product and Engineering",
+      "decided_at": null,
+      "status": "proposed",
+      "linked_req_ids": [
+        "FR-002",
+        "FR-008",
+        "FR-011"
+      ]
+    },
+    {
+      "decision_id": "DEC-010",
+      "title": "Future local MCP layer uses the official TypeScript SDK",
+      "statement": "When the viewer adds a local MCP server, it should use the official Model Context Protocol TypeScript SDK and serve derived PRD projections rather than making full-document JSON reads the default path for agentic workflows.",
+      "rationale": "The viewer already lives in a TypeScript stack, and the reusable-framework goal is better served by one supported implementation path that stays local-first, canonical-JSON-first, and lightweight enough for solo-developer hardware.",
+      "owner": "Engineering",
+      "decided_at": "2026-05-03T14:30:00Z",
+      "status": "accepted",
+      "linked_req_ids": [
+        "FR-010",
+        "FR-012"
+      ]
+    },
+    {
+      "decision_id": "DEC-011",
+      "title": "Public release uses a separate clean-history repository",
+      "statement": "Publish the PRD framework and Viewer from a new repository initialized from a sanitized current-tree snapshot; do not copy or rewrite the private source repository history.",
+      "rationale": "A new repository creates a verifiable object-level boundary, keeps unrelated private history private, avoids coordinated force-push risk, and gives the public project a focused identity.",
+      "owner": "Repository owner and Engineering",
+      "decided_at": "2026-07-15T01:44:04Z",
+      "status": "accepted",
+      "linked_req_ids": [
+        "FR-012",
+        "NFR-003"
+      ]
+    }
+  ],
+  "extensions": {
+    "registry": [],
+    "data": {}
+  }
+}

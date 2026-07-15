@@ -1,0 +1,4 @@
+interface:
+  display_name: "PRD Validation Gate"
+  short_description: "Validate PRDs and route targeted repairs"
+  default_prompt: "Use $prd-validation-gate to validate this merged PRD and return focused repair routing for any failing sections. Check schema_contract compatibility with schema.versions.json and keep canonical validation artifacts as JSON."

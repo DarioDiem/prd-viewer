@@ -1,0 +1,62 @@
+{
+  "framework_name": "PRD Creation Framework",
+  "framework_version": "0.1.0",
+  "current_schema_version": "1.2.0",
+  "current_strict_schema": "schema.strict.json",
+  "compatibility_policy": {
+    "versioning": "semantic",
+    "patch": "Patch versions are fully compatible and must not require document migration.",
+    "minor": "Minor versions must be backward compatible unless a schema entry explicitly marks migration as required.",
+    "major": "Major versions may introduce breaking schema changes and require migration.",
+    "extensions": "Extensions must be namespaced, registered, and isolated from core PRD sections. Required extensions must be declared in meta.schema_contract.extensions."
+  },
+  "schemas": [
+    {
+      "schema_version": "1.0.0",
+      "schema_id": "https://example.com/prd.schema.strict.v1.0.0.json",
+      "file": "schema.strict.json",
+      "status": "supported",
+      "fully_compatible_with": [
+        "1.0.0"
+      ],
+      "backward_compatible_with": [
+        "1.1.0",
+        "1.2.0"
+      ],
+      "migration_required_from": [],
+      "notes": "1.0.0 documents remain valid under later minor schemas because project_tracking is optional, but they do not expose first-class project tracking or external workflow references until upgraded."
+    },
+    {
+      "schema_version": "1.1.0",
+      "schema_id": "https://example.com/prd.schema.strict.v1.1.0.json",
+      "file": "schema.strict.json",
+      "status": "supported",
+      "fully_compatible_with": [
+        "1.1.0"
+      ],
+      "backward_compatible_with": [
+        "1.2.0"
+      ],
+      "migration_required_from": [],
+      "notes": "Adds optional first-class project_tracking to the PRD framework while preserving backward compatibility for existing 1.0.0 documents."
+    },
+    {
+      "schema_version": "1.2.0",
+      "schema_id": "https://example.com/prd.schema.strict.v1.2.0.json",
+      "file": "schema.strict.json",
+      "status": "current",
+      "fully_compatible_with": [
+        "1.2.0"
+      ],
+      "backward_compatible_with": [],
+      "migration_required_from": [],
+      "notes": "Adds optional external_refs URI arrays to project-tracking records so PRD execution summaries can link to GitHub or other workflow systems without duplicating their live state."
+    }
+  ],
+  "extension_policy": {
+    "registry_location": "meta.schema_contract.extensions",
+    "payload_location": "extensions.data",
+    "required_extension_behavior": "Agents and viewers must fail closed or ask for explicit support when a required extension is not recognized.",
+    "optional_extension_behavior": "Agents may ignore unknown optional extensions but must preserve extension data during read/write round trips."
+  }
+}

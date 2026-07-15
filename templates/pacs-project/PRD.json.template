@@ -1,0 +1,357 @@
+{
+  "meta": {
+    "prd_id": "__PRD_ID__",
+    "title": "__PROJECT_NAME__ Product Requirements Document",
+    "summary": "A working PRD starter for __PROJECT_NAME__ using the PACS framework.",
+    "product_name": "__PRODUCT_NAME__",
+    "document_type": "prd",
+    "version": "0.1.0",
+    "status": "draft",
+    "lifecycle_stage": "definition",
+    "owners": {
+      "product": null,
+      "engineering": null,
+      "design": null,
+      "business": null,
+      "compliance": null
+    },
+    "authors": [
+      "__AUTHOR__"
+    ],
+    "reviewers": [],
+    "approvers": [],
+    "created_at": "__TIMESTAMP__",
+    "updated_at": "__TIMESTAMP__",
+    "target_release": null,
+    "stakeholders": [
+      {
+        "name": "Primary product owner",
+        "role": "Defines scope, priorities, and tradeoffs",
+        "team": "Product",
+        "approval_required": false
+      },
+      {
+        "name": "Engineering maintainer",
+        "role": "Implements the approved delivery scope",
+        "team": "Engineering",
+        "approval_required": false
+      }
+    ],
+    "source_brief": null,
+    "links": [],
+    "schema_contract": {
+      "schema_id": "https://example.com/prd.schema.strict.v1.2.0.json",
+      "schema_version": "1.2.0",
+      "compatible_schema_versions": [
+        "1.2.0"
+      ],
+      "compatibility_mode": "exact",
+      "extension_policy": "core_only",
+      "migrations": [],
+      "extensions": []
+    }
+  },
+  "problem": {
+    "statement": "__PROJECT_NAME__ needs a single canonical PRD that stays valid, reviewable, and usable by both humans and local agent tooling.",
+    "background": "This starter artifact exists so the project can begin with a schema-valid PRD instead of rebuilding the document shape from scratch.",
+    "opportunity": "A valid initial PRD reduces setup friction, keeps scope changes reviewable, and lets local MCP-based agent workflows stay focused.",
+    "strategic_fit": "This project uses the PACS workflow so the PRD can remain the canonical artifact through planning, implementation, and review.",
+    "affected_users": [
+      "Project maintainer",
+      "Engineering contributor"
+    ],
+    "evidence": [
+      {
+        "type": "internal_data",
+        "description": "Projects need a canonical PRD artifact before automated review and agent handoff can work consistently.",
+        "source": "PACS framework bootstrap",
+        "confidence": "high",
+        "observed_at": "__DATE__"
+      },
+      {
+        "type": "other",
+        "description": "A generic valid starter reduces manual schema assembly and accelerates first delivery planning.",
+        "source": "Bootstrap design assumption",
+        "confidence": "medium",
+        "observed_at": "__DATE__"
+      },
+      {
+        "type": "other",
+        "description": "Local agent workflows become easier to control when the PRD starts with stable IDs and structured sections.",
+        "source": "PACS multi-project reuse plan",
+        "confidence": "medium",
+        "observed_at": "__DATE__"
+      }
+    ]
+  },
+  "goals": {
+    "business_goals": [
+      {
+        "statement": "Establish a valid starting PRD for __PROJECT_NAME__.",
+        "rationale": "The project needs a canonical baseline before deeper planning and implementation begin.",
+        "owner": null,
+        "priority": "primary"
+      }
+    ],
+    "user_outcomes": [
+      {
+        "actor": "Project maintainer",
+        "desired_outcome": "Start editing a real PRD immediately instead of reconstructing the schema manually.",
+        "measurement_signal": "The starter PRD validates and can be loaded by the viewer and MCP server."
+      }
+    ],
+    "success_metrics": [
+      {
+        "metric": "Starter PRD validation success",
+        "baseline": null,
+        "target": "Valid on first run",
+        "unit": "status",
+        "measurement_method": "Run schema compatibility validation against the generated PRD artifact.",
+        "timeframe_days": 1
+      }
+    ],
+    "guardrail_metrics": [],
+    "non_goals": [
+      "This starter does not define the full shipped scope of __PROJECT_NAME__."
+    ]
+  },
+  "assumptions": [
+    {
+      "assumption_id": "A-001",
+      "statement": "The initial project scope will evolve after the first review pass.",
+      "category": "business",
+      "validation_plan": "Refine the PRD after project discovery and implementation planning.",
+      "owner": null,
+      "status": "open"
+    }
+  ],
+  "personas": [
+    {
+      "persona_id": "P-001",
+      "name": "Project maintainer",
+      "role": "Owns scope and delivery decisions",
+      "goals": [
+        "Keep the canonical PRD valid and current"
+      ],
+      "needs": [
+        "Fast access to focused PRD context"
+      ],
+      "pain_points": [
+        "Bootstrapping structured project artifacts from scratch"
+      ],
+      "current_workarounds": [
+        "Starting from ad hoc notes or copying previous documents"
+      ],
+      "frequency_of_use": "daily",
+      "technical_proficiency": "high",
+      "environment": "Local development workflow"
+    }
+  ],
+  "requirements": {
+    "functional": [
+      {
+        "req_id": "FR-001",
+        "title": "Maintain a canonical PRD artifact",
+        "description": "__PROJECT_NAME__ must keep a schema-valid PRD as the canonical source of scope, requirements, and delivery state.",
+        "rationale": "The framework depends on one authoritative artifact for review, editing, and agent handoff.",
+        "priority": "must",
+        "persona_ids": [
+          "P-001"
+        ],
+        "dependencies": [],
+        "acceptance_criteria": [
+          "A schema-valid PRD exists at the project root.",
+          "The PRD can be loaded by local PACS tooling without manual repair."
+        ],
+        "status": "proposed",
+        "release_phase": "mvp"
+      }
+    ],
+    "non_functional": [
+      {
+        "req_id": "NFR-001",
+        "category": "observability",
+        "description": "Local PRD tooling should emit content-redacted local metrics when configured.",
+        "target": "Metrics stay local and avoid raw PRD payload logging.",
+        "priority": "should",
+        "acceptance_criteria": [
+          "Tooling can write JSONL metrics without storing PRD content."
+        ]
+      }
+    ]
+  },
+  "user_stories": [
+    {
+      "story_id": "US-001",
+      "epic": "Project setup",
+      "persona_id": "P-001",
+      "priority": "must",
+      "release_phase": "mvp",
+      "statement": {
+        "as_a": "project maintainer",
+        "i_want": "a valid starter PRD",
+        "so_that": "I can begin planning and implementation without rebuilding the framework contract"
+      },
+      "acceptance_criteria": [
+        {
+          "given": "a newly initialized project",
+          "when": "the maintainer opens the generated PRD",
+          "then": "the document is valid and ready for editing"
+        }
+      ],
+      "linked_req_ids": [
+        "FR-001"
+      ],
+      "story_points": 1,
+      "edge_cases": []
+    }
+  ],
+  "constraints": {
+    "technical": [
+      {
+        "constraint_id": "TC-001",
+        "description": "The canonical PRD stays as JSON on disk.",
+        "imposed_by": "architecture",
+        "impact": "All tooling must preserve deterministic JSON structure and fail closed on invalid changes."
+      }
+    ],
+    "legal_compliance": [],
+    "dependencies": [
+      {
+        "dependency_id": "D-001",
+        "name": "PACS framework tooling",
+        "description": "Local schema validation, MCP access, and bootstrap support.",
+        "type": "internal",
+        "owner": null,
+        "required_by": null,
+        "status": "pending"
+      }
+    ]
+  },
+  "delivery": {
+    "target_launch": null,
+    "milestones": [
+      {
+        "name": "PRD baseline ready",
+        "date": null,
+        "deliverable": "A valid starter PRD for __PROJECT_NAME__.",
+        "entry_criteria": [],
+        "exit_criteria": [
+          "The generated PRD validates against schema.strict.json."
+        ],
+        "owner": null
+      }
+    ],
+    "rollout_plan": {
+      "strategy": "Iterate locally on the canonical PRD before expanding implementation scope.",
+      "phases": [
+        {
+          "name": "Baseline",
+          "audience": "Project maintainer",
+          "success_criteria": [
+            "The project can edit and validate its PRD locally."
+          ],
+          "owner": null
+        }
+      ],
+      "communications": [],
+      "training": [],
+      "support_handoff": []
+    },
+    "operational_readiness": [
+      {
+        "area": "PRD governance",
+        "owner": null,
+        "status": "not_started",
+        "notes": "Confirm owners, scope boundaries, and first implementation priorities."
+      }
+    ]
+  },
+  "project_tracking": {
+    "status": "not_started",
+    "owner": null,
+    "summary": "The project has been initialized from the PACS bootstrap layer and still needs project-specific refinement.",
+    "updated_at": "__TIMESTAMP__",
+    "linked_prd_ids": [
+      "__PRD_ID__"
+    ],
+    "pending_work": [
+      {
+        "work_item_id": "PTW-001",
+        "title": "Refine the starter PRD",
+        "description": "Replace the generic bootstrap content with project-specific scope, requirements, and delivery detail.",
+        "status": "not_started",
+        "priority": "high",
+        "owner": null,
+        "linked_prd_ids": [
+          "__PRD_ID__"
+        ],
+        "linked_entity_ids": [
+          "FR-001",
+          "US-001"
+        ],
+        "external_refs": [],
+        "notes": "This is the first expected task after initialization."
+      }
+    ],
+    "issues_found": [],
+    "blockers": [],
+    "notes": [
+      {
+        "note_id": "PTN-001",
+        "note": "One MCP server instance should be configured per project when the framework is reused across multiple repos or worktrees.",
+        "owner": "PACS bootstrap",
+        "noted_at": "__TIMESTAMP__",
+        "linked_prd_ids": [
+          "__PRD_ID__"
+        ],
+        "linked_entity_ids": [
+          "FR-001"
+        ],
+        "external_refs": []
+      }
+    ]
+  },
+  "risks": [
+    {
+      "risk_id": "R-001",
+      "description": "The starter PRD may remain generic for too long and drift away from the real project scope.",
+      "category": "schedule",
+      "probability": "medium",
+      "impact": "medium",
+      "score": 4,
+      "mitigation": "Refine the generated sections early and keep the PRD updated with implementation changes.",
+      "owner": null,
+      "trigger": "Project work begins without replacing the initial placeholder content."
+    }
+  ],
+  "open_questions": [
+    {
+      "question_id": "Q-001",
+      "question": "Which project-specific scope should replace the starter PRD content first?",
+      "raised_by": "__AUTHOR__",
+      "raised_at": "__TIMESTAMP__",
+      "status": "open",
+      "resolution": null
+    }
+  ],
+  "decisions": [
+    {
+      "decision_id": "DEC-001",
+      "title": "Use PACS as the initial PRD workflow",
+      "statement": "__PROJECT_NAME__ will use PACS schema validation and local MCP access for PRD-driven development.",
+      "rationale": "The framework provides a structured, locally controlled workflow for multi-project agent collaboration.",
+      "owner": null,
+      "decided_at": null,
+      "status": "proposed",
+      "linked_req_ids": [
+        "FR-001",
+        "NFR-001"
+      ]
+    }
+  ],
+  "extensions": {
+    "registry": [],
+    "data": {}
+  }
+}

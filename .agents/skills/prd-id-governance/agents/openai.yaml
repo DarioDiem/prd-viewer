@@ -1,0 +1,4 @@
+interface:
+  display_name: "PRD ID Governance"
+  short_description: "Maintain stable PRD IDs across agent runs"
+  default_prompt: "Use $prd-id-governance to preserve deterministic PRD IDs and repair the shared registry across merge or retry rounds."
