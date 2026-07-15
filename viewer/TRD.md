@@ -88,8 +88,9 @@ Viewer a hosted service.
 - Generated browser output, local metrics, dependencies, and build products are
   ignored and are not release inputs.
 - CI installs from lockfiles and runs deterministic root, MCP, and Viewer gates.
-- Publication does not imply permission to reuse the code when no license file
-  is present; selecting an open-source license remains a repository-owner choice.
+- The repository-wide Apache License 2.0 covers the code, schemas, templates,
+  documentation, Viewer, and PRD Context plugin under one permissive license
+  with an explicit patent grant.
 - Public release uses a new repository initialized from a sanitized current-tree
   snapshot. No Git objects, refs, or remotes are copied from the private source.
 - The public repository is `https://github.com/DarioDiem/prd-viewer` and
@@ -118,9 +119,10 @@ hygiene. TOON is not a release gate.
 ## Decisions and unresolved boundaries
 
 This design implements the consequences of `DEC-001` through `DEC-005`,
-`DEC-008`, `DEC-010`, and `DEC-011`. `DEC-009` keeps approval readiness separate
-from project tracking. `DEC-011` requires a separate clean-history public
-repository so the private source history is never copied.
+`DEC-008`, and `DEC-010` through `DEC-012`. `DEC-009` keeps approval readiness
+separate from project tracking. `DEC-011` requires a separate clean-history
+public repository so the private source history is never copied. `DEC-012`
+licenses the complete public repository under Apache License 2.0.
 
 `PTW-003` and `PTB-002` continue to own unresolved launch ownership and any
 future shared-deployment privacy review. They do not block publishing the
