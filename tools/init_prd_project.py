@@ -29,6 +29,7 @@ VALIDATION_FILE_BUNDLE = (
     "tools/prd_metrics.py",
     "tools/prd_schema_compat.py",
     "tools/prd_extractor.py",
+    "tools/validate_delivery_tracking.py",
     "tools/requirements-prd-validation.txt",
 )
 VALIDATION_DIR_BUNDLE: tuple[str, ...] = ()
@@ -865,6 +866,22 @@ def main() -> int:
         target_dir / "docs" / "delivery-workflow.md",
         (framework_root / "docs" / "delivery-workflow.md").read_text(encoding="utf-8"),
     )
+    write_text(
+        target_dir / ".github" / "workflows" / "prd-governance.yml",
+        render_template("github-prd-governance.yml.template", {}),
+    )
+    write_text(
+        target_dir / ".github" / "ISSUE_TEMPLATE" / "implementation.yml",
+        (framework_root / ".github" / "ISSUE_TEMPLATE" / "implementation.yml").read_text(encoding="utf-8"),
+    )
+    write_text(
+        target_dir / ".github" / "ISSUE_TEMPLATE" / "config.yml",
+        (framework_root / ".github" / "ISSUE_TEMPLATE" / "config.yml").read_text(encoding="utf-8"),
+    )
+    write_text(
+        target_dir / ".github" / "pull_request_template.md",
+        (framework_root / ".github" / "pull_request_template.md").read_text(encoding="utf-8"),
+    )
 
     if use_local_agents:
         included_agent_files = copy_curated_agent_assets(
@@ -879,6 +896,7 @@ def main() -> int:
     print(f"- Agent instructions: {target_dir / 'AGENTS.md'}")
     print(f"- MCP registration guide: {target_dir / 'docs' / 'mcp-registration.md'}")
     print(f"- Delivery workflow: {target_dir / 'docs' / 'delivery-workflow.md'}")
+    print(f"- GitHub governance workflow: {target_dir / '.github' / 'workflows' / 'prd-governance.yml'}")
     print("- Local validation bundle: schema.strict.json, schema.json, schema.versions.json, tools/")
     if use_local_agents:
         print("- Included local agent assets: .agents/, .codex/agents/, .gemini/agents/")
@@ -912,6 +930,10 @@ def main() -> int:
                     ".gitignore",
                     "docs/mcp-registration.md",
                     "docs/delivery-workflow.md",
+                    ".github/workflows/prd-governance.yml",
+                    ".github/ISSUE_TEMPLATE/implementation.yml",
+                    ".github/ISSUE_TEMPLATE/config.yml",
+                    ".github/pull_request_template.md",
                     ".metrics/.gitkeep",
                 ]
                 + validation_files

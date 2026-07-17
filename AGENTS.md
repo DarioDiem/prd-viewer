@@ -15,7 +15,7 @@ This repository contains PRD JSON generation and validation assets for a multi-a
 - `plugins/prd-context/` packages focused context guidance, MCP registration, and lightweight hooks.
 - `tools/prd_toon_roundtrip.py` is an optional encoding benchmark.
 - `docs/agent-research.md` records evaluated external agent implementations and local-agent inclusion decisions.
-- `docs/delivery-workflow.md` defines when PRD, TRD, project-tracking, external issues, tasks, and sprints change.
+- `docs/delivery-workflow.md` defines when PRD, TRD, project tracking, GitHub Issues, GitHub Projects, and pull requests change.
 
 ## Setup Commands
 
@@ -42,7 +42,10 @@ This repository contains PRD JSON generation and validation assets for a multi-a
 - Do not invent sources, citations, owners, market metrics, compliance claims, or decisions.
 - Do not add undocumented top-level PRD keys.
 - Keep consolidated specialist boundaries: `prd-authoring-agent` owns evidence, problem framing, goals, assumptions, requirements, personas, stories, constraints, delivery, metrics, risks, and authoring open questions in one memory context; `prd-quality-agent` validates and routes without mutating content; `prd-contract-agent` owns schema/contract migration planning; `viewer-quality-agent` owns viewer governance, accessibility review, and QA planning.
-- Follow `docs/delivery-workflow.md`: start implementation from a PTW-backed external issue rather than an FR or NFR alone, and keep external live state linked through `external_refs` instead of duplicating it in the PRD.
+- Follow `docs/delivery-workflow.md`: GitHub Issues are the only ticket system. Start implementation from a PTW-backed GitHub issue rather than an FR or NFR alone, and keep live state linked through GitHub `external_refs` instead of duplicating it in the PRD.
+- Split work before implementation when slices need different owners, pull requests, blockers, verification, trust boundaries, or more than three focused delivery days.
+- Keep the delivery-tracking CI check required on protected integration branches.
+- Use the PRD implementation issue form; issues marked `Large` must be split before a pull request can pass CI.
 - Prefer mega-specialist review agents for focused checks: PRD quality for schema, traceability, semantic diff, ambiguity, and repair routing; PRD contract for schema changes; viewer quality for local-first UI governance, accessibility, and test coverage.
 
 ## Open Agent Spec

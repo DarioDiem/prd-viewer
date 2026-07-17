@@ -21,4 +21,12 @@ The bundled MCP server resolves `prd.config.json` from the active MCP project ro
 4. Read a complete PRD only for full-document validation, migration, deterministic serialization, or export.
 5. Validate canonical artifacts with their schema and traceability checks after edits.
 
+## GitHub delivery enforcement
+
+- GitHub Issues are the only executable ticket system.
+- Start implementation from a PTW-backed GitHub issue and reference the applicable TRD section.
+- Split work when slices need different owners, pull requests, blockers, verification, trust boundaries, or more than three focused delivery days.
+- Keep live status in GitHub and durable summary state in PRD `project_tracking`.
+- Before completion, run `tools/validate_delivery_tracking.py` against the canonical PRD and ensure the pull request closes its issue.
+
 TOON is optional benchmarking. Do not use it as an ingestion, merge, or release gate.

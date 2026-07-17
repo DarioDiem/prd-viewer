@@ -45,9 +45,8 @@ Key production-level expectations by section:
 - `requirements`: rationale, dependencies, release phase, and testable acceptance criteria.
 - `delivery`: target launch, milestones, rollout plan, operational readiness.
 - `project_tracking`: overall status, pending work, issues found, blockers, linked entities, and timestamped notes.
-- Project-tracking record `external_refs`: canonical external issue,
-  pull-request, board, or iteration URLs; external systems remain authoritative
-  for live state.
+- Project-tracking record `external_refs`: canonical GitHub issue, pull-request,
+  project, or iteration URLs; GitHub remains authoritative for live state.
 - `decisions`: explicit product or technical decisions already made or proposed.
 
 ## Required Behavior

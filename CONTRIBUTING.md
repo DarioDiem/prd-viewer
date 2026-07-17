@@ -17,16 +17,18 @@ python3 -m pip install -r tools/requirements-prd-validation.txt
 
 ## Change workflow
 
-1. Start implementation from a `PTW-###` record linked to the affected PRD
-   entities. Follow `docs/delivery-workflow.md`.
+1. Create a GitHub issue from the PRD implementation task form and link it to a
+   `PTW-###` record. GitHub Issues are the only ticket system.
 2. Update the linked TRD before implementation when architecture, interfaces,
    data ownership, security boundaries, deployment, operations, or non-trivial
    verification changes.
-3. Keep `.agents/*.yaml` as the source for generated agent definitions.
-4. Do not commit credentials, local PRD data, metrics, dependencies, build
+3. Split work when slices need different owners, pull requests, blockers,
+   verification, trust boundaries, or more than three focused delivery days.
+4. Keep `.agents/*.yaml` as the source for generated agent definitions.
+5. Do not commit credentials, local PRD data, metrics, dependencies, build
    output, test output, or browser artifacts.
-5. Open a focused pull request with the validation evidence relevant to the
-   files changed.
+6. Open a focused pull request that references its `PTW-###`, closes its GitHub
+   issue, and includes the relevant validation evidence.
 
 ## Validation
 
@@ -35,7 +37,9 @@ For framework and agent changes:
 ```bash
 npm run validate:agents
 python3 tools/prd_schema_compat.py viewer/PRD_web_ui.json --stats-json
+python3 tools/validate_delivery_tracking.py viewer/PRD_web_ui.json
 python3 -m unittest tools.test_init_prd_project
+python3 -m unittest tools.test_validate_delivery_tracking
 ```
 
 For MCP changes:

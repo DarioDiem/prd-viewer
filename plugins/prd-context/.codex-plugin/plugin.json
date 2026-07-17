@@ -1,6 +1,6 @@
 {
   "name": "prd-context",
-  "version": "0.2.0+codex.20260715215001",
+  "version": "0.2.0+codex.20260717184456",
   "description": "Bundled, project-aware PRD and TRD context routing for PRD agent workflows.",
   "license": "Apache-2.0",
   "author": {

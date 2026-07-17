@@ -10,7 +10,7 @@ This project uses the PRD framework with a canonical local `PRD.json` artifact.
 - `schema.strict.json`, `schema.json`, and `schema.versions.json` are copied locally so the project can validate its PRD without depending on the framework repo layout.
 - `tools/prd_schema_compat.py`, `tools/prd_extractor.py`, and `tools/prd_metrics.py` are copied locally as the project validation bundle.
 - `docs/mcp-registration.md` explains how to install and verify the PRD Context plugin.
-- `docs/delivery-workflow.md` defines when PRD, TRD, project-tracking, external issues, tasks, and sprints change.
+- `docs/delivery-workflow.md` defines when PRD, TRD, project tracking, GitHub Issues, GitHub Projects, and pull requests change.
 
 ## Agent Rules
 
@@ -19,7 +19,10 @@ This project uses the PRD framework with a canonical local `PRD.json` artifact.
 - Keep `PRD.json` canonical. Any derived index, metrics log, cache, or transport packet must be rebuildable from it.
 - Keep product scope and acceptance criteria in `PRD.json`; keep architecture, interface contracts, runtime design, and verification mapping in `TRD.md`.
 - Keep `DEC-###` records in the PRD `decisions` array as the single decision log. Reference them from `TRD.md` instead of creating a parallel ADR log.
-- Start implementation from a PTW-backed external issue rather than an FR or NFR alone. Add canonical issue, pull-request, board, or iteration URLs to `external_refs` instead of copying live external state into the PRD.
+- Use GitHub Issues as the only ticket system. Start implementation from a PTW-backed GitHub issue rather than an FR or NFR alone. Add canonical GitHub issue, pull-request, project, or iteration URLs to `external_refs` instead of copying live state into the PRD.
+- Split work into separate GitHub issues when slices have different owners, pull requests, blockers, verification, trust boundaries, or exceed three focused delivery days. Large issues are not ready for implementation.
+- Keep `.github/workflows/prd-governance.yml` enabled and make its `prd-governance` job a required check on the default branch.
+- Use the repository's PRD implementation issue form; blank issues are disabled and issues marked `Large` must be split before a pull request can pass CI.
 - Validate complete PRD files against the PRD strict schema before treating edits as accepted.
 - Do not send PRD content to third-party services unless the user explicitly asks.
 
@@ -31,6 +34,7 @@ This project uses the PRD framework with a canonical local `PRD.json` artifact.
   - `python3 -m pip install -r tools/requirements-prd-validation.txt`
 - Use the local validation bundle for project-local checks:
   - `python3 tools/prd_schema_compat.py PRD.json --stats-json`
+  - `python3 tools/validate_delivery_tracking.py PRD.json`
   - `python3 tools/prd_extractor.py PRD.json --summary`
 - Keep local metrics content-redacted.
 - ${AGENT_MODE_WORKFLOW}
