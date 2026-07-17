@@ -634,8 +634,8 @@ describe("App", () => {
     await user.upload(screen.getByLabelText("Open PRD"), prdFile("schema-invalid-prd.json", schemaInvalidPrdFixture()));
 
     expect(screen.getByRole("heading", { name: "Last valid uploaded PRD" })).toBeInTheDocument();
-    expect(screen.getAllByText("schema-invalid-prd.json").length).toBeGreaterThan(0);
-    expect(screen.getByText('$["meta"]["title"]')).toBeInTheDocument();
+    expect((await screen.findAllByText("schema-invalid-prd.json")).length).toBeGreaterThan(0);
+    expect(await screen.findByText('$["meta"]["title"]')).toBeInTheDocument();
     await openSectionEditor(user);
     expect(screen.getByLabelText("Pending changed sections")).toHaveTextContent("No pending section changes.");
   });
