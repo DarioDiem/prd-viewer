@@ -9,6 +9,7 @@
     "init:project": "python3 tools/init_prd_project.py",
     "benchmark:toon": "python3 tools/prd_toon_roundtrip.py",
     "validate:agents": "python3 tools/validate_agent_formats.py",
+    "validate:delivery": "python3 tools/validate_delivery_tracking.py viewer/PRD_web_ui.json",
     "sync:agents": "python3 tools/sync_agents.py",
     "validate:oa": "PYTHONPATH=.agent-tools/open-agent-spec .agent-tools/open-agent-spec/bin/oa validate aac"
   },

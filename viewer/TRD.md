@@ -6,6 +6,7 @@ linked_req_ids:
   - FR-003
   - FR-008
   - FR-010
+  - FR-011
   - FR-012
   - NFR-003
   - NFR-005
@@ -81,6 +82,23 @@ Viewer a hosted service.
 4. The agent requests a standard, token-budgeted packet with an explicit preset.
 5. The canonical JSON remains unchanged; metrics contain metadata, not PRD text.
 
+### GitHub execution tracking
+
+1. A coherent deliverable is represented by one PRD `PTW-###`.
+2. Independently assignable slices are GitHub issues linked through the PTW's
+   `external_refs`; GitHub Projects may schedule those issues.
+3. Work splits into separate issues when slices need different owners, pull
+   requests, blockers, verification, trust boundaries, or more than three
+   focused delivery days.
+4. Each pull request references its PTW and closes its GitHub issue.
+5. `tools/validate_delivery_tracking.py` rejects non-GitHub tracking URLs,
+   active PTWs without an issue, and pull requests without both links.
+6. The GitHub ruleset makes the governance check required on the default branch.
+
+The PRD stores durable delivery summaries. GitHub owns assignees, discussion,
+checklists, scheduling, and live status. Jira and other ticket systems are not
+part of the framework workflow.
+
 ## Public repository and release design
 
 - Public-facing documentation states setup, contribution, security reporting,
@@ -106,6 +124,7 @@ Viewer a hosted service.
 | FR-003 | Complete-document validation before apply, export, or save | Schema validation and App tests |
 | FR-008 | Derived readiness categories and navigation | Approval-readiness and App tests |
 | FR-010 | Compatibility evaluation from the version manifest | Schema compatibility tests |
+| FR-011 | GitHub-only PTW, issue, project, and pull-request boundaries | Delivery-tracking validator and bootstrap tests |
 | FR-012 | Project-scoped read-only MCP and focused packets | MCP unit and integration tests |
 | NFR-003 | No default third-party PRD transmission | Source review, local-only configuration, E2E network assertions |
 | NFR-005 | Keyboard, focus, labels, and browser accessibility gates | Viewer tests and Playwright accessibility flows |
@@ -119,10 +138,12 @@ hygiene. TOON is not a release gate.
 ## Decisions and unresolved boundaries
 
 This design implements the consequences of `DEC-001` through `DEC-005`,
-`DEC-008`, and `DEC-010` through `DEC-012`. `DEC-009` keeps approval readiness
+`DEC-008`, and `DEC-010` through `DEC-013`. `DEC-009` keeps approval readiness
 separate from project tracking. `DEC-011` requires a separate clean-history
 public repository so the private source history is never copied. `DEC-012`
 licenses the complete public repository under Apache License 2.0.
+`DEC-013` makes GitHub the sole execution tracker and requires CI-enforced
+PTW-to-issue-to-PR linkage.
 
 `PTW-003` and `PTB-002` continue to own unresolved launch ownership and any
 future shared-deployment privacy review. They do not block publishing the

@@ -5,7 +5,7 @@ Markdown TRDs. A TRD may explain how approved requirements will be implemented,
 but it must not redefine their priority, scope, or acceptance criteria.
 
 Use `docs/delivery-workflow.md` for the lifecycle that connects requirements and
-TRDs to PTW records, external issues, tasks, sprints, and pull requests.
+TRDs to PTW records, GitHub Issues, GitHub Projects, and pull requests.
 
 ## Header contract
 

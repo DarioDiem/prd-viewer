@@ -1,0 +1,22 @@
+name: PRD governance
+
+on:
+  pull_request:
+  push:
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
+jobs:
+  prd-governance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+      - run: python3 tools/validate_delivery_tracking.py PRD.json
+        env:
+          GITHUB_TOKEN: ${{ github.token }}

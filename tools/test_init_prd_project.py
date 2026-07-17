@@ -45,6 +45,10 @@ class InitPrdProjectTest(unittest.TestCase):
             agents_path = target_dir / "AGENTS.md"
             registration_path = target_dir / "docs" / "mcp-registration.md"
             workflow_path = target_dir / "docs" / "delivery-workflow.md"
+            governance_path = target_dir / ".github" / "workflows" / "prd-governance.yml"
+            issue_template_path = target_dir / ".github" / "ISSUE_TEMPLATE" / "implementation.yml"
+            issue_config_path = target_dir / ".github" / "ISSUE_TEMPLATE" / "config.yml"
+            pull_request_template_path = target_dir / ".github" / "pull_request_template.md"
             metrics_dir = target_dir / ".metrics"
             metrics_log = target_dir.parent / "init.metrics.jsonl"
 
@@ -54,6 +58,10 @@ class InitPrdProjectTest(unittest.TestCase):
             self.assertTrue(agents_path.exists())
             self.assertTrue(registration_path.exists())
             self.assertTrue(workflow_path.exists())
+            self.assertTrue(governance_path.exists())
+            self.assertTrue(issue_template_path.exists())
+            self.assertTrue(issue_config_path.exists())
+            self.assertTrue(pull_request_template_path.exists())
             self.assertTrue((metrics_dir / ".gitkeep").exists())
             self.assertTrue(metrics_log.exists())
             self.assertTrue((target_dir / "schema.strict.json").exists())
@@ -62,6 +70,7 @@ class InitPrdProjectTest(unittest.TestCase):
             self.assertTrue((target_dir / "tools" / "prd_metrics.py").exists())
             self.assertTrue((target_dir / "tools" / "prd_schema_compat.py").exists())
             self.assertTrue((target_dir / "tools" / "prd_extractor.py").exists())
+            self.assertTrue((target_dir / "tools" / "validate_delivery_tracking.py").exists())
             self.assertTrue((target_dir / "tools" / "requirements-prd-validation.txt").exists())
             self.assertFalse((target_dir / "tools" / "prd_toon_roundtrip.py").exists())
             self.assertFalse((target_dir / ".agents").exists())
@@ -98,6 +107,10 @@ class InitPrdProjectTest(unittest.TestCase):
             self.assertIn("codex plugin add prd-context@prd-local", registration_path.read_text(encoding="utf-8"))
             self.assertIn("FR/NFR -> PTW -> TRD when needed", workflow_path.read_text(encoding="utf-8"))
             self.assertIn("external_refs", workflow_path.read_text(encoding="utf-8"))
+            self.assertIn("validate_delivery_tracking.py PRD.json", governance_path.read_text(encoding="utf-8"))
+            self.assertIn("Parent work item", issue_template_path.read_text(encoding="utf-8"))
+            self.assertIn("blank_issues_enabled: false", issue_config_path.read_text(encoding="utf-8"))
+            self.assertIn("Closes #", pull_request_template_path.read_text(encoding="utf-8"))
 
             compat = subprocess.run(
                 [

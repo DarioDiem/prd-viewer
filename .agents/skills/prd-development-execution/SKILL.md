@@ -65,12 +65,15 @@ Before coding, write a compact brief for yourself or delegated workers:
 - Create or update a TRD before coding when architecture, interfaces, data
   ownership, security boundaries, deployment, operations, or non-trivial
   verification design changes.
-- When the project uses an external issue tracker, execute assignable work
-  through a linked issue and add its canonical URL to the tracking record's
-  optional `external_refs` array. Do not copy live issue state into the PRD.
-- External issues enter tasks or sprints; FRs and NFRs do not. Set the PTW to
+- Execute assignable work through a linked GitHub issue and add its canonical
+  URL to the tracking record's optional `external_refs` array. GitHub Issues are
+  the only ticket system; do not copy live issue state into the PRD.
+- GitHub issues enter GitHub Projects; FRs and NFRs do not. Set the PTW to
   `in_progress` when its first linked issue starts and to `done` only after its
   required issues and acceptance conditions are complete.
+- Split work before implementation when slices need different owners, pull
+  requests, blockers, verification, trust boundaries, or more than three
+  focused delivery days.
 - Follow `docs/delivery-workflow.md` for issue, blocker, and completion
   boundaries.
 
@@ -96,8 +99,8 @@ Do not delegate the immediate critical-path task if the next local step depends 
 - Preserve stable IDs when item identity is unchanged.
 - Do not invent evidence, owners, metrics, credentials, compliance claims, or decisions while implementing.
 - Update PRD status/readiness notes only when the implemented behavior is present and verified.
-- Keep granular task state in the external tracker and durable delivery state in
-  PRD `project_tracking`.
+- Keep granular task state in GitHub and durable delivery state in PRD
+  `project_tracking`.
 
 ## Verification
 

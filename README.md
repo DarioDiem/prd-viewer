@@ -31,9 +31,9 @@ for its own implementation and delivery workflow.
 See `docs/trd-framework.md` for the header,
 traceability, OpenAPI, Mermaid, and decision-log conventions.
 
-See `docs/delivery-workflow.md` for the lifecycle connecting PRD requirements,
-PTW records, TRDs, external issues, tasks, sprints, pull requests, and
-verification evidence.
+See `docs/delivery-workflow.md` for the GitHub-only lifecycle connecting PRD
+requirements, PTW records, TRDs, GitHub Issues, GitHub Projects, pull requests,
+and verification evidence.
 
 ## Schema
 

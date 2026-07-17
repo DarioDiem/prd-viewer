@@ -10,6 +10,8 @@ on:
 
 permissions:
   contents: read
+  issues: read
+  pull-requests: read
 
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
@@ -41,10 +43,14 @@ jobs:
           npm --prefix viewer ci
           python3 -m pip install -r tools/requirements-prd-validation.txt
       - name: Validate PRD and agent contracts
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           npm run validate:agents
           python3 tools/prd_schema_compat.py viewer/PRD_web_ui.json --stats-json
+          python3 tools/validate_delivery_tracking.py viewer/PRD_web_ui.json
           python3 -m unittest tools.test_init_prd_project
+          python3 -m unittest tools.test_validate_delivery_tracking
       - name: Audit dependencies
         run: |
           npm audit --audit-level=high
