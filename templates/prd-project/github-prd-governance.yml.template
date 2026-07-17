@@ -2,6 +2,7 @@ name: PRD governance
 
 on:
   pull_request:
+    types: [opened, synchronize, reopened, edited]
   push:
 
 permissions:
