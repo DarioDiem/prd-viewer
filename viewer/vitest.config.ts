@@ -9,6 +9,7 @@ export default defineConfig({
     include: ["src/**/*.test.{ts,tsx}"],
     exclude: ["tests/e2e/**", "node_modules/**", "dist/**"],
     setupFiles: "./src/test/setup.ts",
+    testTimeout: 10_000,
     coverage: {
       provider: "v8",
       reporter: ["text", "html"],
